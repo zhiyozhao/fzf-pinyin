@@ -24,6 +24,12 @@
 
 日志和临时报告放在 `Artifacts/`。发布测量结果时注明环境、输入、方法和范围；不要把一次测量当成所有机器上的速度保证。
 
+`internal/fixture/perf.go` 使用种子 20261123 生成路径/标题、超长行、48 字母查询、多音字和纯英文语料。`go run ./cmd/perf -bins baseline=/tmp/before,optimized=/tmp/after -compare` 对真实 `--filter` 进程预热后交替测量 21 次，输出中位数、nearest-rank p95 和输出 SHA-256。用各版本 `./cmd/perfcli` 的构建传入 `-alloc-bins baseline=/tmp/before-alloc,optimized=/tmp/after-alloc`，单独测量完整过滤进程的累计 Go 分配（含初始化）；正常耗时测量不含分配探针。纯英文对照在同一命令中加入固定上游的正常/探针程序。
+
+`FZFP_PERF=1 go test -run '^TestPerfQuantiles$' -v ./src/pinyin` 对同一语料做库级全量扫描，与保留的 `eb83824c` 实现交替测量 21 次，记录中位数、p95 和平均分配。`FZFP_PERF_CASE=long` 可筛选场景。`go test -run '^$' -bench BenchmarkPerfScan -benchmem ./src/pinyin` 提供标准 Go benchmark（每 op 为一遍完整语料）；原有 `BenchmarkMatch` 每 op 为一行，两者数字不可直接比较。性能测量应独占运行，避免与 race、profile 或另一轮测量争用 CPU。
+
+`go test -run '^TestLegacyDifferential$' -v ./src/pinyin` 在三个独立 scheme 进程内对旧 DP 比较每条候选的 score、起止和 positions（含 nil、顺序），覆盖固定种子随机输入、所有性能场景和长间隔回溯。设置 `FZFP_BASELINE_BIN`、`FZFP_BIN` 和 `FZF_REFERENCE_BIN` 后，`go test -run '^TestPerfLegacyCLI$' -v ./integration` 逐字节比较旧版/新版的完整排序输出、stderr 和退出码。
+
 ## 完整终端对照
 
 `make -f Makefile.fzfp e2e` 先构建两份程序，再对固定上游和 fzfp 运行同一套 Ruby/tmux 断言。参考程序来自 `.cache/upstream`，不使用 fork 根目录默认 Makefile 构建。该套件需要额外依赖且可能运行数分钟，因此与常规 `check` 分开；匹配或终端行为变化时应运行。

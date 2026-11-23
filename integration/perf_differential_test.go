@@ -10,12 +10,12 @@ import (
 	"github.com/junegunn/fzf/internal/fixture"
 )
 
-// Set FZFP_BASELINE_BIN to an eb83824c build. Compare full bytes, not top-k or
+// Set FZFP_BASELINE_BIN to a 76553e1d build. Compare full bytes, not top-k or
 // membership alone; the historical and stress fixtures are shared with perf.
 func TestPerfLegacyCLI(t *testing.T) {
 	baseline := os.Getenv("FZFP_BASELINE_BIN")
 	if baseline == "" {
-		t.Skip("set FZFP_BASELINE_BIN to eb83824c binary")
+		t.Skip("set FZFP_BASELINE_BIN to 76553e1d binary")
 	}
 	current := binary(t, "FZFP_BIN", "fzfp")
 	count := 0

@@ -2,6 +2,7 @@ package pinyin
 
 import (
 	"slices"
+	"sync"
 	"unicode"
 
 	"github.com/junegunn/fzf/src/algo"
@@ -15,6 +16,13 @@ import (
 // stronger block may overtake another alignment when more letters arrive.
 // All upstream schemes use raw block bonuses 0, 7, 8, 9 or 10.
 const blockBonuses = 5
+
+// Scratch belongs to one call at a time, never to a candidate or query. Bound
+// retained capacity so a single unusually long query cannot inflate the pool.
+// No input, spelling, query or trace is retained between calls.
+type workspace struct{ cells []state }
+
+var workspaces = sync.Pool{New: func() any { return &workspace{} }}
 
 type state struct {
 	score, start, end, trace, block int
@@ -38,12 +46,36 @@ func better(a, b state, forward bool) bool {
 
 func word(r rune) bool { return unicode.IsLetter(r) || unicode.IsNumber(r) }
 
-// allowPinyin=false reuses the same state slots to recover untaxed literal
-// paths when the native matcher alone cannot cover their boundary scores.
 func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool, mode Mode, allowPinyin bool) (algo.Result, *[]int) {
+	// First locate the winning interval on large position requests. Replaying
+	// only that interval avoids retaining traces for every losing start on a
+	// long repetitive line. Bonuses and anchors still use the original input.
+	if withPos && input.Length() > 65536/max(1, len(query)) {
+		result, _ := matchRange(cs, norm, forward, input, query, false, mode, allowPinyin, 0, input.Length(), false)
+		if result.Start < 0 {
+			return result, nil
+		}
+		return matchRange(cs, norm, forward, input, query, true, mode, allowPinyin, result.Start, result.End, true)
+	}
+	return matchRange(cs, norm, forward, input, query, withPos, mode, allowPinyin, 0, input.Length(), false)
+}
+
+func matchRange(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool, mode Mode, allowPinyin bool, begin, stop int, fixedStart bool) (algo.Result, *[]int) {
 	m, n := len(query), input.Length()
 	width := (m + 1) * blockBonuses
-	storage := make([]state, 2*width+m+1)
+	size := 2*width + m + 1
+	work := workspaces.Get().(*workspace)
+	if cap(work.cells) < size {
+		work.cells = make([]state, size)
+	}
+	storage := work.cells[:size]
+	defer func() {
+		clear(storage)
+		if cap(work.cells) > 11*257 {
+			work.cells = nil
+		}
+		workspaces.Put(work)
+	}()
 	prev, next, gap := storage[:width], storage[width:2*width], storage[2*width:]
 	var traces []traceNode
 	var best state
@@ -58,7 +90,12 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 			right -= input.TrailingWhitespaces()
 		}
 	}
-	for i := 0; i < n; i++ {
+	limit := 0 // No column beyond the largest consumed query prefix is reachable.
+	// At most O(c*m) live states each refer to at most m original positions.
+	// Reclaim dead paths in batches; this caps traceback space at O(c*m*m)
+	// even for winning intervals containing very long gaps.
+	traceLimit := max(65536, size*m*2)
+	for i := begin; i < stop; i++ {
 		clear(next)
 		r := input.Get(i)
 		literal := r
@@ -83,11 +120,12 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 			bonus = max(bonus, 8)
 		}
 		startOK := (mode != Prefix && mode != Equal || i == left) &&
-			(mode != Boundary || i == 0 || !word(input.Get(i-1)))
+			(mode != Boundary || i == 0 || !word(input.Get(i-1))) && (!fixedStart || i == begin)
 		endOK := (mode != Suffix && mode != Equal || i+1 == right) &&
 			(mode != Boundary || i+1 == n || !word(input.Get(i+1)))
 		// Score typed letters as a literal consecutive chunk. A new, stronger
 		// boundary replaces the block bonus; a skipped source rune resets it.
+		nextLimit := limit
 		offer := func(j int, from state, k int) {
 			block, first := bonus, bonus
 			if j == 0 {
@@ -115,22 +153,14 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 				traces = append(traces, traceNode{i, from.trace})
 			}
 			next[cell] = candidate
+			nextLimit = max(nextLimit, col)
 			if col == m && endOK && better(candidate, best, forward) {
 				best = candidate
 			}
 		}
-		for j := 0; j < m; j++ {
+		for j := 0; j < min(m, limit+1); j++ {
 			if j == 0 && !startOK {
 				continue
-			}
-			if j > 0 {
-				reachable := mode == Fuzzy && gap[j].valid
-				for _, from := range prev[j*blockBonuses : (j+1)*blockBonuses] {
-					reachable = reachable || from.valid
-				}
-				if !reachable {
-					continue
-				}
 			}
 			consume := func(k int) {
 				if j == 0 {
@@ -179,10 +209,13 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 			}
 		}
 		if mode == Fuzzy {
-			for j := 1; j < m; j++ {
+			for j := 1; j < min(m, limit+1); j++ {
 				oldGap := gap[j]
 				oldGap.score--
 				for _, from := range prev[j*blockBonuses : (j+1)*blockBonuses] {
+					if !from.valid {
+						continue
+					}
 					from.score -= 3
 					if better(from, oldGap, forward) {
 						oldGap = from
@@ -191,7 +224,11 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 				gap[j] = oldGap
 			}
 		}
+		limit = nextLimit
 		prev, next = next, prev
+		if withPos && len(traces) > traceLimit {
+			traces = compactTraces(traces, prev, gap, &best)
+		}
 	}
 	if !best.valid {
 		return algo.Result{Start: -1, End: -1}, nil
@@ -206,4 +243,53 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 	}
 	slices.Reverse(positions)
 	return result, &positions
+}
+
+// Reindex only nodes reachable from live DP states. Node order has no scoring
+// meaning; preserving each predecessor chain preserves position tie-breaking.
+func compactTraces(nodes []traceNode, prev, gap []state, best *state) []traceNode {
+	remap := make([]int, len(nodes))
+	for i := range remap {
+		remap[i] = -1
+	}
+	mark := func(s state) {
+		if !s.valid {
+			return
+		}
+		for i := s.trace; i >= 0 && remap[i] == -1; i = nodes[i].previous {
+			remap[i] = -2
+		}
+	}
+	for _, s := range prev {
+		mark(s)
+	}
+	for _, s := range gap {
+		mark(s)
+	}
+	mark(*best)
+	count := 0
+	for i, node := range nodes {
+		if remap[i] != -2 {
+			continue
+		}
+		remap[i] = count
+		if node.previous >= 0 {
+			node.previous = remap[node.previous]
+		}
+		nodes[count] = node
+		count++
+	}
+	fix := func(s *state) {
+		if s.valid && s.trace >= 0 {
+			s.trace = remap[s.trace]
+		}
+	}
+	for i := range prev {
+		fix(&prev[i])
+	}
+	for i := range gap {
+		fix(&gap[i])
+	}
+	fix(best)
+	return nodes[:count]
 }

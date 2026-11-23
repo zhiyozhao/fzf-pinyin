@@ -18,22 +18,31 @@ func TestLegacyDifferential(t *testing.T) {
 		algo.Init(scheme)
 		rng := rand.New(rand.NewSource(20261123))
 		count := 0
+		fallbacks := []algo.Algo{algo.FuzzyMatchV2, algo.ExactMatchNaive, algo.PrefixMatch, algo.SuffixMatch, algo.EqualMatch, algo.ExactMatchBoundary}
+		oldWrapped, newWrapped := make([]algo.Algo, 6), make([]algo.Algo, 6)
+		for mode, f := range fallbacks {
+			oldWrapped[mode] = legacyWrap(f, Mode(mode))
+			newWrapped[mode] = Wrap(f, Mode(mode))
+		}
 		check := func(line, query string, mode Mode, cs, norm, forward, pos bool) {
 			t.Helper()
 			chars, q := util.ToChars([]byte(line)), []rune(query)
-			want, wp := legacyMatch(cs, norm, forward, &chars, q, pos, mode)
-			got, gp := match(cs, norm, forward, &chars, q, pos, mode)
-			if got != want || !reflect.DeepEqual(gp, wp) {
-				t.Fatalf("%s mode=%d cs=%t norm=%t forward=%t pos=%t line=%q query=%q: got %+v %v want %+v %v", scheme, mode, cs, norm, forward, pos, line, query, got, gp, want, wp)
+			for _, positions := range []bool{pos, false} {
+				for _, allow := range []bool{true, false} {
+					want, wp := legacyMatch(cs, norm, forward, &chars, q, positions, mode, allow)
+					got, gp := match(cs, norm, forward, &chars, q, positions, mode, allow)
+					if got != want || !reflect.DeepEqual(gp, wp) {
+						t.Fatalf("%s mode=%d allow=%t cs=%t norm=%t forward=%t pos=%t line=%q query=%q: got %+v %v want %+v %v", scheme, mode, allow, cs, norm, forward, positions, line, query, got, gp, want, wp)
+					}
+					count++
+				}
+				want, wp := oldWrapped[mode](cs, norm, forward, &chars, q, positions, nil)
+				got, gp := newWrapped[mode](cs, norm, forward, &chars, q, positions, nil)
+				if got != want || !reflect.DeepEqual(gp, wp) {
+					t.Fatalf("%s Wrap mode=%d forward=%t positions=%t line=%q query=%q: got %+v %v want %+v %v", scheme, mode, forward, positions, line, query, got, gp, want, wp)
+				}
+				count++
 			}
-			count++
-			// Position-free calls take a distinct path for large inputs.
-			want, wp = legacyMatch(cs, norm, forward, &chars, q, false, mode)
-			got, gp = match(cs, norm, forward, &chars, q, false, mode)
-			if got != want || !reflect.DeepEqual(gp, wp) {
-				t.Fatalf("%s mode=%d query=%q without positions: got %+v %v want %+v %v", scheme, mode, query, got, gp, want, wp)
-			}
-			count++
 		}
 		tokens := []string{"中", "国", "北", "京", "重", "行", "乐", "长", "得", "单", "解", "曾", "区", "薄", "女", "绿", "〇", "𠀀", "A", "b", "é", "Ü", "ü", "/", "-", " ", "🙂", "\t", "北京", "中国", "zhong", "Beijing", "Ω"}
 		queries := []string{"zhongguo", "zg", "beijing", "bj", "zhongg", "chonghangyuezhang", "pr", "SDK", "北jing", "nü", "lv", "Ü", "a", "b", "国", " ", strings.Repeat("zhongguo", 6)}
@@ -45,6 +54,12 @@ func TestLegacyDifferential(t *testing.T) {
 		// Above the retained scratch capacity, then shrink again in the random
 		// cases below: oversized arrays must not leave stale state in the pool.
 		check(strings.Repeat("中国", 40), strings.Repeat("zhongguo", 40), Fuzzy, false, true, true, true)
+		for _, forward := range []bool{false, true} {
+			for mode := Fuzzy; mode <= Boundary; mode++ {
+				check("田"+strings.Repeat("abc", 33334), "abc", mode, false, true, forward, true)
+				check("中a"+strings.Repeat("国", 100000)+"b", "ab", mode, false, true, forward, true)
+			}
+		}
 		for i := 0; i < 60000; i++ {
 			var line strings.Builder
 			for n := 1 + rng.Intn(45); n > 0; n-- {
