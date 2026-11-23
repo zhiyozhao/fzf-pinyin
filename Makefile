@@ -1,196 +1,72 @@
-GO             ?= go
-DOCKER         ?= docker
-GOOS           ?= $(shell $(GO) env GOOS)
+GO ?= go
+ROOT := $(CURDIR)
+export GOMODCACHE := $(ROOT)/.cache/go-mod
+export GOCACHE := $(ROOT)/.cache/go-build
+export GOPATH := $(ROOT)/.cache/go
+UPSTREAM := bf4869b7fa7748d973eeb414da4dde0d7fe4cd3c
+export FZFP_BIN := $(ROOT)/Artifacts/fzfp
+export FZF_REFERENCE_BIN := $(ROOT)/Artifacts/fzf-reference
+E2E_RUBY ?= ruby
+VERSION ?= 0.1.0
+GORELEASER_VERSION := v2.20.0
 
-MAKEFILE       := $(realpath $(lastword $(MAKEFILE_LIST)))
-ROOT_DIR       := $(shell dirname $(MAKEFILE))
-SOURCES        := $(wildcard *.go src/*.go src/*/*.go shell/*sh man/man1/*.1) $(MAKEFILE)
-
-BASH_SCRIPTS   := $(ROOT_DIR)/bin/fzf-preview.sh \
-					$(ROOT_DIR)/bin/fzf-tmux \
-					$(ROOT_DIR)/install \
-					$(ROOT_DIR)/uninstall \
-					$(ROOT_DIR)/shell/common.sh \
-					$(ROOT_DIR)/shell/update.sh \
-					$(ROOT_DIR)/shell/completion.bash \
-					$(ROOT_DIR)/shell/key-bindings.bash
-
-ifdef FZF_VERSION
-VERSION        := $(FZF_VERSION)
-else
-VERSION        := $(shell git describe --abbrev=0 2> /dev/null | sed "s/^v//")
-endif
-ifeq ($(VERSION),)
-$(error Not on git repository; cannot determine $$FZF_VERSION)
-endif
-VERSION_TRIM   := $(shell echo $(VERSION) | sed "s/^v//; s/-.*//")
-VERSION_REGEX  := $(subst .,\.,$(VERSION_TRIM))
-
-ifdef FZF_REVISION
-REVISION       := $(FZF_REVISION)
-else
-REVISION       := $(shell git log -n 1 --pretty=format:%h --abbrev=8 -- $(SOURCES) 2> /dev/null)
-endif
-ifeq ($(REVISION),)
-$(error Not on git repository; cannot determine $$FZF_REVISION)
-endif
-BUILD_FLAGS    := -a -ldflags "-s -w -X main.version=$(VERSION) -X main.revision=$(REVISION)" -tags "$(TAGS)" -trimpath
-
-BINARY32       := fzf-$(GOOS)_386
-BINARY64       := fzf-$(GOOS)_amd64
-BINARYS390     := fzf-$(GOOS)_s390x
-BINARYARM5     := fzf-$(GOOS)_arm5
-BINARYARM6     := fzf-$(GOOS)_arm6
-BINARYARM7     := fzf-$(GOOS)_arm7
-BINARYARM8     := fzf-$(GOOS)_arm8
-BINARYPPC64LE  := fzf-$(GOOS)_ppc64le
-BINARYRISCV64  := fzf-$(GOOS)_riscv64
-BINARYLOONG64  := fzf-$(GOOS)_loong64
-
-# https://en.wikipedia.org/wiki/Uname
-UNAME_M := $(shell uname -m)
-ifeq ($(UNAME_M),x86_64)
-	BINARY := $(BINARY64)
-else ifeq ($(UNAME_M),amd64)
-	BINARY := $(BINARY64)
-else ifeq ($(UNAME_M),i86pc)
-	BINARY := $(BINARY64)
-else ifeq ($(UNAME_M),s390x)
-	BINARY := $(BINARYS390)
-else ifeq ($(UNAME_M),i686)
-	BINARY := $(BINARY32)
-else ifeq ($(UNAME_M),i386)
-	BINARY := $(BINARY32)
-else ifeq ($(UNAME_M),armv5l)
-	BINARY := $(BINARYARM5)
-else ifeq ($(UNAME_M),armv6l)
-	BINARY := $(BINARYARM6)
-else ifeq ($(UNAME_M),armv7l)
-	BINARY := $(BINARYARM7)
-else ifeq ($(UNAME_M),armv8l)
-	# armv8l is always 32-bit and should implement the armv7 ISA, so
-	# just use the same filename as for armv7.
-	BINARY := $(BINARYARM7)
-else ifeq ($(UNAME_M),arm64)
-	BINARY := $(BINARYARM8)
-else ifeq ($(UNAME_M),aarch64)
-	BINARY := $(BINARYARM8)
-else ifeq ($(UNAME_M),ppc64le)
-	BINARY := $(BINARYPPC64LE)
-else ifeq ($(UNAME_M),riscv64)
-	BINARY := $(BINARYRISCV64)
-else ifeq ($(UNAME_M),loongarch64)
-	BINARY := $(BINARYLOONG64)
-else
-$(error Build on $(UNAME_M) is not supported, yet.)
-endif
-
-all: target/$(BINARY)
-
-test: $(SOURCES)
-	SHELL=/bin/sh GOOS= $(GO) test -v -tags "$(TAGS)" \
-				github.com/junegunn/fzf/src \
-				github.com/junegunn/fzf/src/algo \
-				github.com/junegunn/fzf/src/tui \
-				github.com/junegunn/fzf/src/util
-
-# Run in a separate tmux server without user config, like CI (80x24)
-itest:
-	@dir=$$(mktemp -d) && \
-	env -u TMUX TMUX_TMPDIR=$$dir sh -c \
-		'tmux -f /dev/null new-session -d && ruby test/runner.rb; s=$$?; tmux kill-server; exit $$s'; \
-	s=$$?; rm -rf $$dir; exit $$s
-
-# Actively fuzz the matcher fast paths against the general algorithm.
-# Go fuzzes one target at a time, so iterate. Override duration with
-# FUZZTIME (e.g. make fuzz FUZZTIME=5m).
-FUZZTIME ?= 30s
-fuzz:
-	@for t in FuzzFuzzyMatchV2Single FuzzFuzzyMatchV2Two FuzzRunePrefilter; do \
-		echo "== $$t =="; \
-		$(GO) test -run '^$$' -fuzz "^$$t$$" -fuzztime $(FUZZTIME) ./src/algo || exit 1; \
-	done
-
-bench:
-	cd src && SHELL=/bin/sh GOOS= $(GO) test -v -tags "$(TAGS)" -run=Bench -bench=. -benchmem
-
-lint: $(SOURCES) test/*.rb test/lib/*.rb ${BASH_SCRIPTS}
-	[ -z "$$(gofmt -s -d src)" ] || (gofmt -s -d src; exit 1)
-	bundle exec rubocop -a --require rubocop-minitest --require rubocop-performance
-	shell/update.sh --check ${BASH_SCRIPTS}
-
-fmt: $(SOURCES) $(BASH_SCRIPTS)
-	gofmt -s -w src
-	shell/update.sh ${BASH_SCRIPTS}
-
-install: bin/fzf
-
-generate:
-	PATH=$(PATH):$(GOPATH)/bin $(GO) generate ./...
-
+.PHONY: all build reference check test fmt run bench fuzz test-ui shots package e2e release-build
+all: build
 build:
-	goreleaser build --clean --snapshot --skip=post-hooks
+	$(GO) build -trimpath -o Artifacts/fzfp .
 
-prerelease:
-	# Check if version numbers are properly updated
-	grep -q ^$(VERSION_REGEX)$$ CHANGELOG.md
-	grep -qF '"fzf $(VERSION_TRIM)"' man/man1/fzf.1
-	grep -qF '"fzf $(VERSION_TRIM)"' man/man1/fzf-tmux.1
-	grep -qF $(VERSION) install
-	grep -qF $(VERSION) install.ps1
-	@echo "OK: all files consistent at $(VERSION)"
+# A pristine, pinned checkout from this repository's local upstream history.
+reference:
+	@test -d .cache/upstream || git worktree add --detach .cache/upstream $(UPSTREAM)
+	@test "$$(git -C .cache/upstream rev-parse HEAD)" = $(UPSTREAM)
+	@git -C .cache/upstream diff --exit-code HEAD -- .
+	@test -z "$$(git -C .cache/upstream ls-files --others --exclude-standard)"
+	cd .cache/upstream && $(GO) build -trimpath -o $(FZF_REFERENCE_BIN) .
 
-tag: prerelease
-	git tag -s v$(VERSION) -m v$(VERSION)
-	git push origin v$(VERSION)
+fmt:
+	$(GO) fmt ./...
 
-clean:
-	$(RM) -r dist target
+check: build reference
+	@test -z "$$(gofmt -l main.go src integration internal cmd)"
+	$(GO) vet ./...
+	$(GO) test ./...
+	$(GO) test -race ./src/pinyin ./integration
+	sh scripts/test-install.sh
+	ruby packaging/homebrew/test-update.rb
+	@git diff --check
 
-target/$(BINARY32): $(SOURCES)
-	GOARCH=386 $(GO) build $(BUILD_FLAGS) -o $@
+test: build reference
+	$(GO) test ./...
 
-target/$(BINARY64): $(SOURCES)
-	GOARCH=amd64 $(GO) build $(BUILD_FLAGS) -o $@
+run: build
+	./Artifacts/fzfp
 
-target/$(BINARYS390): $(SOURCES)
-	GOARCH=s390x $(GO) build $(BUILD_FLAGS) -o $@
-# https://github.com/golang/go/wiki/GoArm
-target/$(BINARYARM5): $(SOURCES)
-	GOARCH=arm GOARM=5 $(GO) build $(BUILD_FLAGS) -o $@
+bench: build reference
+	$(GO) run ./cmd/bench
+	$(GO) test -run '^$$' -bench . -benchmem ./src/pinyin
 
-target/$(BINARYARM6): $(SOURCES)
-	GOARCH=arm GOARM=6 $(GO) build $(BUILD_FLAGS) -o $@
+fuzz:
+	$(GO) test -run '^$$' -fuzz '^FuzzPrefixRecall$$' -fuzztime 15s ./src/pinyin
 
-target/$(BINARYARM7): $(SOURCES)
-	GOARCH=arm GOARM=7 $(GO) build $(BUILD_FLAGS) -o $@
+# Terminal interaction is exercised in an isolated PTY without opening windows.
+test-ui: build reference
+	$(GO) test -count=1 -v ./integration
 
-target/$(BINARYARM8): $(SOURCES)
-	GOARCH=arm64 $(GO) build $(BUILD_FLAGS) -o $@
+# Ruby 3.4+; gems must already be in .cache/gems (see CONTRIBUTING.md).
+e2e: build reference
+	GEM_HOME="$(ROOT)/.cache/gems" GEM_PATH="$(ROOT)/.cache/gems" "$(E2E_RUBY)" scripts/e2e.rb
 
-target/$(BINARYPPC64LE): $(SOURCES)
-	GOARCH=ppc64le $(GO) build $(BUILD_FLAGS) -o $@
+shots:
+	@echo 'Terminal tool: see README examples and make test-ui (no GUI screenshots).'
 
-target/$(BINARYRISCV64): $(SOURCES)
-	GOARCH=riscv64 $(GO) build $(BUILD_FLAGS) -o $@
+package: build
+	@echo 'Local executable: Artifacts/fzfp; no install or upload performed.'
 
-target/$(BINARYLOONG64): $(SOURCES)
-	GOARCH=loong64 $(GO) build $(BUILD_FLAGS) -o $@
+release-build:
+	CGO_ENABLED=0 $(GO) build -trimpath -buildvcs=false -ldflags='-s -w -X main.version=$(VERSION) -X main.revision=' -o Artifacts/release/fzfp .
 
-bin/fzf: target/$(BINARY) | bin
-	-rm -f bin/fzf
-	cp -f target/$(BINARY) bin/fzf
-
-docker:
-	$(DOCKER) build -t fzf-ubuntu .
-	$(DOCKER) run -it fzf-ubuntu tmux
-
-docker-test:
-	$(DOCKER) build -t fzf-ubuntu .
-	$(DOCKER) run -it fzf-ubuntu
-
-update:
-	$(GO) get -u
-	$(GO) mod tidy
-
-.PHONY: all generate build prerelease tag test itest bench lint install clean docker docker-test update fmt
+.PHONY: snapshot
+snapshot:
+	FZFP_VERSION=$(VERSION) $(GO) run github.com/goreleaser/goreleaser/v2@$(GORELEASER_VERSION) check
+	FZFP_VERSION=$(VERSION) $(GO) run github.com/goreleaser/goreleaser/v2@$(GORELEASER_VERSION) release --snapshot --clean
+	sh scripts/verify-archives.sh Artifacts/dist $(VERSION)-snapshot

@@ -1,0 +1,22 @@
+name: Pinyin matching or CLI issue
+description: Report unexpected fzfp matches, ordering, or CLI behavior
+body:
+  - type: textarea
+    attributes:
+      label: Input and query
+      description: Include a small generated or public example, the command, and the query.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual and expected result
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Output of fzfp --version
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: OS and terminal

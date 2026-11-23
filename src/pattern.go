@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/junegunn/fzf/src/algo"
+	"github.com/junegunn/fzf/src/pinyin"
 	"github.com/junegunn/fzf/src/util"
 )
 
@@ -78,6 +79,7 @@ func init() {
 // BuildPattern builds Pattern object from the given arguments
 func BuildPattern(cache *ChunkCache, patternCache map[string]*Pattern, fuzzy bool, fuzzyAlgo algo.Algo, extended bool, caseMode Case, normalize bool, forward bool,
 	withPos bool, cacheable bool, nth []Range, delimiter Delimiter, revision revision, runes []rune, denylist map[int32]struct{}, startIndex int32) *Pattern {
+	fuzzyAlgo = pinyin.Wrap(fuzzyAlgo, pinyin.Fuzzy)
 
 	var asString string
 	if extended {
@@ -155,11 +157,11 @@ func BuildPattern(cache *ChunkCache, patternCache map[string]*Pattern, fuzzy boo
 	ptr.cacheKey = ptr.buildCacheKey()
 	ptr.directAlgo, ptr.directTerm = ptr.buildDirectAlgo(fuzzyAlgo)
 	ptr.procFun[termFuzzy] = fuzzyAlgo
-	ptr.procFun[termEqual] = algo.EqualMatch
-	ptr.procFun[termExact] = algo.ExactMatchNaive
-	ptr.procFun[termExactBoundary] = algo.ExactMatchBoundary
-	ptr.procFun[termPrefix] = algo.PrefixMatch
-	ptr.procFun[termSuffix] = algo.SuffixMatch
+	ptr.procFun[termEqual] = pinyin.EqualMatch
+	ptr.procFun[termExact] = pinyin.ExactMatchNaive
+	ptr.procFun[termExactBoundary] = pinyin.ExactMatchBoundary
+	ptr.procFun[termPrefix] = pinyin.PrefixMatch
+	ptr.procFun[termSuffix] = pinyin.SuffixMatch
 
 	patternCache[asString] = ptr
 	return ptr
@@ -308,7 +310,7 @@ func (p *Pattern) Match(chunk *Chunk, slab *util.Slab) []Result {
 		cachedBitmap = p.cache.Lookup(chunk, cacheKey)
 	}
 	if cachedBitmap == nil {
-		cachedBitmap = p.cache.Search(chunk, cacheKey)
+		cachedBitmap = p.cache.SearchPrefix(chunk, cacheKey)
 	}
 
 	matches, bitmap := p.matchChunk(chunk, cachedBitmap, slab)
@@ -410,7 +412,7 @@ func (p *Pattern) basicMatch(item *Item, withPos bool, slab *util.Slab) (Offset,
 	if p.fuzzy {
 		return p.iter(p.fuzzyAlgo, input, p.caseSensitive, p.normalize, p.forward, p.text, withPos, slab)
 	}
-	return p.iter(algo.ExactMatchNaive, input, p.caseSensitive, p.normalize, p.forward, p.text, withPos, slab)
+	return p.iter(pinyin.ExactMatchNaive, input, p.caseSensitive, p.normalize, p.forward, p.text, withPos, slab)
 }
 
 func (p *Pattern) extendedMatch(item *Item, withPos bool, slab *util.Slab) ([]Offset, int, *[]int) {

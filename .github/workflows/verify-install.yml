@@ -1,0 +1,34 @@
+name: Verify Linux installer
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Released fzfp version
+        required: true
+        default: '0.1.0'
+permissions:
+  contents: read
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Install release into default user directory
+        env:
+          FZFP_VERSION: ${{ inputs.version }}
+          FZF_DEFAULT_OPTS: ''
+          FZF_DEFAULT_OPTS_FILE: /dev/null
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$FZFP_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          work=$(mktemp -d)
+          trap 'rm -rf "$work"' EXIT
+          export HOME="$work/home"
+          sh install-fzfp --version "$FZFP_VERSION"
+          test -x "$HOME/.local/bin/fzfp"
+          test "$("$HOME/.local/bin/fzfp" --version)" = "fzfp $FZFP_VERSION (based on fzf 0.75)"
+          test "$(printf '北京\n上海\n' | "$HOME/.local/bin/fzfp" -f bj)" = 北京
+          file "$HOME/.local/bin/fzfp"
+          "$HOME/.local/bin/fzfp" --version
+          echo 'Default ~/.local/bin installation and bj -> 北京 passed'

@@ -11,8 +11,10 @@ import (
 	"github.com/junegunn/fzf/src/protector"
 )
 
-var version = "0.75"
+var version = "0.1.0"
 var revision = "devel"
+
+const upstreamVersion = "0.75"
 
 //go:embed shell/key-bindings.bash
 var bashKeyBindings []byte
@@ -38,7 +40,7 @@ var nushellCompletion []byte
 //go:embed shell/completion.fish
 var fishCompletion []byte
 
-//go:embed man/man1/fzf.1
+//go:embed man/man1/fzfp.1
 var manPage []byte
 
 func printScript(label string, content []byte) {
@@ -83,14 +85,18 @@ func main() {
 		return
 	}
 	if options.Help {
-		fmt.Print(fzf.Usage)
+		usage := strings.Replace(fzf.Usage, "fzf is an", "fzfp is an", 1)
+		usage = strings.Replace(usage, "Usage: fzf [options]", "Usage: fzfp [options]", 1)
+		usage = strings.Replace(usage, "Project URL: https://github.com/junegunn/fzf", "Project URL: https://github.com/zhiyozhao/fzf-pinyin\nUpstream: https://github.com/junegunn/fzf", 1)
+		fmt.Print(strings.Replace(usage, "fzf --man", "fzfp --man", 1))
 		return
 	}
 	if options.Version {
+		label := fmt.Sprintf("fzfp %s (based on fzf %s)", version, upstreamVersion)
 		if len(revision) > 0 {
-			fmt.Printf("%s (%s)\n", version, revision)
+			fmt.Printf("%s (%s)\n", label, revision)
 		} else {
-			fmt.Println(version)
+			fmt.Println(label)
 		}
 		return
 	}

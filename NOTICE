@@ -1,0 +1,16 @@
+fzf-pinyin is a modified distribution of fzf, maintained independently at
+https://github.com/zhiyozhao/fzf-pinyin. Its executable is named fzfp.
+
+The original fzf is Copyright (c) 2013-2026 Junegunn Choi and is licensed
+under the MIT License. The complete original copyright and permission
+notice is retained in LICENSE. Upstream source and history are preserved;
+README.fzf.md is the original README at the pinned upstream commit.
+
+The modifications add Mandarin pinyin matching, source-coordinate scoring
+and highlighting, prefix-safe candidate caching, documentation, tests and
+fzfp packaging. Pinyin extensions are Copyright (c) 2026 fzf-pinyin contributors
+and are also licensed under MIT.
+
+Pronunciation data and code from go-pinyin/pinyin-data retain their MIT
+notices. Additional dependency notices and complete license texts are listed
+in THIRD_PARTY_NOTICES.md and docs/licenses/.

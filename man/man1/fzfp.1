@@ -1,0 +1,76 @@
+.TH FZFP 1 "November 23, 2026" "fzfp 0.1.0" "User Commands"
+.SH NAME
+fzfp \- fuzzy finder with Mandarin pinyin matching
+.SH SYNOPSIS
+.B fzfp
+.RI [ options ]
+.SH DESCRIPTION
+fzfp is a fork of fzf with pinyin search for Han characters.
+It reads candidate lines from standard input and writes selected lines to
+standard output.  Run fzfp interactively, or use --filter for non-interactive
+matching.  Enter selects an item; Escape or Ctrl-C exits.
+.SH PINYIN
+Each Han character accepts its full spelling, first letter, or consonant
+initial (including zh, ch and sh).  A syllable without a consonant initial
+also accepts its final.  These forms can be mixed per character.
+The final matched syllable accepts any nonempty spelling prefix.
+Earlier syllables must use a complete supported form.
+.PP
+For example, zg, zhg, zhongguo and zhonggu match 中国;
+bj, beijing and beiji match 北京.
+Pinyin accepts v or ü and ignores case.
+Literal Latin text still follows the selected case mode.
+All dictionary readings of polyphonic characters are accepted, without
+phrase disambiguation.  Tones, dialect substitutions and typo correction
+are not supported.
+.SH SEARCH SYNTAX
+.TP
+.B 'query
+Require adjacent original characters, while still allowing abbreviations
+and a partial final syllable.  Under --exact, the leading quote instead
+switches the term back to fuzzy matching.
+.TP
+.BR ^query ", " query$ ", " ^query$
+Anchor matching to the original beginning, end, or entire span.
+With --nth, anchors apply to the selected search field or range.
+.TP
+.B 'query'
+Require a span bounded by whitespace, punctuation or string edges.
+This does not perform Chinese word segmentation.
+.TP
+.B !query
+Exclude adjacent matches.  Use !'query to exclude fuzzy matches.
+!^query and !query$ exclude prefix and suffix matches.
+.TP
+.B query1 | query2
+Combine alternatives.  The | must be separated by spaces.
+Separate terms without | are combined with AND.
+.PP
+Quote operators as needed to prevent the shell from interpreting them.
+.SH OPTIONS
+The inherited fzf options remain available, including --filter, --preview,
+--nth, --delimiter, --scheme and --tiebreak.  See fzfp --help for all options
+and the repository documentation for detailed semantics.
+.PP
+--literal disables Latin accent normalization; it does not disable pinyin.
+--algo=v1 selects the native literal matcher; pinyin still uses its dynamic
+programming matcher.
+.SH ENVIRONMENT
+The inherited FZF_* environment variables retain their names, including
+FZF_DEFAULT_OPTS, FZF_DEFAULT_OPTS_FILE and FZF_DEFAULT_COMMAND.
+.SH INTEGRATIONS
+The Homebrew formula installs only fzfp and this manual.  It does not install
+shell bindings, Vim plugins, or files named fzf.  Retained upstream scripts
+still invoke fzf and are not automatically configured for fzfp.
+.SH EXAMPLE
+.nf
+printf '北京\en上海\en' | fzfp --filter=bj
+.fi
+.SH DOCUMENTATION
+https://github.com/zhiyozhao/fzf-pinyin
+.PP
+Upstream fzf documentation:
+https://github.com/junegunn/fzf
+.SH LICENSE
+MIT.  Copyright 2013-2026 Junegunn Choi;
+Copyright 2026 fzf-pinyin contributors (pinyin extensions).
