@@ -24,6 +24,10 @@ func exhaustive(text, q string) (int, bool) {
 		'中': {{"zhong", 1}, {"zh", 2}, {"z", 3}},
 		'国': {{"guo", 1}, {"g", 2}},
 		'安': {{"an", 1}, {"a", 3}},
+		'马': {{"ma", 1}, {"m", 2}},
+		'超': {{"chao", 1}, {"ch", 2}, {"c", 3}},
+		'北': {{"bei", 1}, {"b", 2}},
+		'京': {{"jing", 1}, {"j", 2}},
 	}
 	runes, qr := []rune(text), []rune(q)
 	c := util.RunesToChars(runes)
@@ -31,7 +35,7 @@ func exhaustive(text, q string) (int, bool) {
 	var search func(int, int, []edge)
 	search = func(start, offset int, path []edge) {
 		if offset == len(qr) {
-			score := 0
+			score, block := 0, 0
 			for j, e := range path {
 				bonus := algo.BoundaryBonus(&c, e.index)
 				if e.index > 0 {
@@ -39,20 +43,29 @@ func exhaustive(text, q string) (int, bool) {
 					if unicode.Is(unicode.Han, a) && unicode.Is(unicode.Han, b) {
 						bonus = max(bonus, 8)
 					}
-					if unicode.IsLetter(a) && unicode.IsLetter(b) && unicode.Is(unicode.Han, a) != unicode.Is(unicode.Han, b) {
+					if (unicode.IsLetter(a) || unicode.IsNumber(a)) && (unicode.IsLetter(b) || unicode.IsNumber(b)) && unicode.Is(unicode.Han, a) != unicode.Is(unicode.Han, b) {
 						bonus = max(bonus, 8)
 					}
 				}
-				score += 16*e.letters + 4*(e.letters-1) - e.cost
+				score += 16*e.letters - e.cost
 				if j == 0 {
+					block = bonus
 					score += 2 * bonus
 				} else {
 					gap := e.index - path[j-1].index - 1
 					if gap == 0 {
-						score += max(8, bonus)
+						if bonus >= 8 && bonus > block {
+							block = bonus
+						}
+						score += max(4, bonus, block)
 					} else {
+						block = bonus
 						score += bonus - 3 - (gap - 1)
 					}
+				}
+				// Expand the matched syllable into only its typed letters.
+				for letter := 1; letter < e.letters; letter++ {
+					score += max(4, block)
 				}
 			}
 			best, found = max(best, max(1, score)), true
@@ -79,9 +92,21 @@ func exhaustive(text, q string) (int, bool) {
 }
 
 func TestExhaustiveOptimality(t *testing.T) {
+	for _, scheme := range testSchemes(t) {
+		algo.Init(scheme)
+		testExhaustiveOptimality(t, false)
+		testExhaustiveOptimality(t, true)
+	}
+}
+
+func testExhaustiveOptimality(t *testing.T, expanded bool) {
 	rng := rand.New(rand.NewSource(1729))
 	alphabet := []rune("中国安gza- 🙂")
 	queries := []string{"z", "zh", "zho", "zhong", "g", "guo", "a", "an", "zg", "zz", "gz", "aa", "zhg", "zhog", "zgg", "agg", "zzz", "中国", "中g"}
+	if expanded {
+		alphabet = []rune("中国安马超北京gzabjmc0-/ 🙂")
+		queries = append(queries, "ma", "machao", "mch", "mc", "beijing", "bj", "北jing", "中0g")
+	}
 	for trial := 0; trial < 4000; trial++ {
 		text := "中"
 		for j, n := 0, 1+rng.Intn(6); j < n; j++ {

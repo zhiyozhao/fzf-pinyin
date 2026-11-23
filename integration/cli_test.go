@@ -139,11 +139,22 @@ func TestPinyinSearchSyntax(t *testing.T) {
 func TestMixedRanking(t *testing.T) {
 	bin := binary(t, "FZFP_BIN", "fzfp")
 	for _, q := range []string{"zg", "zhongguo"} {
-		corpus := fmt.Sprintf("中--------国\nx中国\n中国\n%s\n", q)
-		got := filter(t, bin, corpus, "--filter", q)
-		want := q + "\n中国\nx中国\n中--------国\n"
-		if got.stdout != want {
-			t.Fatalf("q=%q got %q, want %q", q, got.stdout, want)
+		// The start advantage now applies to all five letters of zhong.
+		// Its upper bound is 2*(5+1)=12; g=11 costs 13, so the
+		// interior continuous alignment wins even against that boundary.
+		for _, gap := range []int{8, 11} {
+			gapped := "中" + strings.Repeat("-", gap) + "国"
+			corpus := fmt.Sprintf("%s\nx中国\n中国\n%s\n", gapped, q)
+			got := filter(t, bin, corpus, "--filter", q)
+			want := q + "\n中国\nx中国\n" + gapped + "\n"
+			if gap == 8 && q == "zhongguo" {
+				// Preserve the original fixture as an explicit tradeoff:
+				// 12 boundary advantage - 10 gap penalty = 2 points.
+				want = q + "\n中国\n" + gapped + "\nx中国\n"
+			}
+			if got.stdout != want {
+				t.Fatalf("q=%q gap=%d got %q, want %q", q, gap, got.stdout, want)
+			}
 		}
 	}
 }

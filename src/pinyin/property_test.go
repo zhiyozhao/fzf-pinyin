@@ -10,6 +10,13 @@ import (
 	"github.com/junegunn/fzf/src/util"
 )
 
+func TestNonHanSchemeDifferential(t *testing.T) {
+	for _, scheme := range testSchemes(t) {
+		algo.Init(scheme)
+		TestNonHanDifferential(t)
+	}
+}
+
 func TestNonHanDifferential(t *testing.T) {
 	rng := rand.New(rand.NewSource(20261120))
 	alphabet := []rune("abcXYZ123_ /:éÉößΩωЖж한글かな🙂💡")

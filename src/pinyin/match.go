@@ -10,12 +10,15 @@ import (
 
 // The DP has one row per original rune, one column per query rune. prev
 // ends at the preceding source rune; gap has skipped at least one rune.
-// An edge consumes one source rune and one or more query runes. Keeping the
-// best score per cell is exact because all future costs are additive and
-// depend only on query offset and whether there is a gap.
+// An edge consumes one source rune and one or more query runes. Each cell
+// keeps separate consecutive-block bonuses: a currently lower score with a
+// stronger block may overtake another alignment when more letters arrive.
+// All upstream schemes use raw block bonuses 0, 7, 8, 9 or 10.
+const blockBonuses = 5
+
 type state struct {
-	score, start, end, trace int
-	valid                    bool
+	score, start, end, trace, block int
+	valid                           bool
 }
 
 type traceNode struct{ position, previous int }
@@ -37,8 +40,9 @@ func word(r rune) bool { return unicode.IsLetter(r) || unicode.IsNumber(r) }
 
 func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool, mode Mode) (algo.Result, *[]int) {
 	m, n := len(query), input.Length()
-	storage := make([]state, 3*(m+1))
-	prev, next, gap := storage[:m+1], storage[m+1:2*(m+1)], storage[2*(m+1):]
+	width := (m + 1) * blockBonuses
+	storage := make([]state, 2*width+m+1)
+	prev, next, gap := storage[:width], storage[width:2*width], storage[2*width:]
 	var traces []traceNode
 	var best state
 	left, right := 0, n
@@ -77,48 +81,70 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 			(mode != Boundary || i == 0 || !word(input.Get(i-1)))
 		endOK := (mode != Suffix && mode != Equal || i+1 == right) &&
 			(mode != Boundary || i+1 == n || !word(input.Get(i+1)))
-		// All edges out of one predecessor share this scoring formula.
+		// Score typed letters as a literal consecutive chunk. A new, stronger
+		// boundary replaces the block bonus; a skipped source rune resets it.
 		offer := func(j int, from state, k, cost int) {
-			candidate := state{score: from.score + 16*k + 4*(k-1) - cost,
-				start: from.start, end: i + 1, trace: from.trace, valid: true}
+			block, first := bonus, bonus
 			if j == 0 {
-				candidate.score += 2 * bonus
+				first *= 2
 			} else if from.end == i {
-				candidate.score += max(8, bonus)
-			} else {
-				candidate.score += bonus
+				block = from.block
+				if bonus >= 8 && bonus > block {
+					block = bonus
+				}
+				first = max(4, bonus, block)
 			}
+			candidate := state{score: from.score + 16*k + first + max(4, block)*(k-1) - cost,
+				start: from.start, end: i + 1, trace: from.trace, block: block, valid: true}
 			col := j + k
-			if !better(candidate, next[col], forward) {
+			slot := 0
+			if block != 0 {
+				slot = block - 6
+			}
+			cell := col*blockBonuses + slot
+			if !better(candidate, next[cell], forward) {
 				return
 			}
 			if withPos {
 				candidate.trace = len(traces)
 				traces = append(traces, traceNode{i, from.trace})
 			}
-			next[col] = candidate
+			next[cell] = candidate
 			if col == m && endOK && better(candidate, best, forward) {
 				best = candidate
 			}
 		}
 		for j := 0; j < m; j++ {
-			from := prev[j]
-			if mode == Fuzzy {
-				adjacent, skipped := from, gap[j]
-				adjacent.score += max(8, bonus)
-				skipped.score += bonus
-				if better(skipped, adjacent, forward) {
-					from = gap[j]
-				}
-			}
-			if j == 0 && startOK {
-				from = state{start: i, trace: -1, valid: true}
-			}
-			if !from.valid {
+			if j == 0 && !startOK {
 				continue
 			}
+			if j > 0 {
+				reachable := mode == Fuzzy && gap[j].valid
+				for _, from := range prev[j*blockBonuses : (j+1)*blockBonuses] {
+					reachable = reachable || from.valid
+				}
+				if !reachable {
+					continue
+				}
+			}
+			consume := func(k, cost int) {
+				if j == 0 {
+					if startOK {
+						offer(j, state{start: i, trace: -1, valid: true}, k, cost)
+					}
+					return
+				}
+				for _, from := range prev[j*blockBonuses : (j+1)*blockBonuses] {
+					if from.valid {
+						offer(j, from, k, cost)
+					}
+				}
+				if mode == Fuzzy && gap[j].valid {
+					offer(j, gap[j], k, cost)
+				}
+			}
 			if literal == query[j] {
-				offer(j, from, 1, 0)
+				consume(1, 0)
 			}
 			for _, f := range forms {
 				k := min(len(f.text), m-j)
@@ -147,20 +173,21 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 					}
 				}
 				if ok {
-					offer(j, from, k, cost)
+					consume(k, cost)
 				}
 			}
 		}
 		if mode == Fuzzy {
 			for j := 1; j < m; j++ {
-				oldGap, newGap := gap[j], prev[j]
+				oldGap := gap[j]
 				oldGap.score--
-				newGap.score -= 3
-				if better(newGap, oldGap, forward) {
-					gap[j] = newGap
-				} else {
-					gap[j] = oldGap
+				for _, from := range prev[j*blockBonuses : (j+1)*blockBonuses] {
+					from.score -= 3
+					if better(from, oldGap, forward) {
+						oldGap = from
+					}
 				}
+				gap[j] = oldGap
 			}
 		}
 		prev, next = next, prev

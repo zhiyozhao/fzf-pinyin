@@ -16,10 +16,11 @@ func TestHanBoundaryXdaoScores(t *testing.T) {
 		score     int
 		positions []int
 	}{
-		{"文化宣导员会议", 93, []int{2, 3}},
-		{"小一二三四道", 91, []int{0, 5}},
-		{"小一道", 94, []int{0, 2}},
-		{"小一二道", 93, []int{0, 3}},
+		// dao's two internal letters now inherit 8 each instead of 4.
+		{"文化宣导员会议", 101, []int{2, 3}},
+		{"小一二三四道", 99, []int{0, 5}},
+		{"小一道", 102, []int{0, 2}},
+		{"小一二道", 101, []int{0, 3}},
 	} {
 		got, pos := run(FuzzyMatchV2, tc.text, "xdao", true)
 		if got.Score != tc.score || pos == nil || !reflect.DeepEqual(*pos, tc.positions) {
@@ -34,9 +35,9 @@ func TestHanShortGapTradeoff(t *testing.T) {
 		c := util.ToChars([]byte(text))
 		for _, forward := range []bool{true, false} {
 			got, pos := FuzzyMatchV2(false, true, forward, &c, []rune("xdao"), true, nil)
-			want, score := []int{0, 1 + len([]rune(gap))}, 94
+			want, score := []int{0, 1 + len([]rune(gap))}, 102
 			if gap == "一二" {
-				score = 93
+				score = 101
 				if !forward {
 					start := len([]rune("小" + gap + "道文文化"))
 					want = []int{start, start + 1}
@@ -50,8 +51,7 @@ func TestHanShortGapTradeoff(t *testing.T) {
 }
 
 func TestHanScoreBoundarySchemes(t *testing.T) {
-	defer algo.Init("default")
-	for _, scheme := range []string{"default", "path", "history"} {
+	for _, scheme := range testSchemes(t) {
 		algo.Init(scheme)
 		for _, prefix := range []string{"", " ", "/", "，", "文", "a", "1"} {
 			c := util.ToChars([]byte(prefix + "中"))
@@ -61,7 +61,7 @@ func TestHanScoreBoundarySchemes(t *testing.T) {
 				boundary = 8
 			}
 			got, _ := FuzzyMatchV2(false, true, true, &c, []rune("zhong"), false, nil)
-			if want := 16*5 + 4*4 - 1 + 2*boundary; got.Score != want {
+			if want := 16*5 + boundary*4 - 1 + 2*boundary; got.Score != want {
 				t.Fatalf("%s prefix=%q: %+v; want %d (B=%d)", scheme, prefix, got, want, boundary)
 			}
 		}
@@ -70,21 +70,21 @@ func TestHanScoreBoundarySchemes(t *testing.T) {
 
 func TestRandomHanContiguousAlignment(t *testing.T) {
 	rng := rand.New(rand.NewSource(20261123))
-	defer algo.Init("default")
 	checks := 0
-	for _, scheme := range []string{"default", "path", "history"} {
+	for _, scheme := range testSchemes(t) {
 		algo.Init(scheme)
 		for _, prefix := range []string{"", "文 ", "文，", "文/", "文"} {
 			for trial := 0; trial < 200; trial++ {
 				pair := []struct{ a, b, query string }{{"中", "国", "zguo"}, {"北", "京", "beijing"}, {"宣", "导", "xdao"}}[rng.Intn(3)]
-				// Equal spelling evidence and >=3 skipped Han guarantee a
-				// strict win even over default scheme's strongest start.
-				// Gap=1 can win and gap=2 can tie; separate tests pin those
-				// deliberate boundary/gap tradeoffs instead of hiding them.
+				// A start-boundary advantage now applies to every typed
+				// letter of the first syllable, exactly as in a literal chunk.
+				// Bound it by 2*(first syllable letters+1), then choose a
+				// gap whose affine penalty strictly exceeds that advantage.
 				gap := ""
 				// Fillers cannot consume any query letters; otherwise a
 				// different syllable segmentation adds different evidence.
-				for n := 3 + rng.Intn(14); n > 0; n-- {
+				firstLetters := map[string]int{"zguo": 1, "beijing": 3, "xdao": 1}[pair.query]
+				for n := 2*firstLetters + 1 + rng.Intn(14); n > 0; n-- {
 					gap += []string{"文", "田"}[rng.Intn(2)]
 				}
 				gapped := prefix + pair.a + gap + pair.b
