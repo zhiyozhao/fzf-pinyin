@@ -42,8 +42,7 @@ func TestRandomCrossScriptRanking(t *testing.T) {
 				}
 				native, _ := run(algo.FuzzyMatchV2, literalPrefix+q, q, false)
 				cost := native.Score - tight.Score
-				hanCount := len([]rune(w.han))
-				if tight.Start < 0 || cost < 1 || cost > 3*hanCount {
+				if tight.Start < 0 || cost != 1 {
 					t.Fatalf("literal parity: %s %q %q score=%d native=%d cost=%d", scheme, prefix+w.han, q, tight.Score, native.Score, cost)
 				}
 				// Insert nonquery lowercase letters within a literal word.
@@ -52,8 +51,8 @@ func TestRandomCrossScriptRanking(t *testing.T) {
 				cut := 1 + rng.Intn(len(q)-1)
 				looseText := literalPrefix + q[:cut] + strings.Repeat("x", 1+rng.Intn(12)) + q[cut:]
 				loose, _ := run(algo.FuzzyMatchV2, looseText, q, false)
-				if tight.Score < loose.Score {
-					t.Fatalf("cross-script gap: %s %q / %q q=%q: %d < %d", scheme, prefix+w.han, looseText, q, tight.Score, loose.Score)
+				if tight.Score <= loose.Score {
+					t.Fatalf("cross-script gap: %s %q / %q q=%q: %d <= %d", scheme, prefix+w.han, looseText, q, tight.Score, loose.Score)
 				}
 				checks++
 			}
@@ -80,9 +79,9 @@ func TestSpellingEvidenceAndBlockAlignment(t *testing.T) {
 		text, q, literal string
 		cost             int
 	}{
-		{"/马超Go", "machaoGo", "/machaoGo", 2},
-		{"/马Go超", "maGochao", "/maGochao", 2},
-		{"/马超", "macha", "/macha", 5},
+		{"/马超Go", "machaoGo", "/machaoGo", 1},
+		{"/马Go超", "maGochao", "/maGochao", 1},
+		{"/马超", "macha", "/macha", 1},
 		{"/马超", "马chao", "/马chao", 1},
 	} {
 		got, _ := run(FuzzyMatchV2, tc.text, strings.ToLower(tc.q), false)
@@ -95,7 +94,7 @@ func TestSpellingEvidenceAndBlockAlignment(t *testing.T) {
 	for _, forward := range []bool{true, false} {
 		c := util.ToChars([]byte("文马超---------/马超"))
 		got, positions := FuzzyMatchV2(false, true, forward, &c, []rune("machao"), true, nil)
-		if got.Score != 157 || positions == nil || !reflect.DeepEqual(*positions, []int{13, 14}) {
+		if got.Score != 158 || positions == nil || !reflect.DeepEqual(*positions, []int{13, 14}) {
 			t.Fatalf("best chunk forward=%v: %+v %v", forward, got, positions)
 		}
 	}
@@ -126,9 +125,9 @@ func TestRandomBoundaryTradeoffAudit(t *testing.T) {
 				case equivalent.Score < loose.Score:
 					// A newly introduced stronger boundary also wins in fzf.
 					nativeTradeoffs++
-				case equivalent.Score-tight.Score >= 1 && equivalent.Score-tight.Score <= 3*len([]rune(w.han)):
-					// Preserve the documented preference for literal evidence
-					// when only the small conversion cost separates them.
+				case equivalent.Score == loose.Score && tight.Score == equivalent.Score-1:
+					// The only remaining tax-only reversal is a literal tie
+					// before the single line penalty; no per-character costs.
 					costTradeoffs++
 				default:
 					t.Fatalf("unexplained ranking: %s %q q=%q gap=%q tight=%d equivalent=%d loose=%d", scheme, prefix+w.han, q, gap, tight.Score, equivalent.Score, loose.Score)
@@ -140,7 +139,7 @@ func TestRandomBoundaryTradeoffAudit(t *testing.T) {
 }
 
 func TestMachaoScores(t *testing.T) {
-	want := []int{138, 137, 137, 157, 157}
+	want := []int{138, 137, 137, 158, 158}
 	for i, text := range machaoPaths {
 		got, positions := run(FuzzyMatchV2, text, "machao", true)
 		t.Logf("%s: score=%d positions=%v", text, got.Score, positions)
@@ -151,9 +150,9 @@ func TestMachaoScores(t *testing.T) {
 	chinese, _ := run(FuzzyMatchV2, machaoPaths[3], "machao", false)
 	loose, _ := run(algo.FuzzyMatchV2, machaoPaths[0], "machao", false)
 	literal, _ := run(algo.FuzzyMatchV2, "/machao", "machao", false)
-	// Six typed letters are six consecutive observations; there are two
-	// full-spelling costs, rather than a discount for four internal letters.
-	if chinese.Score != literal.Score-2 || chinese.Score <= loose.Score {
+	// Six typed letters are six consecutive observations; the entire
+	// pinyin path pays one point, independently of its source rune count.
+	if chinese.Score != literal.Score-1 || chinese.Score <= loose.Score {
 		t.Fatalf("full spelling=%d; literal=%d; gapped literal=%d", chinese.Score, literal.Score, loose.Score)
 	}
 }
@@ -163,12 +162,12 @@ func TestExplicitScoringTradeoffs(t *testing.T) {
 		han, literal, query    string
 		hanScore, literalScore int
 	}{
-		// Real new word boundaries can outweigh small abbreviation costs.
-		{"-北京", "-b-j", "bj", 52, 53},
-		{"-音乐", "-y-y", "yy", 50, 53},
+		// A one-point line penalty is smaller than the gap penalty of 3.
+		{"-北京", "-b-j", "bj", 55, 53},
+		{"-音乐", "-y-y", "yy", 55, 53},
 		// Default's line-start bonus is inherited by all three letters of
 		// bei: this is also a literal fzf boundary/gap tradeoff.
-		{"文北京", "北文田田文文京", "beijing", 174, 175},
+		{"文北京", "北文田田文文京", "beijing", 175, 176},
 	} {
 		han, _ := run(FuzzyMatchV2, tc.han, tc.query, false)
 		literal, _ := run(FuzzyMatchV2, tc.literal, tc.query, false)

@@ -45,4 +45,6 @@ Only the last matched character accepts an unfinished syllable: `zhonggu` matche
 
 Pinyin ignores case; literal Latin text follows fzf's case settings. Tones, double-pinyin schemes, and spelling correction are not supported. Readings are not selected by phrase context. See [pinyin input](docs/pinyin.md) and [search syntax](docs/syntax.md) for details, exclusions, fields, and multiple conditions.
 
+Full syllables, initials, and unfinished final syllables have no per-character penalty. A match using any pinyin pays one point in total, so literal text leads when letters, boundaries, and consecutive bonuses are equal.
+
 Supporting documentation is in Chinese: [development](CONTRIBUTING.md) · [changelog](CHANGELOG.fzfp.md). See also [upstream fzf documentation](README.fzf.md), [MIT](LICENSE), and [third-party licenses](THIRD_PARTY_NOTICES.md).

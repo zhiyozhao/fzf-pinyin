@@ -15,19 +15,22 @@ import (
 // dictionary lookup, or spelling builder. Small inputs make exhaustive search
 // practical and expose mistakes when competing adjacent/gapped paths merge.
 func exhaustive(text, q string) (int, bool) {
-	type edge struct{ index, letters, cost int }
+	type edge struct {
+		index, letters int
+		phonetic       bool
+	}
 	type form struct {
-		text string
-		cost int
+		text     string
+		phonetic bool
 	}
 	known := map[rune][]form{
-		'中': {{"zhong", 1}, {"zh", 2}, {"z", 3}},
-		'国': {{"guo", 1}, {"g", 2}},
-		'安': {{"an", 1}, {"a", 3}},
-		'马': {{"ma", 1}, {"m", 2}},
-		'超': {{"chao", 1}, {"ch", 2}, {"c", 3}},
-		'北': {{"bei", 1}, {"b", 2}},
-		'京': {{"jing", 1}, {"j", 2}},
+		'中': {{"zhong", true}, {"zh", true}, {"z", true}},
+		'国': {{"guo", true}, {"g", true}},
+		'安': {{"an", true}, {"a", true}},
+		'马': {{"ma", true}, {"m", true}},
+		'超': {{"chao", true}, {"ch", true}, {"c", true}},
+		'北': {{"bei", true}, {"b", true}},
+		'京': {{"jing", true}, {"j", true}},
 	}
 	runes, qr := []rune(text), []rune(q)
 	c := util.RunesToChars(runes)
@@ -36,6 +39,7 @@ func exhaustive(text, q string) (int, bool) {
 	search = func(start, offset int, path []edge) {
 		if offset == len(qr) {
 			score, block := 0, 0
+			usedPinyin := false
 			for j, e := range path {
 				bonus := algo.BoundaryBonus(&c, e.index)
 				if e.index > 0 {
@@ -47,7 +51,8 @@ func exhaustive(text, q string) (int, bool) {
 						bonus = max(bonus, 8)
 					}
 				}
-				score += 16*e.letters - e.cost
+				score += 16 * e.letters
+				usedPinyin = usedPinyin || e.phonetic
 				if j == 0 {
 					block = bonus
 					score += 2 * bonus
@@ -68,22 +73,21 @@ func exhaustive(text, q string) (int, bool) {
 					score += max(4, block)
 				}
 			}
+			if usedPinyin {
+				score--
+			}
 			best, found = max(best, max(1, score)), true
 			return
 		}
 		for i := start; i < len(runes); i++ {
-			forms := append([]form{{string(runes[i]), 0}}, known[runes[i]]...)
+			forms := append([]form{{string(runes[i]), false}}, known[runes[i]]...)
 			for _, f := range forms {
 				spelling := []rune(f.text)
 				k := min(len(spelling), len(qr)-offset)
 				if string(spelling[:k]) != string(qr[offset:offset+k]) {
 					continue
 				}
-				cost := f.cost
-				if k < len(spelling) {
-					cost = max(4, cost)
-				}
-				search(i+1, offset+k, append(path, edge{i, k, cost}))
+				search(i+1, offset+k, append(path, edge{i, k, f.phonetic}))
 			}
 		}
 	}

@@ -51,7 +51,23 @@ func Wrap(fallback algo.Algo, mode Mode) algo.Algo {
 		if !phonetic {
 			return native, nativePos
 		}
-		result, positions := match(cs, norm, forward, input, query, withPos, mode)
+		result, positions := match(cs, norm, forward, input, query, withPos, mode, true)
+		if result.Start >= 0 {
+			// max(all paths - 1, literal paths) charges exactly once for
+			// using pinyin, without adding a "used pinyin" DP dimension.
+			// Native recall covers literal paths, but its score need not:
+			// the DP also has Han/Han and Han/Latin boundary bonuses.
+			rawScore := result.Score
+			result.Score = max(1, result.Score-1)
+			if native.Start >= 0 && rawScore > native.Score {
+				literal, literalPos := match(cs, norm, forward, input, query, withPos, mode, false)
+				if literal.Start >= 0 && (literal.Score > result.Score || literal.Score == result.Score &&
+					(literal.Start != result.Start && (literal.Start < result.Start) == forward ||
+						literal.Start == result.Start && literal.End != result.End && (literal.End < result.End) == forward)) {
+					result, positions = literal, literalPos
+				}
+			}
+		}
 		if result.Start >= 0 && (native.Start < 0 || result.Score > native.Score) {
 			return result, positions
 		}
@@ -86,7 +102,6 @@ func HasHan(input *util.Chars) bool {
 
 type spelling struct {
 	text string
-	cost int
 }
 
 // Only per-rune readings are cached: input strings and queries are never kept.
@@ -106,17 +121,16 @@ func spellings(r rune) []spelling {
 	args := data.Args{Style: data.Normal, Heteronym: true}
 	normal := data.SinglePinyin(r, args)
 	forms := []spelling{}
-	add := func(s string, cost int) {
+	add := func(s string) {
 		if s == "" {
 			return
 		}
-		for i, f := range forms {
+		for _, f := range forms {
 			if f.text == s {
-				forms[i].cost = min(cost, f.cost)
 				return
 			}
 		}
-		forms = append(forms, spelling{s, cost})
+		forms = append(forms, spelling{s})
 	}
 	for _, s := range normal {
 		// Normal style uses keyboard v for ü. Non-ASCII rare syllables remain
@@ -124,8 +138,8 @@ func spellings(r rune) []spelling {
 		if strings.IndexFunc(s, func(r rune) bool { return r < 'a' || r > 'z' }) >= 0 {
 			continue
 		}
-		add(s, 1)
-		add(s[:1], 3)
+		add(s)
+		add(s[:1])
 		initial := ""
 		for _, c := range []string{"zh", "ch", "sh", "b", "p", "m", "f", "d", "t", "n", "l", "g", "k", "h", "j", "q", "x", "r", "z", "c", "s"} {
 			if strings.HasPrefix(s, c) {
@@ -134,11 +148,11 @@ func spellings(r rune) []spelling {
 			}
 		}
 		if initial != "" {
-			add(initial, 2)
+			add(initial)
 		} else {
 			// y/w are spelling letters, not phonological initials. Accept
 			// the zero-initial final as well as the normal spelling.
-			add(zeroFinal(s), 1)
+			add(zeroFinal(s))
 		}
 	}
 	actual, _ := readings.LoadOrStore(r, forms)

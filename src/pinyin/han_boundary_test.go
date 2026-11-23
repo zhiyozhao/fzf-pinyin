@@ -16,11 +16,12 @@ func TestHanBoundaryXdaoScores(t *testing.T) {
 		score     int
 		positions []int
 	}{
-		// dao's two internal letters now inherit 8 each instead of 4.
-		{"文化宣导员会议", 101, []int{2, 3}},
-		{"小一二三四道", 99, []int{0, 5}},
-		{"小一道", 102, []int{0, 2}},
-		{"小一二道", 101, []int{0, 3}},
+		// Interior xdao: 4*16 + 2*8 + 3*8 - 1 = 103.
+		// A line-start x adds 4 points; a gap of g costs g+2.
+		{"文化宣导员会议", 103, []int{2, 3}},
+		{"小一二三四道", 101, []int{0, 5}},
+		{"小一道", 104, []int{0, 2}},
+		{"小一二道", 103, []int{0, 3}},
 	} {
 		got, pos := run(FuzzyMatchV2, tc.text, "xdao", true)
 		if got.Score != tc.score || pos == nil || !reflect.DeepEqual(*pos, tc.positions) {
@@ -35,9 +36,9 @@ func TestHanShortGapTradeoff(t *testing.T) {
 		c := util.ToChars([]byte(text))
 		for _, forward := range []bool{true, false} {
 			got, pos := FuzzyMatchV2(false, true, forward, &c, []rune("xdao"), true, nil)
-			want, score := []int{0, 1 + len([]rune(gap))}, 102
+			want, score := []int{0, 1 + len([]rune(gap))}, 104
 			if gap == "一二" {
-				score = 101
+				score = 103
 				if !forward {
 					start := len([]rune("小" + gap + "道文文化"))
 					want = []int{start, start + 1}

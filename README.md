@@ -45,4 +45,6 @@ sh install-fzfp --version 0.1.0
 
 拼音不分大小写；实际英文字母仍遵守 fzf 的大小写设置。不支持声调、双拼和拼写纠错，多音字不按词组消歧。更多写法见[拼音指南](docs/pinyin.md)，排除、字段及多条件查询见[搜索语法](docs/syntax.md)。
 
+全拼、缩写和末字半截拼音均不按字扣分；整条匹配用了拼音只扣 1 分，让相同字母、边界和连续块下的原文字面命中排在前面。
+
 [开发指南](CONTRIBUTING.md) · [变更记录](CHANGELOG.fzfp.md) · [上游 fzf 文档](README.fzf.md) · [MIT](LICENSE) · [第三方许可](THIRD_PARTY_NOTICES.md)

@@ -38,7 +38,9 @@ func better(a, b state, forward bool) bool {
 
 func word(r rune) bool { return unicode.IsLetter(r) || unicode.IsNumber(r) }
 
-func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool, mode Mode) (algo.Result, *[]int) {
+// allowPinyin=false reuses the same state slots to recover untaxed literal
+// paths when the native matcher alone cannot cover their boundary scores.
+func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool, mode Mode, allowPinyin bool) (algo.Result, *[]int) {
 	m, n := len(query), input.Length()
 	width := (m + 1) * blockBonuses
 	storage := make([]state, 2*width+m+1)
@@ -66,7 +68,10 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 		if norm {
 			literal = algo.FoldRune(literal)
 		}
-		forms := spellings(r)
+		var forms []spelling
+		if allowPinyin {
+			forms = spellings(r)
+		}
 		bonus := algo.BoundaryBonus(input, i)
 		// Any Han character may start a Chinese word. This is a scoring
 		// bonus only; Boundary mode still requires actual delimiters.
@@ -83,7 +88,7 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 			(mode != Boundary || i+1 == n || !word(input.Get(i+1)))
 		// Score typed letters as a literal consecutive chunk. A new, stronger
 		// boundary replaces the block bonus; a skipped source rune resets it.
-		offer := func(j int, from state, k, cost int) {
+		offer := func(j int, from state, k int) {
 			block, first := bonus, bonus
 			if j == 0 {
 				first *= 2
@@ -94,7 +99,7 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 				}
 				first = max(4, bonus, block)
 			}
-			candidate := state{score: from.score + 16*k + first + max(4, block)*(k-1) - cost,
+			candidate := state{score: from.score + 16*k + first + max(4, block)*(k-1),
 				start: from.start, end: i + 1, trace: from.trace, block: block, valid: true}
 			col := j + k
 			slot := 0
@@ -127,32 +132,28 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 					continue
 				}
 			}
-			consume := func(k, cost int) {
+			consume := func(k int) {
 				if j == 0 {
 					if startOK {
-						offer(j, state{start: i, trace: -1, valid: true}, k, cost)
+						offer(j, state{start: i, trace: -1, valid: true}, k)
 					}
 					return
 				}
 				for _, from := range prev[j*blockBonuses : (j+1)*blockBonuses] {
 					if from.valid {
-						offer(j, from, k, cost)
+						offer(j, from, k)
 					}
 				}
 				if mode == Fuzzy && gap[j].valid {
-					offer(j, gap[j], k, cost)
+					offer(j, gap[j], k)
 				}
 			}
 			if literal == query[j] {
-				consume(1, 0)
+				consume(1)
 			}
 			for _, f := range forms {
 				k := min(len(f.text), m-j)
 				// Only the last query token may use an arbitrary prefix.
-				cost := f.cost
-				if k < len(f.text) {
-					cost = max(4, cost)
-				}
 				ok := true
 				for a := 0; a < k; a++ {
 					q := query[j+a]
@@ -173,7 +174,7 @@ func match(cs, norm, forward bool, input *util.Chars, query []rune, withPos bool
 					}
 				}
 				if ok {
-					consume(k, cost)
+					consume(k)
 				}
 			}
 		}
