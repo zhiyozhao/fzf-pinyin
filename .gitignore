@@ -12,3 +12,7 @@ fzf
 tmp
 *.patch
 .idea
+.cache/
+Artifacts/
+local.mk
+.env.local

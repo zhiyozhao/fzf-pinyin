@@ -1,0 +1,72 @@
+# fzfp development entry point: make -f Makefile.fzfp <target>
+GO ?= go
+ROOT := $(CURDIR)
+export GOMODCACHE := $(ROOT)/.cache/go-mod
+export GOCACHE := $(ROOT)/.cache/go-build
+export GOPATH := $(ROOT)/.cache/go
+UPSTREAM := bf4869b7fa7748d973eeb414da4dde0d7fe4cd3c
+export FZFP_BIN := $(ROOT)/Artifacts/fzfp
+export FZF_REFERENCE_BIN := $(ROOT)/Artifacts/fzf-reference
+E2E_RUBY ?= ruby
+VERSION ?= 0.1.0
+GORELEASER_VERSION := v2.20.0
+
+.PHONY: all build reference check test fmt run bench fuzz test-ui shots package e2e release-build
+all: build
+build:
+	$(GO) build -trimpath -o Artifacts/fzfp .
+
+# A pristine, pinned checkout from this repository's local upstream history.
+reference:
+	@test -d .cache/upstream || git worktree add --detach .cache/upstream $(UPSTREAM)
+	@test "$$(git -C .cache/upstream rev-parse HEAD)" = $(UPSTREAM)
+	@git -C .cache/upstream diff --exit-code HEAD -- .
+	@test -z "$$(git -C .cache/upstream ls-files --others --exclude-standard)"
+	cd .cache/upstream && $(GO) build -trimpath -o $(FZF_REFERENCE_BIN) .
+
+fmt:
+	$(GO) fmt ./...
+
+check: build reference
+	@test -z "$$(gofmt -l main.go src integration internal cmd)"
+	$(GO) vet ./...
+	$(GO) test ./...
+	$(GO) test -race ./src/pinyin ./integration
+	sh scripts/test-install.sh
+	@git diff --check
+
+test: build reference
+	$(GO) test ./...
+
+run: build
+	./Artifacts/fzfp
+
+bench: build reference
+	$(GO) run ./cmd/bench
+	$(GO) test -run '^$$' -bench . -benchmem ./src/pinyin
+
+fuzz:
+	$(GO) test -run '^$$' -fuzz '^FuzzPrefixRecall$$' -fuzztime 15s ./src/pinyin
+
+# Terminal interaction is exercised in an isolated PTY without opening windows.
+test-ui: build reference
+	$(GO) test -count=1 -v ./integration
+
+# Ruby 3.4+; gems must already be in .cache/gems (see CONTRIBUTING.md).
+e2e: build reference
+	GEM_HOME="$(ROOT)/.cache/gems" GEM_PATH="$(ROOT)/.cache/gems" "$(E2E_RUBY)" scripts/e2e.rb
+
+shots:
+	@echo 'Terminal tool: see README examples and make -f Makefile.fzfp test-ui (no GUI screenshots).'
+
+package: build
+	@echo 'Local executable: Artifacts/fzfp; no install or upload performed.'
+
+release-build:
+	CGO_ENABLED=0 $(GO) build -trimpath -buildvcs=false -ldflags='-s -w -X main.version=$(VERSION) -X main.revision=' -o Artifacts/release/fzfp .
+
+.PHONY: snapshot
+snapshot:
+	FZFP_VERSION=$(VERSION) $(GO) run github.com/goreleaser/goreleaser/v2@$(GORELEASER_VERSION) check
+	FZFP_VERSION=$(VERSION) $(GO) run github.com/goreleaser/goreleaser/v2@$(GORELEASER_VERSION) release --snapshot --clean
+	sh scripts/verify-archives.sh Artifacts/dist $(VERSION)-snapshot
