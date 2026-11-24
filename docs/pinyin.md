@@ -12,9 +12,14 @@
 | 北京 | `北jing`、`bei京` | 可以混用原字和拼音 |
 | 旅游 | `lvyou`、`lüyou` | ü 也可以写成 v |
 | 方案 | `fan` | “方”用 f，“案”用 an |
-| 音乐 | `inyue` | 零声母字也接受韵母写法，“音”的 yin 可写成 in |
+| 音乐 | `yinyue`、`yy` | 保留正常的 y/w 拼写，不另加 `in` 等韵母打法 |
+| 略、虐 | `lue/lve`、`nue/nve` | 两套 ü 复韵母键入都接受 |
+| 居、鱼 | `ju/jv`、`yu/yv` | j/q/x/y 后的 ü 系列可用 u 或 v |
+| 嗯 | `en`、`ng`、`e`、`n` | 前两项为完整码，后两项为简拼；不加 eng |
 
-最后两种属于额外接受的写法，照常输入 `fangan`、`yinyue` 也可以。
+“方案”的 `fan` 是 `f+an` 简拼，照常输入 `fangan` 也可以。lü/nü 用 `lv/nv`（或 ü），不与 `lu/nu` 混同；鱼不接受单独的 `v`。不再接受旧版零声母韵母打法，例如音 `in`、万 `uan`、一 `i`、五 `u`、要 `iao`。
+
+少量叹词按字补码：呣 `m/mou/mu`，噷 `hm/hen/xin`，欸 `ai/ei/xie/e`，诶 `ei`，誒 `ei/xi/yi`，呒及嘸 `fu/mu/wu/m`，哼 `heng`。首字母从这些编码生成；其他独立鼻音不自动变成 `en/eng/mu`。罕见 ASCII 字典码（如 `biang/cei/wong`）保留，未经核实的 `bong/len/hng` 不作为完整码。
 
 ## 最后一个字可以没打完
 

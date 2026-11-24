@@ -25,7 +25,7 @@ func TestSpellings(t *testing.T) {
 		{"方案", "fan"}, {"方案", "fangan"}, {"方案", "fa"},
 		{"西安", "xian"}, {"银行", "yinhang"}, {"银行", "yinxing"},
 		{"重庆", "chongqing"}, {"重庆", "zhongqing"},
-		{"音乐", "inyue"}, {"音乐", "yy"}, {"音乐", "yinyue"},
+		{"音乐", "yy"}, {"音乐", "yinyue"},
 		{"女绿", "nvlv"}, {"女绿", "nülü"},
 		{"src/中文测试.go", "zwcs.go"}, {"src/中文测试.go", "src/zhongwencs.go"},
 		{"𠀀", "he"}, {"〇", "ling"},
@@ -143,7 +143,7 @@ func TestEveryPrefix(t *testing.T) {
 		queries := map[string][]string{
 			"中国":   {"zhongguo", "zhongg", "zhguo", "zguo", "中guo"},
 			"重庆银行": {"chongqingyinhang", "zhongqyh", "cqyinxing"},
-			"方案":   {"fangan", "fan"}, "音乐": {"yinyue", "inyue", "yy"},
+			"方案":   {"fangan", "fan"}, "音乐": {"yinyue", "yy"},
 			"女绿": {"nvlv", "nülü"}, "中Go国": {"zhonggoguo"},
 		}
 		for _, q := range queries[text] {

@@ -30,7 +30,7 @@
 
 `FZFP_PERF=1 go test -run '^TestPerfLiteralPass$' -v ./src/pinyin` 用 Wrap 原有条件在计时外筛出需要补算字面的候选，只测额外一遍 DP 的调用数、分位数及分配；不是关闭补算后比较不同结果。原 24 组固定语料不变，另加 100k 行 `田abc`/`国中a` 和长字面位置组覆盖补算分支。
 
-`go test -run '^TestLegacyDifferential$' -v ./src/pinyin` 在三个独立 scheme 进程内对 76553e1d 的全路径 DP、纯字面 DP 和完整 Wrap 比较每条候选的 score、起止和 positions（含 nil、顺序），同时覆盖带/不带位置、固定种子随机输入、所有性能场景和长间隔回溯。设置 `FZFP_BASELINE_BIN`、`FZFP_BIN` 和 `FZF_REFERENCE_BIN` 后，`go test -run '^TestPerfLegacyCLI$' -v ./integration` 逐字节比较旧版/新版的完整排序输出、stderr 和退出码。
+`go test -run '^TestLegacyDifferential$' -v ./src/pinyin` 在三个独立 scheme 进程内对 76553e1d 的全路径 DP、纯字面 DP 和完整 Wrap 比较每条候选的 score、起止和 positions（含 nil、顺序），同时覆盖带/不带位置、固定种子随机输入、所有性能场景和长间隔回溯；两套 DP 都使用当前输入法拼写集合。设置 `FZFP_BASELINE_BIN`（旧 zeroFinal 规则的 76553e1d 或其后 main 构建）、`FZFP_BIN` 和 `FZF_REFERENCE_BIN` 后，`go test -run '^TestPerfLegacyCLI$' -v ./integration` 对拼写行为未变的查询逐字节比较完整排序输出、stderr 和退出码。受规则删除影响的 `nv` 改由明确差异断言覆盖：旧版可用 `n+v` 找到 `n乐`，新版只保留女的 nv；完整新规则另由 IME 正反例测试验证。
 
 ## 完整终端对照
 

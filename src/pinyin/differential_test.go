@@ -50,8 +50,8 @@ func TestLegacyDifferential(t *testing.T) {
 				count++
 			}
 		}
-		tokens := []string{"中", "国", "北", "京", "重", "行", "乐", "长", "得", "单", "解", "曾", "区", "薄", "女", "绿", "〇", "𠀀", "A", "b", "é", "Ü", "ü", "/", "-", " ", "🙂", "\t", "北京", "中国", "zhong", "Beijing", "Ω"}
-		queries := []string{"zhongguo", "zg", "beijing", "bj", "zhongg", "chonghangyuezhang", "pr", "SDK", "北jing", "nü", "lv", "Ü", "a", "b", "国", " ", strings.Repeat("zhongguo", 6)}
+		tokens := []string{"中", "国", "北", "京", "重", "行", "乐", "长", "得", "单", "解", "曾", "区", "薄", "女", "绿", "略", "居", "鱼", "音", "万", "嗯", "呣", "噷", "欸", "呒", "嘸", "〇", "𠀀", "A", "b", "é", "Ü", "ü", "/", "-", " ", "🙂", "\t", "北京", "中国", "zhong", "Beijing", "Ω"}
+		queries := []string{"zhongguo", "zg", "beijing", "bj", "zhongg", "chonghangyuezhang", "pr", "SDK", "北jing", "nü", "lv", "lue", "jv", "yv", "v", "in", "uan", "en", "ng", "mu", "hm", "e", "Ü", "a", "b", "国", " ", strings.Repeat("zhongguo", 6)}
 		// The winning interval contains a huge gap; exercise live-trace GC as
 		// well as interval replay, including negative scores clamped to one.
 		for _, forward := range []bool{false, true} {

@@ -108,6 +108,29 @@ type spelling struct {
 // The cache is bounded by the dictionary's finite codepoint set.
 var readings sync.Map // rune -> []spelling
 
+// Keyboard spellings, rather than phonological finals. Restrict u/v aliases
+// to these legal syllables: lu/nu/gu and other u readings stay distinct.
+var syllableAliases = map[string]string{
+	"lve": "lue", "nve": "nue",
+	"ju": "jv", "jue": "jve", "juan": "jvan", "jun": "jvn",
+	"qu": "qv", "que": "qve", "quan": "qvan", "qun": "qvn",
+	"xu": "xv", "xue": "xve", "xuan": "xvan", "xun": "xvn",
+	"yu": "yv", "yue": "yve", "yuan": "yvan", "yun": "yvn",
+}
+
+// Character-specific IME codes missing from go-pinyin Normal. Do not turn
+// every standalone n/ng/m or non-ASCII dictionary reading into en/eng/mu/e.
+// Evidence: Sogou FAQ 2003929 (嗯); rime-luna-pinyin 84685a7 (呣/呒/嘸);
+// rime-ice 8105.dict.yaml at 927e1cf (欸/呒). These are coding facts only;
+// no input-method dictionary or spelling-algebra implementation is copied.
+var runeAdditions = map[rune][]string{
+	'嗯': {"en"},
+	'呣': {"mu"},
+	'欸': {"e"},
+	'呒': {"fu", "mu"},
+	'嘸': {"mu"},
+}
+
 func spellings(r rune) []spelling {
 	if cached, ok := readings.Load(r); ok {
 		return cached.([]spelling)
@@ -133,45 +156,32 @@ func spellings(r rune) []spelling {
 		forms = append(forms, spelling{s})
 	}
 	for _, s := range normal {
-		// Normal style uses keyboard v for ü. Non-ASCII rare syllables remain
-		// searchable literally; they are not silently stripped or invented.
+		// Normal already uses keyboard v for ü. Residual non-ASCII readings
+		// need a per-character decision, not generic accent stripping.
 		if strings.IndexFunc(s, func(r rune) bool { return r < 'a' || r > 'z' }) >= 0 {
 			continue
 		}
-		add(s)
-		add(s[:1])
-		initial := ""
-		for _, c := range []string{"zh", "ch", "sh", "b", "p", "m", "f", "d", "t", "n", "l", "g", "k", "h", "j", "q", "x", "r", "z", "c", "s"} {
-			if strings.HasPrefix(s, c) {
-				initial = c
-				break
-			}
+		switch s {
+		case "bong", "len", "hng":
+			// Unverified IME full codes. Other readings remain available.
+			continue
 		}
-		if initial != "" {
-			add(initial)
-		} else {
-			// y/w are spelling letters, not phonological initials. Accept
-			// the zero-initial final as well as the normal spelling.
-			add(zeroFinal(s))
+		add(s)
+		add(syllableAliases[s])
+	}
+	for _, s := range runeAdditions[r] {
+		add(s)
+	}
+	// Derive abbreviations from the final full-code set, including additions
+	// (en -> e for 嗯). y/w stay intact; there is no zero-initial-final alias.
+	full := len(forms)
+	for i := 0; i < full; i++ {
+		s := forms[i].text
+		add(s[:1])
+		if strings.HasPrefix(s, "zh") || strings.HasPrefix(s, "ch") || strings.HasPrefix(s, "sh") {
+			add(s[:2])
 		}
 	}
 	actual, _ := readings.LoadOrStore(r, forms)
 	return actual.([]spelling)
-}
-
-func zeroFinal(s string) string {
-	switch {
-	case strings.HasPrefix(s, "yu"):
-		return "v" + s[2:]
-	case strings.HasPrefix(s, "yi"):
-		return s[1:]
-	case strings.HasPrefix(s, "y"):
-		return "i" + s[1:]
-	case strings.HasPrefix(s, "wu"):
-		return s[1:]
-	case strings.HasPrefix(s, "w"):
-		return "u" + s[1:]
-	default:
-		return s
-	}
 }

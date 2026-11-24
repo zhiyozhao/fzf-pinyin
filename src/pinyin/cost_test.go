@@ -42,8 +42,12 @@ func TestEverySpellingPaysOnce(t *testing.T) {
 			{"/中", "zhong", "/zhong"}, // full
 			{"/中", "zh", "/zh"},       // consonant initial
 			{"/音", "y", "/y"},         // first letter
-			{"/音", "in", "/in"},       // zero-initial final
-			{"/中", "zho", "/zho"},     // unfinished final syllable
+			{"/音", "yin", "/yin"},     // y stays part of the full spelling
+			{"/略", "lue", "/lue"},
+			{"/居", "jv", "/jv"},
+			{"/嗯呒", "enmu", "/enmu"}, // additions pay once for the whole path
+			{"/嗯呒", "efu", "/efu"},   // abbreviation derived from added en
+			{"/中", "zho", "/zho"},    // unfinished final syllable
 			{"/中国", "zhongguo", "/zhongguo"},
 			{"/中国", "zg", "/zg"},
 			{"/先", "xian", "/xian"},

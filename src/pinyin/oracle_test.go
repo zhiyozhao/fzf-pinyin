@@ -31,6 +31,14 @@ func exhaustive(text, q string) (int, bool) {
 		'超': {{"chao", true}, {"ch", true}, {"c", true}},
 		'北': {{"bei", true}, {"b", true}},
 		'京': {{"jing", true}, {"j", true}},
+		'略': {{"lve", true}, {"lue", true}, {"l", true}},
+		'鱼': {{"yu", true}, {"yv", true}, {"y", true}},
+		'音': {{"yin", true}, {"y", true}},
+		'嗯': {{"en", true}, {"ng", true}, {"e", true}, {"n", true}},
+		'呣': {{"m", true}, {"mou", true}, {"mu", true}},
+		'噷': {{"hm", true}, {"hen", true}, {"xin", true}, {"h", true}, {"x", true}},
+		'欸': {{"ai", true}, {"ei", true}, {"xie", true}, {"e", true}, {"a", true}, {"x", true}},
+		'呒': {{"fu", true}, {"mu", true}, {"m", true}, {"wu", true}, {"f", true}, {"w", true}},
 	}
 	runes, qr := []rune(text), []rune(q)
 	c := util.RunesToChars(runes)
@@ -108,8 +116,8 @@ func testExhaustiveOptimality(t *testing.T, expanded bool) {
 	alphabet := []rune("中国安gza- 🙂")
 	queries := []string{"z", "zh", "zho", "zhong", "g", "guo", "a", "an", "zg", "zz", "gz", "aa", "zhg", "zhog", "zgg", "agg", "zzz", "中国", "中g"}
 	if expanded {
-		alphabet = []rune("中国安马超北京gzabjmc0-/ 🙂")
-		queries = append(queries, "ma", "machao", "mch", "mc", "beijing", "bj", "北jing", "中0g")
+		alphabet = []rune("中国安马超北京略鱼音嗯呣噷欸呒gzabjmc0-/ 🙂")
+		queries = append(queries, "ma", "machao", "mch", "mc", "beijing", "bj", "北jing", "中0g", "lue", "lve", "yv", "yu", "v", "in", "en", "ng", "eng", "mu", "hm", "efu", "enmu", "heng", "xi")
 	}
 	for trial := 0; trial < 4000; trial++ {
 		text := "中"

@@ -35,8 +35,11 @@ func TestRankingExpectations(t *testing.T) {
 		{"default has no basename preference", "bj", "a/北京/x", "long/北京", "default", "a/北京/x"},
 		{"mixed scripts", "beijinggo", "notes/北--京Go.txt", "notes/北京Go.txt", "default", "notes/北京Go.txt"},
 		{"mixed literal Han", "北jing", "notes/北--京.txt", "notes/北京.txt", "default", "notes/北京.txt"},
-		{"equal spelling evidence uses length", "beijing", "notes/波额伊鸡伊年哥.txt", "notes/北京.txt", "default", "notes/北京.txt"},
-		{"equal spelling evidence keeps history order", "beijing", "notes/波额伊鸡伊年哥.txt", "notes/北京.txt", "history", "notes/波额伊鸡伊年哥.txt"},
+		// m+a+ch+a+o uses current initials/full codes. The old beijing
+		// fixture used i for 伊, which is no longer an accepted spelling.
+		{"equal spelling evidence uses length", "machao", "notes/马阿吃阿哦.txt", "notes/马超.txt", "default", "notes/马超.txt"},
+		{"equal spelling evidence keeps history order", "machao", "notes/马阿吃阿哦.txt", "notes/马超.txt", "history", "notes/马阿吃阿哦.txt"},
+		{"removed zero-final no longer ties", "beijing", "notes/波额伊鸡伊年哥.txt", "notes/北京.txt", "history", "notes/北京.txt"},
 		{"complete final and prefix tie", "beiji", "notes/北京.txt", "notes/北极.txt", "default", "notes/北京.txt"},
 		{"complete final and prefix reverse tie", "beiji", "notes/北极.txt", "notes/北京.txt", "default", "notes/北极.txt"},
 		{"unweighted readings", "chongming", "重名.txt", "虫鸣.txt", "default", "重名.txt"},

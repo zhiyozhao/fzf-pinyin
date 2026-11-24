@@ -75,7 +75,12 @@ var recallFixture = []struct {
 	{'中', []string{"zhong", "zh", "z"}},
 	{'国', []string{"guo", "g"}},
 	{'安', []string{"an", "a"}},
-	{'音', []string{"yin", "in", "y"}},
+	{'音', []string{"yin", "y"}},
+	{'略', []string{"lve", "lue", "l"}},
+	{'鱼', []string{"yu", "yv", "y"}},
+	{'嗯', []string{"en", "ng", "e", "n"}},
+	{'呣', []string{"m", "mou", "mu"}},
+	{'噷', []string{"hm", "hen", "xin", "h", "x"}},
 	{'重', []string{"zhong", "chong", "zh", "ch", "z", "c"}},
 	{'行', []string{"xing", "hang", "x", "h"}},
 }
