@@ -62,5 +62,14 @@ func PerfCases() []PerfCase {
 	for _, q := range []string{"pr", "sdk", "config"} {
 		cases = append(cases, PerfCase{"english100k/" + q, english.String(), q, false})
 	}
+	// Additional cost-v2 probes; the original 24 cases above are unchanged.
+	var literalLatin, literalHan strings.Builder
+	for i := 0; i < 100000; i++ {
+		fmt.Fprintf(&literalLatin, "田abc-%06d.txt\n", i)
+		fmt.Fprintf(&literalHan, "国中a-%06d.txt\n", i)
+	}
+	cases = append(cases, PerfCase{"literal-extra100k/abc", literalLatin.String(), "abc", false})
+	cases = append(cases, PerfCase{"literal-extra100k/han", literalHan.String(), "中a", false})
+	cases = append(cases, PerfCase{"literal-long/positions", "田" + strings.Repeat("abc", 33334) + "\n", "abc", true})
 	return cases
 }

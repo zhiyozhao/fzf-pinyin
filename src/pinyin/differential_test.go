@@ -50,6 +50,7 @@ func TestLegacyDifferential(t *testing.T) {
 		// well as interval replay, including negative scores clamped to one.
 		for _, forward := range []bool{false, true} {
 			check("中"+strings.Repeat("国", 100000)+"北", "zhongguobei", Fuzzy, false, true, forward, true)
+			check("中a"+strings.Repeat("bc", 50000)+"d", "abcd", Fuzzy, false, true, forward, true)
 		}
 		// Above the retained scratch capacity, then shrink again in the random
 		// cases below: oversized arrays must not leave stale state in the pool.

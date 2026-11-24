@@ -26,9 +26,11 @@
 
 `internal/fixture/perf.go` 使用种子 20261123 生成路径/标题、超长行、48 字母查询、多音字和纯英文语料。`go run ./cmd/perf -bins baseline=/tmp/before,optimized=/tmp/after -compare` 对真实 `--filter` 进程预热后交替测量 21 次，输出中位数、nearest-rank p95 和输出 SHA-256。用各版本 `./cmd/perfcli` 的构建传入 `-alloc-bins baseline=/tmp/before-alloc,optimized=/tmp/after-alloc`，单独测量完整过滤进程的累计 Go 分配（含初始化）；正常耗时测量不含分配探针。纯英文对照在同一命令中加入固定上游的正常/探针程序。
 
-`FZFP_PERF=1 go test -run '^TestPerfQuantiles$' -v ./src/pinyin` 对同一语料做库级全量扫描，与保留的 `eb83824c` 实现交替测量 21 次，记录中位数、p95 和平均分配。`FZFP_PERF_CASE=long` 可筛选场景。`go test -run '^$' -bench BenchmarkPerfScan -benchmem ./src/pinyin` 提供标准 Go benchmark（每 op 为一遍完整语料）；原有 `BenchmarkMatch` 每 op 为一行，两者数字不可直接比较。性能测量应独占运行，避免与 race、profile 或另一轮测量争用 CPU。
+`FZFP_PERF=1 go test -run '^TestPerfQuantiles$' -v ./src/pinyin` 对同一语料做库级全量扫描，与保留的 `76553e1d` 实现交替测量 21 次，记录中位数、p95 和平均分配。`FZFP_PERF_CASE=long` 可筛选场景。`go test -run '^$' -bench BenchmarkPerfScan -benchmem ./src/pinyin` 提供标准 Go benchmark（每 op 为一遍完整语料）；原有 `BenchmarkMatch` 每 op 为一行，两者数字不可直接比较。性能测量应独占运行，避免与 race、profile 或另一轮测量争用 CPU。
 
-`go test -run '^TestLegacyDifferential$' -v ./src/pinyin` 在三个独立 scheme 进程内对旧 DP 比较每条候选的 score、起止和 positions（含 nil、顺序），覆盖固定种子随机输入、所有性能场景和长间隔回溯。设置 `FZFP_BASELINE_BIN`、`FZFP_BIN` 和 `FZF_REFERENCE_BIN` 后，`go test -run '^TestPerfLegacyCLI$' -v ./integration` 逐字节比较旧版/新版的完整排序输出、stderr 和退出码。
+`FZFP_PERF=1 go test -run '^TestPerfLiteralPass$' -v ./src/pinyin` 用 Wrap 原有条件在计时外筛出需要补算字面的候选，只测额外一遍 DP 的调用数、分位数及分配；不是关闭补算后比较不同结果。原 24 组固定语料不变，另加 100k 行 `田abc`/`国中a` 和长字面位置组覆盖补算分支。
+
+`go test -run '^TestLegacyDifferential$' -v ./src/pinyin` 在三个独立 scheme 进程内对 76553e1d 的全路径 DP、纯字面 DP 和完整 Wrap 比较每条候选的 score、起止和 positions（含 nil、顺序），同时覆盖带/不带位置、固定种子随机输入、所有性能场景和长间隔回溯。设置 `FZFP_BASELINE_BIN`、`FZFP_BIN` 和 `FZF_REFERENCE_BIN` 后，`go test -run '^TestPerfLegacyCLI$' -v ./integration` 逐字节比较旧版/新版的完整排序输出、stderr 和退出码。
 
 ## 完整终端对照
 
