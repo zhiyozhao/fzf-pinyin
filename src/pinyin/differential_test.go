@@ -14,6 +14,12 @@ import (
 // Compare every field and exact position order, including nil vs empty. The
 // frozen reference uses its own state, transitions and tie-breaking helpers.
 func TestLegacyDifferential(t *testing.T) {
+	if raceEnabled {
+		// The ordinary test phase runs this serial, multi-million-case
+		// differential in full. Race instrumentation adds no concurrency
+		// coverage here and exceeds CI's default ten-minute test timeout.
+		t.Skip("serial differential runs in full without -race; race instrumentation adds no concurrency coverage")
+	}
 	for _, scheme := range testSchemes(t) {
 		algo.Init(scheme)
 		rng := rand.New(rand.NewSource(20261123))
