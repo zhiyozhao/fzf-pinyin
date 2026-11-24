@@ -30,7 +30,17 @@
 
 `FZFP_PERF=1 go test -run '^TestPerfLiteralPass$' -v ./src/pinyin` 用 Wrap 原有条件在计时外筛出需要补算字面的候选，只测额外一遍 DP 的调用数、分位数及分配；不是关闭补算后比较不同结果。原 24 组固定语料不变，另加 100k 行 `田abc`/`国中a` 和长字面位置组覆盖补算分支。
 
-`go test -run '^TestLegacyDifferential$' -v ./src/pinyin` 在三个独立 scheme 进程内对 76553e1d 的全路径 DP、纯字面 DP 和完整 Wrap 比较每条候选的 score、起止和 positions（含 nil、顺序），同时覆盖带/不带位置、固定种子随机输入、所有性能场景和长间隔回溯；两套 DP 都使用当前输入法拼写集合。设置 `FZFP_BASELINE_BIN`（旧 zeroFinal 规则的 76553e1d 或其后 main 构建）、`FZFP_BIN` 和 `FZF_REFERENCE_BIN` 后，`go test -run '^TestPerfLegacyCLI$' -v ./integration` 对拼写行为未变的查询逐字节比较完整排序输出、stderr 和退出码。受规则删除影响的 `nv` 改由明确差异断言覆盖：旧版可用 `n+v` 找到 `n乐`，新版只保留女的 nv；完整新规则另由 IME 正反例测试验证。
+`go test -count=1 -run '^TestLegacyDifferential$' -v ./src/pinyin` 在三个独立 scheme 进程内对 76553e1d 的全路径 DP、纯字面 DP 和完整 Wrap 比较 score、起止和 positions（含 nil、顺序）；两套 DP 都使用当前输入法拼写集合。默认规模使用种子 20261123 的前 2,000 组随机用例，对每个固定性能场景均匀抽取最多 128 行（含首尾和未命中行）。固定语料按抽样序号交替 forward/backward；每个用例均比较带/不带位置及允许/禁用拼音边。长行、48 字母查询、多音字、英文、字面补算、长间隔回溯等类别全部保留；长行与 scratch 容量回归保持原始长度，所有单行场景另跑六种模式、两个方向。随机用例继续覆盖六种模式、大小写和归一化组合。
+
+**改动拼音匹配代码时，合并前必须本地运行一次完整规模并记录结果**：
+
+```sh
+FZFP_FULL_DIFF=1 go test -timeout 20m -count=1 -run '^TestLegacyDifferential$' -v ./src/pinyin
+```
+
+完整规模使用全部 60,000 组随机用例和所有固定语料候选，不按命中结果筛选，合计千万级比对；日志列出每个场景实际/总行数以及每种 scheme 的比对数。这里的本地 `-timeout 20m` 不修改默认 CI 超时。race 编译仍跳过这项串行差分，其他 race 检查不变。
+
+设置 `FZFP_BASELINE_BIN`（旧 zeroFinal 规则的 76553e1d 或其后 main 构建）、`FZFP_BIN` 和 `FZF_REFERENCE_BIN` 后，`go test -run '^TestPerfLegacyCLI$' -v ./integration` 对拼写行为未变的查询逐字节比较完整排序输出、stderr 和退出码。受规则删除影响的 `nv` 改由明确差异断言覆盖：旧版可用 `n+v` 找到 `n乐`，新版只保留女的 nv；完整新规则另由 IME 正反例测试验证。
 
 ## 完整终端对照
 
