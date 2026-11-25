@@ -47,7 +47,7 @@ with tempfile.TemporaryDirectory(prefix="fzfp-benchmark-") as tmp:
                 result = subprocess.run([str(cli), "--no-extended", "-i", "--scheme="+scheme, "--filter="+query], input=text, text=True, capture_output=True, check=True, env=env)
                 cli_times.append((time.perf_counter() - start)*1000)
                 assert result.stdout.splitlines() == expected, (scheme, query, "CLI order mismatch")
-            swift_result = json.loads(subprocess.check_output([str(swift), str(corpus), query, scheme, str(args.repetitions)]))
+            swift_result = json.loads(subprocess.check_output([str(swift), str(corpus), query, scheme, str(args.repetitions), "json", "1", "false"]))
             assert swift_result["indexes"] == indexes, (scheme, query, "Swift order mismatch")
             row = {"scheme": scheme, "query": query, "matches": len(hits), "python_ms": times, "swift_ms": swift_result["milliseconds"], "cli_ms": cli_times}
             row["medians_ms"] = {name: statistics.median(row[name+"_ms"]) for name in ("python", "swift", "cli")}

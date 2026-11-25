@@ -51,3 +51,9 @@ Local artifacts: a universal macOS static archive of about 19 MiB before zip;
 compressed Python wheels about 1.45 MiB arm64 / 1.55 MiB x86_64, including Go
 runtime and full license notices. arm64 was executed; x86_64 was compiled and
 inspected, not run. Linux CI is authored but was not executed in this session.
+
+## Current prepared/typed three-language results
+
+The original JSON benchmark above is retained as historical evidence. The new
+Swift/Python/Node matrix, phase breakdown, full/top-50 and 1/4-worker timings
+are documented in [bindings-performance-v2.md](bindings-performance-v2.md).

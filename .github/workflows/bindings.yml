@@ -2,10 +2,10 @@ name: Bindings (build and test only)
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', '.github/workflows/bindings.yml']
+    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
   push:
     branches: [devs/bindings]
-    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', '.github/workflows/bindings.yml']
+    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
 permissions:
   contents: read
 jobs:
@@ -22,6 +22,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - run: bash scripts/build-bindings.sh all
       - run: bash scripts/test-bindings.sh
       - run: |
@@ -38,6 +41,7 @@ jobs:
           path: |
             .cache/bindings/*.whl
             bindings/swift/.cache/CFzfp.xcframework.zip
+            .cache/bindings/npm/*.tgz
   linux:
     strategy:
       matrix:
@@ -49,14 +53,18 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       # Native-architecture manylinux containers supply GCC + auditwheel. Go
       # is installed only inside the ephemeral container, never on the host.
       - run: |
-          docker run --rm -v "$PWD:/work" -w /work '${{ matrix.image }}' bash -euc '
+          node_prefix="$(node -p 'require("path").dirname(require("path").dirname(process.execPath))')"
+          docker run --rm -v "$PWD:/work" -v "$node_prefix:/node:ro" -w /work '${{ matrix.image }}' bash -euc '
             case "$(uname -m)" in x86_64) goarch=amd64 ;; aarch64) goarch=arm64 ;; esac
             curl -fsSL "https://go.dev/dl/go1.27.4.linux-${goarch}.tar.gz" -o /tmp/go.tar.gz
             tar -C /tmp -xzf /tmp/go.tar.gz
-            export PATH=/tmp/go/bin:/opt/python/cp312-cp312/bin:$PATH
+            export PATH=/tmp/go/bin:/opt/python/cp312-cp312/bin:/node/bin:$PATH
             mkdir -p .cache/bindings/raw .cache/bindings/repaired
             python -m pip wheel --no-deps -w .cache/bindings/raw ./bindings/python
             auditwheel repair .cache/bindings/raw/*.whl -w .cache/bindings/repaired
@@ -64,8 +72,15 @@ jobs:
             go test -race ./bindings/core ./capi ./src/algo
             go build -trimpath -buildvcs=false -o .cache/bindings/fzfp .
             FZFP_CLI="$PWD/.cache/bindings/fzfp" python -m unittest discover -s bindings/python/tests -v
+            bash scripts/build-javascript.sh
+            node --test bindings/javascript/test.js
+            bash scripts/test-javascript-package.sh
+            cc -I capi capi/examples/typed.c bindings/javascript/.cache/libfzfp.a -lpthread -ldl -lm -o .cache/bindings/c-typed
+            .cache/bindings/c-typed
           '
       - uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.runner }}
-          path: .cache/bindings/repaired/*.whl
+          path: |
+            .cache/bindings/repaired/*.whl
+            .cache/bindings/npm/*.tgz

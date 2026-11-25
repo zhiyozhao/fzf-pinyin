@@ -1,6 +1,6 @@
-# Swift / Python bindings (ABI 1, preview 0.1.0)
+# Swift / Python / Node bindings (typed ABI 2 + JSON ABI 1, preview 0.1.0)
 
-One Go implementation serves the CLI, Swift and Python. All binding files live
+One Go implementation serves the CLI, Swift, Python and Node. All binding files live
 in this repository so a scoring change and its shared test vectors can be
 reviewed together. No existing upstream file is modified by the bindings.
 Measured batch results and reproduction commands: [performance](bindings-performance.md).
@@ -40,14 +40,55 @@ at the ABI boundary; Python surrogate-only strings raise UnicodeEncodeError.
 
 ## C ABI and memory
 
+The current language convenience APIs use additive **typed ABI 2**, as does
+`Index(candidates).find(query, limit, positions)`. Construct an Index once;
+it copies UTF-8 candidates and prepares rune storage, trimmed lengths and path
+metadata once. Each query prepares case/normalization once and reuses fixed
+100K/2048 upstream slabs per worker, retaining upstream fallback behavior.
+An ingestion-time conservative ASCII letter mask includes case/accent-folded
+literals and every synthetic pinyin/IME spelling; queries only skip candidates
+missing required ASCII letters. This is an order-insensitive rejection filter,
+not an alternate matching algorithm. Unicode scalars without ASCII query letters
+are left to the original matcher. Dictionary/Unicode coverage and randomized
+differential tests guard against false negatives.
+Workers keep bounded heaps with **all** tie keys for top-K. Path conservatively
+traces exact start during ranking; other schemes can score without alignment.
+Only returned hits are traced on `positions=true`. Legacy convenience results
+keep exact start/end even when position arrays are disabled.
+
+`find` rank hits have index/score and optional alignment (`nil`/`None`/`null`).
+The host retains its original list to map indexes to values. Unlimited is
+nil/None/null, zero returns empty, negative limits are invalid at the language
+API. C uses -1 for unlimited. Position arrays are canonical rune coordinates;
+only returned alignments are converted to UTF-8/UTF-16 by wrappers.
+
+ABI 2 uses a UTF-8 byte arena plus count+1 uint64 offsets at construction,
+validated monotonic uint64 handles, versioned fixed-width options, contiguous
+typed hits and a canonical positions arena. Struct sizes, flags, reserved
+fields, offset bounds and UTF-8 are validated. Limits: 256 MiB bytes/query,
+10 million candidates, 64 workers. Structs use natural C alignment. Successful
+find returns a C-owned `fzfp_results` even when empty; release exactly once
+with `fzfp_results_free`. On error output is NULL. Status codes are documented
+in `capi/fzfp.h`; nonexistent/stale handles and double destroy return 3. Destroy
+unregisters a handle without invalidating a query already holding a Go reference.
+Results are independent of the Index and remain valid after destroy.
+
+`fzfp_typed_abi_version()` is 2. **`fzfp_abi_version()` remains 1**, preserving
+existing JSON consumers and the original golden metadata. Language version
+queries additionally expose typed ABI 2 (`typedABIVersion` in Swift). No Go
+pointer escapes, no per-candidate FFI callback or per-query corpus transfer.
+See `capi/examples/typed.c` for a compiled typed ownership/validation example.
+
+### Retained JSON ABI 1
+
 The hand-maintained public header is `capi/fzfp.h`; the generated cgo header is
 private. ABI 1 exports only `fzfp_abi_version`, `fzfp_call`, and `fzfp_free`.
 `fzfp_call` takes a UTF-8 JSON request and its byte length, returning a C-allocated
 JSON buffer with explicit length. The same function does both match and batch
 filter. This keeps Go internal structs out of the ABI, gives identical semantics
 to all hosts, and avoids per-candidate FFI calls. JSON encoding/decoding costs
-are included in the benchmarks. A future typed batch transport should be a new
-ABI entrypoint backed by measurements, not a silent ABI 1 change.
+are included in the separate legacy benchmark. ABI 1 behavior is unchanged;
+typed entrypoints are additive. Swift `filterJSON` is an explicit baseline.
 
 ```c
 #include "fzfp.h"
@@ -89,8 +130,14 @@ state. Re-initializing path then default is unsafe. The new
 `src/algo/library_scheme.go` captures all three schemes once, each from pristine
 defaults; it selects/restores complete snapshots under a mutex for each library
 operation. All FFI calls are safe from host threads, but matching operations
-are **serialized**, including whole batches. Concurrent mixed-scheme calls are
-tested. Callers cannot mix bare Go `algo` calls with this facade concurrently
+are **serialized across requests**, including whole batches. Within a typed
+batch, up to min(4, GOMAXPROCS) workers run by default; explicit workers is
+0 (auto) or 1..64. Corpora under 1024 rows use one worker. Each worker owns
+scratch and a local bounded heap; it joins before scheme globals are restored.
+Worker panics are joined and propagated to the ABI recovery boundary. Same
+Index queries serialize scratch reuse; Swift/Python close locks wait for the
+in-flight query. Node's synchronous API stays in its owning isolate. Concurrent
+mixed-scheme calls are tested. Callers cannot mix bare Go `algo` calls with this facade concurrently
 inside the same Go runtime. Swift's static archive and Python's shared library
 each own their runtime; linking multiple differently-versioned Go archives into
 one executable is unsupported. Normal Go callers of `src/pinyin` keep their
@@ -98,7 +145,8 @@ existing initialization contract. No asynchronous cancellation API is promised.
 
 ## Build and distribution
 
-From a checkout with Go, C compiler, Python 3.10+, and (on macOS) Xcode:
+From a checkout with Go, C compiler, Python 3.10+, Node 22+ with development
+headers, and (on macOS) Xcode:
 
 ```sh
 bash scripts/build-bindings.sh all
@@ -107,6 +155,12 @@ bash scripts/test-bindings.sh
 
 Outputs are ignored: `bindings/swift/.cache/CFzfp.xcframework` and
 `.cache/bindings/*.whl`, plus an XCFramework zip and its SwiftPM checksum.
+Node main/platform npm tarballs are in `.cache/bindings/npm`; a direct C
+N-API compile needs no node-gyp or install-time downloads. The Node README
+documents optionalDependencies platform resolution and worker_threads use.
+Node blocks its event loop during find; Go workers do not make the host call
+asynchronous. Browser/WASM, native cancellation, prefix incremental caches,
+streaming injection and mutation are intentionally deferred in this phase.
 SwiftPM uses the local binaryTarget after this explicit
 build; SwiftPM cannot by itself build the Go source. There is no build plugin
 that invokes installers or requests permissions. Swift distribution should use

@@ -3,10 +3,12 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 root="$PWD"
 mkdir -p .cache/bindings
-case "${1:-all}" in all|swift|python) ;; *) echo 'usage: build-bindings.sh [all|swift|python]' >&2; exit 2 ;; esac
+case "${1:-all}" in all|swift|python|javascript) ;; *) echo 'usage: build-bindings.sh [all|swift|python|javascript]' >&2; exit 2 ;; esac
+if [ "${1:-all}" = javascript ]; then exec bash scripts/build-javascript.sh; fi
 case "${1:-all}" in
   swift|all)
-    if [ "$(uname -s)" != Darwin ]; then echo 'Swift artifacts require macOS/Xcode' >&2; exit 1; fi
+    if [ "$(uname -s)" != Darwin ] && [ "${1:-all}" = swift ]; then echo 'Swift artifacts require macOS/Xcode' >&2; exit 1; fi
+    if [ "$(uname -s)" = Darwin ]; then
     build_dir="$(mktemp -d /tmp/fzfp-swift.XXXXXX)"
     trap 'rm -r "$build_dir"' EXIT
     for arch in arm64 amd64; do
@@ -34,6 +36,7 @@ case "${1:-all}" in
     mv "$build_dir/CFzfp.xcframework.zip" .cache/bindings/
     swift package compute-checksum .cache/bindings/CFzfp.xcframework.zip > .cache/bindings/CFzfp.xcframework.zip.sha256
     if [ "${1:-all}" = swift ]; then exit 0; fi
+    fi
     ;;
 esac
 if [ "$(uname -s)" = Darwin ]; then
@@ -43,3 +46,4 @@ if [ "$(uname -s)" = Darwin ]; then
 else
   python3 -m pip wheel --no-deps --wheel-dir "$root/.cache/bindings" "$root/bindings/python"
 fi
+if [ "${1:-all}" = all ]; then bash scripts/build-javascript.sh; fi
