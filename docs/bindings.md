@@ -176,14 +176,21 @@ documents optionalDependencies platform resolution and worker_threads use.
 Node blocks its event loop during find; Go workers do not make the host call
 asynchronous. Browser/WASM, native cancellation, prefix incremental caches,
 streaming injection and mutation are intentionally deferred in this phase.
+The repository-root `Package.swift` reuses the in-tree Swift sources and tests.
 SwiftPM uses the local binaryTarget after this explicit
 build; SwiftPM cannot by itself build the Go source. There is no build plugin
 that invokes installers or requests permissions. Swift distribution should use
 a tagged XCFramework zip and `swift package compute-checksum`, switching the
-binaryTarget to a release URL only after review. The in-repository subpackage
-currently supports local path dependencies. SwiftPM URL dependencies require
-a root Package.swift or a distribution repository; decide that at publication.
-No URL or checksum is fabricated in this preview.
+root binaryTarget to the release URL only after review. Local path dependencies
+work after generating the ignored XCFramework; the nested manifest remains for
+existing local consumers. A remote URL dependency requires that release artifact
+and its checksum, so the current checkout alone is insufficient. No release is
+published and no URL or checksum is fabricated in this preview.
+
+Verify the root entrypoint from the repository root with
+`swift build --scratch-path .cache/swift-root` and
+`swift test --scratch-path .cache/swift-root`. Its explicit Swift target paths
+do not change the Go build or any upstream source file.
 
 macOS 13+ arm64 and x86_64 are combined into one static universal XCFramework.
 Python wheels use ctypes and `py3-none-<platform>` tags, not CPython extension
@@ -234,6 +241,6 @@ Accessed 2026-11-25:
 Separate binding repositories let language maintainers release independently
 but add core-version skew, duplicated tests, and cross-repo coordination. Keep
 `capi/`, `bindings/core`, `bindings/swift`, `bindings/python`, and shared
-`bindings/testdata` here for atomic review; consider a thin Swift distribution
-repository only if needed for URL-based SwiftPM releases. Avoid gopy, a second
+`bindings/testdata` here for atomic review; use the root Swift manifest for
+future URL-based SwiftPM releases. Avoid gopy, a second
 implementation, or subprocess execution in the in-process binding hot path.

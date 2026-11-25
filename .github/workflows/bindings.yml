@@ -2,15 +2,16 @@ name: Bindings (build and test only)
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
+    paths: ['Package.swift', 'bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'src/bindings_oracle_test.go', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
   push:
-    branches: [devs/bindings]
-    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
+    branches: [main, devs/bindings]
+    paths: ['Package.swift', 'bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'src/bindings_oracle_test.go', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
 permissions:
   contents: read
 jobs:
   macos:
     strategy:
+      fail-fast: false
       matrix:
         runner: [macos-15, macos-15-intel]
     runs-on: ${{ matrix.runner }}
@@ -27,6 +28,12 @@ jobs:
           node-version: '22'
       - run: bash scripts/build-bindings.sh all
       - run: bash scripts/test-bindings.sh
+      - name: Root SwiftPM build and tests
+        env:
+          FZFP_CLI_ORACLE_DIR: ${{ github.workspace }}/.cache/bindings/cli-oracle
+        run: |
+          swift build --scratch-path .cache/swift-root
+          swift test --scratch-path .cache/swift-root
       - run: npx --yes --package typescript@5.9.3 tsc --project bindings/javascript/tsconfig.json
       - run: |
           cp bindings/testdata/golden.json .cache/bindings/original-golden.json
@@ -45,6 +52,7 @@ jobs:
             .cache/bindings/npm/*.tgz
   linux:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - runner: ubuntu-24.04

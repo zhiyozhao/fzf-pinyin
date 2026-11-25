@@ -4,16 +4,24 @@ Swift 5.9+, macOS 13+, Xcode, Go and a C compiler for source builds.
 
 ```sh
 bash scripts/build-bindings.sh swift
-cd bindings/swift
-swift build
-swift test
+swift build --scratch-path .cache/swift-root
+swift test --scratch-path .cache/swift-root
 ```
 
-Add `.package(path: "path/to/fzfp/bindings/swift")` and the `Fzfp` product to
+The primary SwiftPM entrypoint is `Package.swift` at the repository root.
+Add `.package(path: "path/to/fzfp")` and the `Fzfp` product to
 a consuming Swift package after building the XCFramework. Both macOS CPUs
 are included. The local binaryTarget is generated and ignored by Git.
-For this local path the package identity is `swift` (the directory name), so
-the consuming target uses `.product(name: "Fzfp", package: "swift")`.
+For this example the local package identity is `fzfp` (the directory name), so
+the consuming target uses `.product(name: "Fzfp", package: "fzfp")`.
+The nested `bindings/swift/Package.swift` remains available for existing local
+consumers; its package identity is `swift`.
+
+Remote URL dependencies are a future distribution step: the root binaryTarget
+must reference a published XCFramework zip and its real
+`swift package compute-checksum` value. The current local artifact is ignored,
+so a remote dependency cannot build from the Git checkout alone. No release URL
+or placeholder checksum is provided, and no release is published at this stage.
 
 ```swift
 import Fzfp
