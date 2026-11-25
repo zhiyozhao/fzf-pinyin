@@ -1,0 +1,11 @@
+[build-system]
+requires = []
+build-backend = "backend"
+backend-path = ["."]
+
+[project]
+name = "fzfp"
+version = "0.1.0"
+description = "fzf pinyin matching and batch filtering using the shared Go core"
+requires-python = ">=3.10"
+license = "MIT"
