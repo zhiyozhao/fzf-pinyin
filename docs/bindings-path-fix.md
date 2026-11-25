@@ -103,3 +103,25 @@ workers, are recorded in `bindings-benchmark-path-fix.json` after all tests.
 Corpus construction remains separate. One cold query precedes 21 warm samples.
 Every returned index/score is checked against full results validated by CLI
 text order. The raw results include native phase metrics and host overhead.
+
+Measured after fix commit `02c1ce2e`, Apple M1 Pro arm64, Swift release,
+Python 3.12.16, Node 22.22.0. Milliseconds, median / nearest-rank p95:
+
+| Scheme/query | Swift | Python | JS |
+|---|---:|---:|---:|
+| default/bj | 6.48 / 7.45 | 7.05 / 8.40 | 6.69 / 8.25 |
+| path/bj | 7.34 / 9.02 | 7.80 / 11.24 | 8.02 / 12.27 |
+
+Reproduce with an installed rebuilt wheel and rebuilt Swift release/Node addon:
+
+```sh
+python scripts/benchmark-bindings-v2.py --schemes default path --queries bj \
+  --top-only --top-repetitions 21 --output docs/bindings-benchmark-path-fix.json
+```
+
+Local validation: `bash scripts/test-bindings.sh` passes (Python 7 tests, JS 4,
+Swift 6; all consume 1260 live datasets plus 189 golden vectors); sdist rebuild
+and installation tests pass; full `go test -race ./...` passes; go vet, shell
+syntax and git diff --check pass. Linux ASan/tsc CI steps remain unexecuted.
+All upstream existing paths remain unchanged from the pre-fix HEAD. No push,
+publication, new local tool installation, Maclip or protected artifact changes.
