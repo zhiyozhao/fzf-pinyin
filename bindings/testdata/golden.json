@@ -1,0 +1,6822 @@
+{
+  "format_version": 1,
+  "core_revision": "093ccbbdeae6e446e1e903d1ed80971d428e524b",
+  "abi_version": 1,
+  "core_version": "0.1.0",
+  "dictionary_version": "go-pinyin v0.21.0",
+  "vectors": [
+    {
+      "name": "default:中国/zhongguo",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "zhongguo",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 217,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:北京/bj",
+      "request": {
+        "operation": "match",
+        "text": "北京",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 61,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:长沙/chsh",
+      "request": {
+        "operation": "match",
+        "text": "长沙",
+        "candidates": null,
+        "query": "chsh",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 113,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:中Go国/zhonggo国",
+      "request": {
+        "operation": "match",
+        "text": "中Go国",
+        "candidates": null,
+        "query": "zhonggo国",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 217,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3,
+            4,
+            5
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:中国/中g",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "中g",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 61,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:中国/zhonggu",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "zhonggu",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 191,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:音乐/yy",
+      "request": {
+        "operation": "match",
+        "text": "音乐",
+        "candidates": null,
+        "query": "yy",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 61,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:重庆/chongqing",
+      "request": {
+        "operation": "match",
+        "text": "重庆",
+        "candidates": null,
+        "query": "chongqing",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 243,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:绿茶/lvcha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lvcha",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 139,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:绿茶/lücha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lücha",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 139,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:略过/lueguo",
+      "request": {
+        "operation": "match",
+        "text": "略过",
+        "candidates": null,
+        "query": "lueguo",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 165,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:略过/lveguo",
+      "request": {
+        "operation": "match",
+        "text": "略过",
+        "candidates": null,
+        "query": "lveguo",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 165,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:巨人/jvren",
+      "request": {
+        "operation": "match",
+        "text": "巨人",
+        "candidates": null,
+        "query": "jvren",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 139,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:嗯好/enhao",
+      "request": {
+        "operation": "match",
+        "text": "嗯好",
+        "candidates": null,
+        "query": "enhao",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 139,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:女儿/nver",
+      "request": {
+        "operation": "match",
+        "text": "女儿",
+        "candidates": null,
+        "query": "nver",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 113,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:呣啊/mua",
+      "request": {
+        "operation": "match",
+        "text": "呣啊",
+        "candidates": null,
+        "query": "mua",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 87,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:中国/guozhong",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "guozhong",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:绿茶/lucha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lucha",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 139,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:嗯好/enghao",
+      "request": {
+        "operation": "match",
+        "text": "嗯好",
+        "candidates": null,
+        "query": "enghao",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:fooBar/fb",
+      "request": {
+        "operation": "match",
+        "text": "fooBar",
+        "candidates": null,
+        "query": "fb",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:FooBar/FB",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:café/cafe",
+      "request": {
+        "operation": "match",
+        "text": "café",
+        "candidates": null,
+        "query": "cafe",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 114,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:cafe/café",
+      "request": {
+        "operation": "match",
+        "text": "cafe",
+        "candidates": null,
+        "query": "café",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:😀中国é/zg",
+      "request": {
+        "operation": "match",
+        "text": "😀中国é",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            4,
+            7
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:𠀀中国/zg",
+      "request": {
+        "operation": "match",
+        "text": "𠀀中国",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            4,
+            7
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:a\u0000北京\r\n/bj",
+      "request": {
+        "operation": "match",
+        "text": "a\u0000北京\r\n",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 2,
+          "end": 4,
+          "positions": [
+            2,
+            3
+          ],
+          "utf8_positions": [
+            2,
+            5
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:😀/😀",
+      "request": {
+        "operation": "match",
+        "text": "😀",
+        "candidates": null,
+        "query": "😀",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 36,
+          "start": 0,
+          "end": 1,
+          "positions": [
+            0
+          ],
+          "utf8_positions": [
+            0
+          ],
+          "utf16_positions": [
+            0
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:é北京/́bj",
+      "request": {
+        "operation": "match",
+        "text": "é北京",
+        "candidates": null,
+        "query": "́bj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 79,
+          "start": 1,
+          "end": 4,
+          "positions": [
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            1,
+            3,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:/",
+      "request": {
+        "operation": "match",
+        "text": "",
+        "candidates": null,
+        "query": "",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 0,
+          "start": 0,
+          "end": 0,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:中国/",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 0,
+          "start": 0,
+          "end": 0,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:/x",
+      "request": {
+        "operation": "match",
+        "text": "",
+        "candidates": null,
+        "query": "x",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:abc/!a",
+      "request": {
+        "operation": "match",
+        "text": "abc",
+        "candidates": null,
+        "query": "!a",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:/machao/machao",
+      "request": {
+        "operation": "match",
+        "text": "/machao",
+        "candidates": null,
+        "query": "machao",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 159,
+          "start": 1,
+          "end": 7,
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "utf8_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:/马超/machao",
+      "request": {
+        "operation": "match",
+        "text": "/马超",
+        "candidates": null,
+        "query": "machao",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            1,
+            4
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:-北京/bj",
+      "request": {
+        "operation": "match",
+        "text": "-北京",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            1,
+            4
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:中中国/zg",
+      "request": {
+        "operation": "match",
+        "text": "中中国",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 56,
+          "start": 0,
+          "end": 3,
+          "positions": [
+            0,
+            2
+          ],
+          "utf8_positions": [
+            0,
+            6
+          ],
+          "utf16_positions": [
+            0,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:hello hello/hl",
+      "request": {
+        "operation": "match",
+        "text": "hello hello",
+        "candidates": null,
+        "query": "hl",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 49,
+          "start": 0,
+          "end": 3,
+          "positions": [
+            0,
+            2
+          ],
+          "utf8_positions": [
+            0,
+            2
+          ],
+          "utf16_positions": [
+            0,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 165,
+          "start": 0,
+          "end": 6,
+          "positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            8
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 165,
+          "start": 0,
+          "end": 6,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 165,
+          "start": 0,
+          "end": 6,
+          "positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            8
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 165,
+          "start": 0,
+          "end": 6,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "default:filter:bj",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "bj",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 2,
+            "matched": true,
+            "score": 61,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 6,
+            "matched": true,
+            "score": 61,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 61,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 61,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 0,
+            "matched": true,
+            "score": 58,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              3,
+              6
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 56,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              2
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              4,
+              7
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 53,
+            "start": 1,
+            "end": 4,
+            "positions": [
+              1,
+              3
+            ],
+            "utf8_positions": [
+              1,
+              3
+            ],
+            "utf16_positions": [
+              1,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "default:filter:beijing",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "beijing",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 2,
+            "matched": true,
+            "score": 191,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 6,
+            "matched": true,
+            "score": 191,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 191,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 191,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 0,
+            "matched": true,
+            "score": 183,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              3,
+              6
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              4,
+              7
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "default:filter:",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 0,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 6,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 9,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "default:filter:nomatch!",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "nomatch!",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {}
+    },
+    {
+      "name": "path:中国/zhongguo",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "zhongguo",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 208,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:北京/bj",
+      "request": {
+        "operation": "match",
+        "text": "北京",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 58,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:长沙/chsh",
+      "request": {
+        "operation": "match",
+        "text": "长沙",
+        "candidates": null,
+        "query": "chsh",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 108,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:中Go国/zhonggo国",
+      "request": {
+        "operation": "match",
+        "text": "中Go国",
+        "candidates": null,
+        "query": "zhonggo国",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 208,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3,
+            4,
+            5
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:中国/中g",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "中g",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 58,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:中国/zhonggu",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "zhonggu",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 183,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:音乐/yy",
+      "request": {
+        "operation": "match",
+        "text": "音乐",
+        "candidates": null,
+        "query": "yy",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 58,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:重庆/chongqing",
+      "request": {
+        "operation": "match",
+        "text": "重庆",
+        "candidates": null,
+        "query": "chongqing",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 233,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:绿茶/lvcha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lvcha",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 133,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:绿茶/lücha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lücha",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 133,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:略过/lueguo",
+      "request": {
+        "operation": "match",
+        "text": "略过",
+        "candidates": null,
+        "query": "lueguo",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:略过/lveguo",
+      "request": {
+        "operation": "match",
+        "text": "略过",
+        "candidates": null,
+        "query": "lveguo",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:巨人/jvren",
+      "request": {
+        "operation": "match",
+        "text": "巨人",
+        "candidates": null,
+        "query": "jvren",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 133,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:嗯好/enhao",
+      "request": {
+        "operation": "match",
+        "text": "嗯好",
+        "candidates": null,
+        "query": "enhao",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 133,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:女儿/nver",
+      "request": {
+        "operation": "match",
+        "text": "女儿",
+        "candidates": null,
+        "query": "nver",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 108,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:呣啊/mua",
+      "request": {
+        "operation": "match",
+        "text": "呣啊",
+        "candidates": null,
+        "query": "mua",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 83,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:中国/guozhong",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "guozhong",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:绿茶/lucha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lucha",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 133,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:嗯好/enghao",
+      "request": {
+        "operation": "match",
+        "text": "嗯好",
+        "candidates": null,
+        "query": "enghao",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:fooBar/fb",
+      "request": {
+        "operation": "match",
+        "text": "fooBar",
+        "candidates": null,
+        "query": "fb",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:FooBar/FB",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:café/cafe",
+      "request": {
+        "operation": "match",
+        "text": "café",
+        "candidates": null,
+        "query": "cafe",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 109,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:cafe/café",
+      "request": {
+        "operation": "match",
+        "text": "cafe",
+        "candidates": null,
+        "query": "café",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:😀中国é/zg",
+      "request": {
+        "operation": "match",
+        "text": "😀中国é",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            4,
+            7
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:𠀀中国/zg",
+      "request": {
+        "operation": "match",
+        "text": "𠀀中国",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            4,
+            7
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:a\u0000北京\r\n/bj",
+      "request": {
+        "operation": "match",
+        "text": "a\u0000北京\r\n",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 2,
+          "end": 4,
+          "positions": [
+            2,
+            3
+          ],
+          "utf8_positions": [
+            2,
+            5
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:😀/😀",
+      "request": {
+        "operation": "match",
+        "text": "😀",
+        "candidates": null,
+        "query": "😀",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 34,
+          "start": 0,
+          "end": 1,
+          "positions": [
+            0
+          ],
+          "utf8_positions": [
+            0
+          ],
+          "utf16_positions": [
+            0
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:é北京/́bj",
+      "request": {
+        "operation": "match",
+        "text": "é北京",
+        "candidates": null,
+        "query": "́bj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 79,
+          "start": 1,
+          "end": 4,
+          "positions": [
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            1,
+            3,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:/",
+      "request": {
+        "operation": "match",
+        "text": "",
+        "candidates": null,
+        "query": "",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 0,
+          "start": 0,
+          "end": 0,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:中国/",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 0,
+          "start": 0,
+          "end": 0,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:/x",
+      "request": {
+        "operation": "match",
+        "text": "",
+        "candidates": null,
+        "query": "x",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:abc/!a",
+      "request": {
+        "operation": "match",
+        "text": "abc",
+        "candidates": null,
+        "query": "!a",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:/machao/machao",
+      "request": {
+        "operation": "match",
+        "text": "/machao",
+        "candidates": null,
+        "query": "machao",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 159,
+          "start": 1,
+          "end": 7,
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "utf8_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:/马超/machao",
+      "request": {
+        "operation": "match",
+        "text": "/马超",
+        "candidates": null,
+        "query": "machao",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            1,
+            4
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:-北京/bj",
+      "request": {
+        "operation": "match",
+        "text": "-北京",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            1,
+            4
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:中中国/zg",
+      "request": {
+        "operation": "match",
+        "text": "中中国",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            3,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:hello hello/hl",
+      "request": {
+        "operation": "match",
+        "text": "hello hello",
+        "candidates": null,
+        "query": "hl",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 47,
+          "start": 0,
+          "end": 3,
+          "positions": [
+            0,
+            2
+          ],
+          "utf8_positions": [
+            0,
+            2
+          ],
+          "utf16_positions": [
+            0,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 0,
+          "end": 6,
+          "positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            8
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 0,
+          "end": 6,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 0,
+          "end": 6,
+          "positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            8
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 158,
+          "start": 0,
+          "end": 6,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 53,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "path:filter:bj",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "bj",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 6,
+            "matched": true,
+            "score": 58,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 58,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 0,
+            "matched": true,
+            "score": 58,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              3,
+              6
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 58,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 56,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              2
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              4,
+              7
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 53,
+            "start": 1,
+            "end": 4,
+            "positions": [
+              1,
+              3
+            ],
+            "utf8_positions": [
+              1,
+              3
+            ],
+            "utf16_positions": [
+              1,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "path:filter:beijing",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "beijing",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 6,
+            "matched": true,
+            "score": 183,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 183,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 0,
+            "matched": true,
+            "score": 183,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              3,
+              6
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 183,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              4,
+              7
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "path:filter:",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 0,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 6,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 9,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "path:filter:nomatch!",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "nomatch!",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {}
+    },
+    {
+      "name": "history:中国/zhongguo",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "zhongguo",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 199,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:北京/bj",
+      "request": {
+        "operation": "match",
+        "text": "北京",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:长沙/chsh",
+      "request": {
+        "operation": "match",
+        "text": "长沙",
+        "candidates": null,
+        "query": "chsh",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 103,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:中Go国/zhonggo国",
+      "request": {
+        "operation": "match",
+        "text": "中Go国",
+        "candidates": null,
+        "query": "zhonggo国",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 199,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3,
+            4,
+            5
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:中国/中g",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "中g",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:中国/zhonggu",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "zhonggu",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 175,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:音乐/yy",
+      "request": {
+        "operation": "match",
+        "text": "音乐",
+        "candidates": null,
+        "query": "yy",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:重庆/chongqing",
+      "request": {
+        "operation": "match",
+        "text": "重庆",
+        "candidates": null,
+        "query": "chongqing",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 223,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:绿茶/lvcha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lvcha",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 127,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:绿茶/lücha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lücha",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 127,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:略过/lueguo",
+      "request": {
+        "operation": "match",
+        "text": "略过",
+        "candidates": null,
+        "query": "lueguo",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 151,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:略过/lveguo",
+      "request": {
+        "operation": "match",
+        "text": "略过",
+        "candidates": null,
+        "query": "lveguo",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 151,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:巨人/jvren",
+      "request": {
+        "operation": "match",
+        "text": "巨人",
+        "candidates": null,
+        "query": "jvren",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 127,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:嗯好/enhao",
+      "request": {
+        "operation": "match",
+        "text": "嗯好",
+        "candidates": null,
+        "query": "enhao",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 127,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:女儿/nver",
+      "request": {
+        "operation": "match",
+        "text": "女儿",
+        "candidates": null,
+        "query": "nver",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 103,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:呣啊/mua",
+      "request": {
+        "operation": "match",
+        "text": "呣啊",
+        "candidates": null,
+        "query": "mua",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 79,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:中国/guozhong",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "guozhong",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:绿茶/lucha",
+      "request": {
+        "operation": "match",
+        "text": "绿茶",
+        "candidates": null,
+        "query": "lucha",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 127,
+          "start": 0,
+          "end": 2,
+          "positions": [
+            0,
+            1
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:嗯好/enghao",
+      "request": {
+        "operation": "match",
+        "text": "嗯好",
+        "candidates": null,
+        "query": "enghao",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:fooBar/fb",
+      "request": {
+        "operation": "match",
+        "text": "fooBar",
+        "candidates": null,
+        "query": "fb",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:FooBar/FB",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:café/cafe",
+      "request": {
+        "operation": "match",
+        "text": "café",
+        "candidates": null,
+        "query": "cafe",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 104,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:cafe/café",
+      "request": {
+        "operation": "match",
+        "text": "cafe",
+        "candidates": null,
+        "query": "café",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:😀中国é/zg",
+      "request": {
+        "operation": "match",
+        "text": "😀中国é",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            4,
+            7
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:𠀀中国/zg",
+      "request": {
+        "operation": "match",
+        "text": "𠀀中国",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            4,
+            7
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:a\u0000北京\r\n/bj",
+      "request": {
+        "operation": "match",
+        "text": "a\u0000北京\r\n",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 2,
+          "end": 4,
+          "positions": [
+            2,
+            3
+          ],
+          "utf8_positions": [
+            2,
+            5
+          ],
+          "utf16_positions": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:😀/😀",
+      "request": {
+        "operation": "match",
+        "text": "😀",
+        "candidates": null,
+        "query": "😀",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 32,
+          "start": 0,
+          "end": 1,
+          "positions": [
+            0
+          ],
+          "utf8_positions": [
+            0
+          ],
+          "utf16_positions": [
+            0
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:é北京/́bj",
+      "request": {
+        "operation": "match",
+        "text": "é北京",
+        "candidates": null,
+        "query": "́bj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 79,
+          "start": 1,
+          "end": 4,
+          "positions": [
+            1,
+            2,
+            3
+          ],
+          "utf8_positions": [
+            1,
+            3,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:/",
+      "request": {
+        "operation": "match",
+        "text": "",
+        "candidates": null,
+        "query": "",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 0,
+          "start": 0,
+          "end": 0,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:中国/",
+      "request": {
+        "operation": "match",
+        "text": "中国",
+        "candidates": null,
+        "query": "",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 0,
+          "start": 0,
+          "end": 0,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:/x",
+      "request": {
+        "operation": "match",
+        "text": "",
+        "candidates": null,
+        "query": "x",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:abc/!a",
+      "request": {
+        "operation": "match",
+        "text": "abc",
+        "candidates": null,
+        "query": "!a",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:/machao/machao",
+      "request": {
+        "operation": "match",
+        "text": "/machao",
+        "candidates": null,
+        "query": "machao",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 152,
+          "start": 1,
+          "end": 7,
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "utf8_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:/马超/machao",
+      "request": {
+        "operation": "match",
+        "text": "/马超",
+        "candidates": null,
+        "query": "machao",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 151,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            1,
+            4
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:-北京/bj",
+      "request": {
+        "operation": "match",
+        "text": "-北京",
+        "candidates": null,
+        "query": "bj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            1,
+            4
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:中中国/zg",
+      "request": {
+        "operation": "match",
+        "text": "中中国",
+        "candidates": null,
+        "query": "zg",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 55,
+          "start": 1,
+          "end": 3,
+          "positions": [
+            1,
+            2
+          ],
+          "utf8_positions": [
+            3,
+            6
+          ],
+          "utf16_positions": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:hello hello/hl",
+      "request": {
+        "operation": "match",
+        "text": "hello hello",
+        "candidates": null,
+        "query": "hl",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 45,
+          "start": 0,
+          "end": 3,
+          "positions": [
+            0,
+            2
+          ],
+          "utf8_positions": [
+            0,
+            2
+          ],
+          "utf16_positions": [
+            0,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 151,
+          "start": 0,
+          "end": 6,
+          "positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            8
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 151,
+          "start": 0,
+          "end": 6,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 151,
+          "start": 0,
+          "end": 6,
+          "positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "utf8_positions": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            8
+          ],
+          "utf16_positions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": true,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 151,
+          "start": 0,
+          "end": 6,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [
+            0,
+            3
+          ],
+          "utf8_positions": [
+            0,
+            3
+          ],
+          "utf16_positions": [
+            0,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": true
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "FooBar",
+        "candidates": null,
+        "query": "FB",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": true,
+          "score": 51,
+          "start": 0,
+          "end": 4,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:options",
+      "request": {
+        "operation": "match",
+        "text": "café北京",
+        "candidates": null,
+        "query": "cafebj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": true,
+          "normalize": false,
+          "positions": false
+        }
+      },
+      "expected": {
+        "match": {
+          "matched": false,
+          "score": 0,
+          "start": -1,
+          "end": -1,
+          "positions": [],
+          "utf8_positions": [],
+          "utf16_positions": []
+        }
+      }
+    },
+    {
+      "name": "history:filter:bj",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "bj",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 5,
+            "matched": true,
+            "score": 56,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              2
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 0,
+            "matched": true,
+            "score": 55,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              3,
+              6
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 55,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 6,
+            "matched": true,
+            "score": 55,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 55,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 55,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              4,
+              7
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 53,
+            "start": 1,
+            "end": 4,
+            "positions": [
+              1,
+              3
+            ],
+            "utf8_positions": [
+              1,
+              3
+            ],
+            "utf16_positions": [
+              1,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "history:filter:beijing",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "beijing",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 0,
+            "matched": true,
+            "score": 175,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              3,
+              6
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 175,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              1,
+              4
+            ],
+            "utf16_positions": [
+              1,
+              2
+            ]
+          },
+          {
+            "index": 6,
+            "matched": true,
+            "score": 175,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 175,
+            "start": 0,
+            "end": 2,
+            "positions": [
+              0,
+              1
+            ],
+            "utf8_positions": [
+              0,
+              3
+            ],
+            "utf16_positions": [
+              0,
+              1
+            ]
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 175,
+            "start": 1,
+            "end": 3,
+            "positions": [
+              1,
+              2
+            ],
+            "utf8_positions": [
+              4,
+              7
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "history:filter:",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 0,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 6,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 7,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 8,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          },
+          {
+            "index": 9,
+            "matched": true,
+            "score": 0,
+            "start": 0,
+            "end": 0,
+            "positions": [],
+            "utf8_positions": [],
+            "utf16_positions": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "history:filter:nomatch!",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "xx/北京.md",
+          "北京/xx.md",
+          " 北京 ",
+          "-b-j",
+          "-北京",
+          "-bj",
+          "北京",
+          "北京",
+          "😀北京",
+          "no match"
+        ],
+        "query": "nomatch!",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {}
+    }
+  ]
+}
