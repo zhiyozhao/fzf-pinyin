@@ -70,6 +70,9 @@ jobs:
       - run: |
           node_prefix="$(node -p 'require("path").dirname(require("path").dirname(process.execPath))')"
           docker run --rm -v "$PWD:/work" -v "$node_prefix:/node:ro" -w /work '${{ matrix.image }}' bash -euc '
+            # manylinux omits GCC sanitizer development files; install the
+            # matching toolset package for the ASan link and leak check below.
+            yum install -y gcc-toolset-14-libasan-devel
             case "$(uname -m)" in x86_64) goarch=amd64 ;; aarch64) goarch=arm64 ;; esac
             curl -fsSL "https://go.dev/dl/go1.27.4.linux-${goarch}.tar.gz" -o /tmp/go.tar.gz
             tar -C /tmp -xzf /tmp/go.tar.gz
