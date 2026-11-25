@@ -25,6 +25,17 @@ class BindingTests(unittest.TestCase):
                 else:
                     results = fzfp.filter(req["candidates"], req["query"], opts)
                     self.assertEqual([{k:v for k,v in asdict(r).items() if k != "text"} for r in results], vector["expected"].get("results", []))
+                texts = [req["text"]] if req["operation"] == "match" else req["candidates"]
+                expected = ([dict(index=0, **vector["expected"]["match"])] if vector["expected"].get("match", {}).get("matched") else []) if req["operation"] == "match" else vector["expected"].get("results", [])
+                for workers in (1, 4):
+                    with fzfp.Index(texts, opts, workers=workers) as index:
+                        for k in (None, 0, 1, 7, 50):
+                            want = expected if k is None else expected[:k]
+                            for positions in (False, True):
+                                actual = index.find(req["query"], k, positions)
+                                self.assertEqual([(h.index, h.score) for h in actual], [(h["index"], h["score"]) for h in want])
+                                if positions and opts.positions:
+                                    self.assertEqual([asdict(h.alignment) for h in actual], [{key:value for key,value in h.items() if key != "index"} for h in want])
         print(f"Verified {len(fixture['vectors'])} shared golden vectors")
 
     def test_concurrency(self):
@@ -57,6 +68,31 @@ class BindingTests(unittest.TestCase):
         for _ in range(1000):
             self.assertEqual(fzfp.match("a\0中国", "zg").positions, [2, 3])
         self.assertEqual(fzfp.filter([], "x"), [])
+        index = fzfp.Index(["北京"])
+        with self.assertRaises(ValueError):
+            index.find("bj", -1)
+        handle = index._handle.value
+        index.close()
+        index.close()
+        self.assertEqual(fzfp._lib.fzfp_index_destroy(handle), 3)
+        with self.assertRaises(RuntimeError):
+            index.find("bj")
+        with self.assertRaises(ValueError):
+            fzfp.Index([], workers=65)
+
+    def test_same_index_concurrency_and_close(self):
+        index = fzfp.Index(["北京"] * 1100)
+        def run(_):
+            try:
+                hits = index.find("bj", 7, True)
+                self.assertEqual([h.index for h in hits], list(range(7)))
+            except RuntimeError:
+                pass  # close won the serialized wrapper lock
+        with concurrent.futures.ThreadPoolExecutor(8) as pool:
+            tasks = [pool.submit(run, i) for i in range(20)]
+            index.close()
+            for task in tasks:
+                task.result()
 
     def test_cli_order(self):
         binary = os.environ.get("FZFP_CLI")

@@ -26,6 +26,7 @@ final class GoldenTests: XCTestCase {
     struct Hit: Decodable {
         let index: Int
         let match: Match
+        init(index: Int, match: Match) { self.index = index; self.match = match }
         enum Keys: String, CodingKey { case index }
         init(from decoder: Decoder) throws {
             index = try decoder.container(keyedBy: Keys.self).decode(Int.self, forKey: .index)
@@ -50,8 +51,44 @@ final class GoldenTests: XCTestCase {
                 XCTAssertEqual(actual.map(\.index), expected.map(\.index), vector.name)
                 XCTAssertEqual(actual.map(\.match), expected.map(\.match), vector.name)
             }
+            let texts = r.operation == "match" ? [r.text] : (r.candidates ?? [])
+            let expected: [Hit] = r.operation == "match" ? ((vector.expected.match?.matched ?? false) ? [Hit(index: 0, match: vector.expected.match!)] : []) : (vector.expected.results ?? [])
+            for workers in [1, 4] {
+                let index = try Index(texts, options: r.options, workers: workers)
+                for k: Int? in [nil, 0, 1, 7, 50] {
+                    let want = Array(expected.prefix(k ?? expected.count))
+                    for positions in [false, true] {
+                        let hits = try index.find(r.query, limit: k, positions: positions)
+                        XCTAssertEqual(hits.map(\.index), want.map(\.index), vector.name)
+                        XCTAssertEqual(hits.map(\.score), want.map { $0.match.score }, vector.name)
+                        if positions && r.options.positions { XCTAssertEqual(hits.map { $0.alignment! }, want.map(\.match), vector.name) }
+                    }
+                }
+                try index.close(); try index.close()
+                XCTAssertThrowsError(try index.find(r.query))
+            }
         }
         print("Verified \(fixture.vectors.count) shared golden vectors")
+    }
+    func testIndexErrors() throws {
+        XCTAssertThrowsError(try Index([], workers: 65))
+        let index = try Index(["北京"])
+        XCTAssertThrowsError(try index.find("bj", limit: -1))
+        XCTAssertEqual(try index.find("bj", positions: false).first?.alignment, nil)
+    }
+    func testSameIndexConcurrencyAndClose() throws {
+        let index = try Index(Array(repeating: "北京", count: 1100))
+        let lock = NSLock()
+        var failures = 0
+        DispatchQueue.concurrentPerform(iterations: 20) { _ in
+            do {
+                let hits = try index.find("bj", limit: 7, positions: true)
+                if hits.map(\.index) != Array(0..<7) { lock.lock(); failures += 1; lock.unlock() }
+            } catch { lock.lock(); failures += 1; lock.unlock() }
+        }
+        XCTAssertEqual(failures, 0)
+        try index.close(); try index.close()
+        XCTAssertThrowsError(try index.find("bj"))
     }
     func testUnicodeRanges() throws {
         let m = try Fzfp.match("😀中国e\u{301}", query: "zg")

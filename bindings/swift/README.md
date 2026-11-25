@@ -25,9 +25,22 @@ for hit in hits {
     print(hit.match.utf16Ranges(in: hit.text))
 }
 print(try Fzfp.version())
+
+// Keep the same corpus across many queries; return only visible hits.
+let titles = ["北京", "中国", "fooBar"]
+let index = try Index(titles, options: Options(scheme: .path), workers: 4)
+for hit in try index.find("bj", limit: 50, positions: true) {
+    print(titles[hit.index], hit.score, hit.alignment!.utf16Ranges(in: titles[hit.index]))
+}
+try index.close() // deinit is also a fallback
 ```
 
 Positions count Unicode scalars, not Swift Characters. UTF-16 ranges refer to
 the original string. API calls are synchronous, throwable, thread safe, and
-serialized in Go. Use application scheduling for background work.
+serialized across requests in Go; each batch can use up to four workers by
+default. Index is not Sendable; own it in a background actor for UI work.
+Same-index calls and close are locked; close is idempotent. Cancelling an
+await does not stop a native query. Rank-only `find` returns no alignment by
+default; positions opt in. `limit: nil` returns all, zero none, negative throws.
+Corpus construction is a one-time cost; do not rebuild an Index per keystroke.
 Full contract and release URL/checksum plan: [bindings documentation](../../docs/bindings.md).
