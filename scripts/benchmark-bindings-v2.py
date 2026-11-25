@@ -22,6 +22,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--repetitions", type=int, default=7)
 parser.add_argument("--top-repetitions", type=int, default=21)
 parser.add_argument("--output", type=Path, required=True)
+parser.add_argument("--schemes", nargs="+", choices=("default", "path", "history"), default=["default", "path", "history"])
+parser.add_argument("--queries", nargs="+", default=["bj", "beijing", "fb", "b"])
+parser.add_argument("--top-only", action="store_true", help="measure only prepared top-50, 4 workers, highlights")
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 cli = root / ".cache/bindings/fzfp"
@@ -78,8 +81,8 @@ def python_run(query, scheme, repetitions, mode, workers, positions):
 with tempfile.TemporaryDirectory(prefix="fzfp-benchmark-v2-") as tmp:
     corpus = Path(tmp) / "corpus.txt"
     corpus.write_text(text)
-    for scheme in ("default", "path", "history"):
-        for query in ("bj", "beijing", "fb", "b"):
+    for scheme in args.schemes:
+        for query in args.queries:
             cli_times = []
             for _ in range(args.repetitions):
                 start = time.perf_counter()
@@ -91,7 +94,14 @@ with tempfile.TemporaryDirectory(prefix="fzfp-benchmark-v2-") as tmp:
                         cli_median_ms=statistics.median(cli_times), results=[])
             configs = [("json", 1, False), ("convenience", 4, False)]
             configs += [(mode, w, pos) for mode in ("full", "top50") for w in (1, 4) for pos in (False, True)]
-            oracle = None
+            if args.top_only:
+                configs = [("top50", 4, True)]
+                # Independent full baseline remains outside the top-K timing.
+                baseline = fzfp.filter(candidates, query, fzfp.Options(scheme=scheme))
+                oracle = [(h.index, h.score) for h in baseline]
+                assert [h.text for h in baseline] == expected_texts, (scheme, query, "CLI full order")
+            else:
+                oracle = None
             for mode, workers, positions in configs:
                 repetitions = args.top_repetitions if mode == "top50" and workers == 4 and positions else args.repetitions
                 for language in ("python", "swift", "js"):

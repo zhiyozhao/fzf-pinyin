@@ -7,6 +7,7 @@ root = Path(__file__).resolve().parents[1]
 data = json.loads((root / "docs/bindings-benchmark-v2.json").read_text())
 languages = ("swift", "python", "js")
 lines = ["# Prepared typed bindings: 100k-row benchmark", "",
+         "Historical measurements of `662cfd7b`: path alignment direction was later corrected. See [the fix and live regression](bindings-path-fix.md) and bindings-benchmark-path-fix.json. Agreement on this corpus did not establish all-input path correctness.", "",
          "Measured 2026-11-25 on Apple M1 Pro arm64, Go 1.27.4, Swift 6.2.4 release, Python 3.12.16, Node 22.22.0.", "",
          "Same deterministic corpus as the original benchmark, plus low-selectivity `b`. All twelve cases validate full index/score order against legacy exact results, and text order against the CLI. Every top-K is checked against the full prefix. No incremental cache is used.", "",
          "Corpus file read/import/runtime startup are excluded. Prepared rows exclude corpus construction, measured separately. One cold query is recorded and excluded from warm statistics. Full/convenience/JSON use 7 warm samples; highlighted top-50/4 workers uses 21. CLI includes process startup, ingestion and stdin/stdout, returns text only. Legacy JSON/convenience always compute exact bounds even with positions off; new rank-only full results intentionally do less work, so the speed ratio is not a claim of equivalent exact-alignment work.", "",

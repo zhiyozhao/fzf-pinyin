@@ -6,6 +6,36 @@ const path = require('node:path');
 const { Worker } = require('node:worker_threads');
 const { Index, match, filter, version, _json } = require('./');
 const fixture = JSON.parse(fs.readFileSync(process.env.FZFP_GOLDEN || path.join(__dirname, '../testdata/golden.json')));
+test('live CLI tie-heavy oracle: byte order, scores, exact alignment, workers and top-K', {
+  skip: !process.env.FZFP_CLI_ORACLE_DIR && 'scripts/test-bindings.sh generates the mandatory live CLI oracle'
+}, () => {
+  let count = 0;
+  for (const scheme of ['default', 'path', 'history']) {
+    const data = JSON.parse(fs.readFileSync(path.join(process.env.FZFP_CLI_ORACLE_DIR, scheme + '.json')));
+    for (const { name, request: r, expected: e } of data.vectors) {
+      count++;
+      const expected = e.results || [];
+      const options = { scheme, positions: true };
+      const actual = filter(r.candidates, r.query, options);
+      assert.deepEqual(actual.map(({ text, ...m }) => canonical(m)), expected, name);
+      assert.deepEqual(Buffer.from(actual.map(h => h.text + '\0').join('')),
+        Buffer.from(expected.map(h => r.candidates[h.index] + '\0').join('')), name);
+      for (const workers of [1, 4]) {
+        const index = new Index(r.candidates, { ...options, workers });
+        try {
+          for (const [limit, positions] of [[null, true], [50, true], [50, false]]) {
+            const hits = index.find(r.query, { limit, positions });
+            const want = limit === null ? expected : expected.slice(0, limit);
+            assert.deepEqual(hits.map(h => [h.index, h.score]), want.map(h => [h.index, h.score]), name);
+            if (positions) assert.deepEqual(hits.map(h => canonical(h.alignment)), want.map(({ index, ...m }) => m), name);
+          }
+        } finally { index.close(); }
+      }
+    }
+  }
+  assert.equal(count, 1260);
+  console.log(`Verified ${count} live CLI tie-heavy datasets (JS)`);
+});
 function canonical(m) {
   const { utf8Positions, utf16Positions, ...rest } = m;
   return { ...rest, utf8_positions: utf8Positions, utf16_positions: utf16Positions };

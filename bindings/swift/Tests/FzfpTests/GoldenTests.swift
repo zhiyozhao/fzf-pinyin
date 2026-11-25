@@ -2,6 +2,39 @@ import XCTest
 @testable import Fzfp
 
 final class GoldenTests: XCTestCase {
+    func testCLITieHeavyOracle() throws {
+        guard let directory = ProcessInfo.processInfo.environment["FZFP_CLI_ORACLE_DIR"] else {
+            throw XCTSkip("scripts/test-bindings.sh generates the mandatory live CLI oracle")
+        }
+        struct Oracle: Decodable { let vectors: [Vector] }
+        var count = 0
+        for name in ["default", "path", "history"] {
+            let url = URL(fileURLWithPath: directory).appendingPathComponent(name + ".json")
+            for v in try JSONDecoder().decode(Oracle.self, from: Data(contentsOf: url)).vectors {
+                count += 1
+                let r = v.request, expected = v.expected.results ?? [], texts = v.request.candidates ?? []
+                let actual = try Fzfp.filter(texts, query: r.query, options: r.options)
+                XCTAssertEqual(actual.map(\.index), expected.map(\.index), v.name)
+                XCTAssertEqual(actual.map(\.match), expected.map(\.match), v.name)
+                let bytes: [UInt8] = actual.flatMap { Array($0.text.utf8) + [UInt8(0)] }
+                let expectedBytes: [UInt8] = expected.flatMap { Array(texts[$0.index].utf8) + [UInt8(0)] }
+                XCTAssertEqual(bytes, expectedBytes, v.name)
+                for workers in [1, 4] {
+                    let index = try Index(texts, options: r.options, workers: workers)
+                    for (limit, positions): (Int?, Bool) in [(nil, true), (50, true), (50, false)] {
+                        let hits = try index.find(r.query, limit: limit, positions: positions)
+                        let want = Array(expected.prefix(limit ?? expected.count))
+                        XCTAssertEqual(hits.map(\.index), want.map(\.index), v.name)
+                        XCTAssertEqual(hits.map(\.score), want.map { $0.match.score }, v.name)
+                        if positions { XCTAssertEqual(hits.map { $0.alignment! }, want.map(\.match), v.name) }
+                    }
+                    try index.close()
+                }
+            }
+        }
+        XCTAssertEqual(count, 1260)
+        print("Verified \(count) live CLI tie-heavy datasets (Swift)")
+    }
     struct Fixture: Decodable {
         let abi_version: Int
         let core_revision: String

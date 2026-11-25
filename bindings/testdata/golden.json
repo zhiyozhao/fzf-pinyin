@@ -2312,6 +2312,146 @@
       "expected": {}
     },
     {
+      "name": "default:tie-heavy-regression",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "case-test_qux",
+          "test-cherry.index",
+          "test_cherry-world",
+          "test_finder-match",
+          "grape-peach test",
+          "score-lemon-filter"
+        ],
+        "query": "st",
+        "options": {
+          "scheme": "default",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 0,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 6,
+            "positions": [
+              2,
+              5
+            ],
+            "utf8_positions": [
+              2,
+              5
+            ],
+            "utf16_positions": [
+              2,
+              5
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 36,
+            "start": 14,
+            "end": 16,
+            "positions": [
+              14,
+              15
+            ],
+            "utf8_positions": [
+              14,
+              15
+            ],
+            "utf16_positions": [
+              14,
+              15
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 36,
+            "start": 0,
+            "end": 16,
+            "positions": [
+              0,
+              15
+            ],
+            "utf8_positions": [
+              0,
+              15
+            ],
+            "utf16_positions": [
+              0,
+              15
+            ]
+          }
+        ]
+      }
+    },
+    {
       "name": "path:中国/zhongguo",
       "request": {
         "operation": "match",
@@ -4618,6 +4758,146 @@
       "expected": {}
     },
     {
+      "name": "path:tie-heavy-regression",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "case-test_qux",
+          "test-cherry.index",
+          "test_cherry-world",
+          "test_finder-match",
+          "grape-peach test",
+          "score-lemon-filter"
+        ],
+        "query": "st",
+        "options": {
+          "scheme": "path",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 1,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 0,
+            "matched": true,
+            "score": 36,
+            "start": 7,
+            "end": 9,
+            "positions": [
+              7,
+              8
+            ],
+            "utf8_positions": [
+              7,
+              8
+            ],
+            "utf16_positions": [
+              7,
+              8
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 36,
+            "start": 14,
+            "end": 16,
+            "positions": [
+              14,
+              15
+            ],
+            "utf8_positions": [
+              14,
+              15
+            ],
+            "utf16_positions": [
+              14,
+              15
+            ]
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 34,
+            "start": 0,
+            "end": 16,
+            "positions": [
+              0,
+              15
+            ],
+            "utf8_positions": [
+              0,
+              15
+            ],
+            "utf16_positions": [
+              0,
+              15
+            ]
+          }
+        ]
+      }
+    },
+    {
       "name": "history:中国/zhongguo",
       "request": {
         "operation": "match",
@@ -6922,6 +7202,146 @@
         }
       },
       "expected": {}
+    },
+    {
+      "name": "history:tie-heavy-regression",
+      "request": {
+        "operation": "filter",
+        "text": "",
+        "candidates": [
+          "case-test_qux",
+          "test-cherry.index",
+          "test_cherry-world",
+          "test_finder-match",
+          "grape-peach test",
+          "score-lemon-filter"
+        ],
+        "query": "st",
+        "options": {
+          "scheme": "history",
+          "case_sensitive": false,
+          "normalize": true,
+          "positions": true
+        }
+      },
+      "expected": {
+        "results": [
+          {
+            "index": 0,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 6,
+            "positions": [
+              2,
+              5
+            ],
+            "utf8_positions": [
+              2,
+              5
+            ],
+            "utf16_positions": [
+              2,
+              5
+            ]
+          },
+          {
+            "index": 1,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 2,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 3,
+            "matched": true,
+            "score": 36,
+            "start": 2,
+            "end": 4,
+            "positions": [
+              2,
+              3
+            ],
+            "utf8_positions": [
+              2,
+              3
+            ],
+            "utf16_positions": [
+              2,
+              3
+            ]
+          },
+          {
+            "index": 4,
+            "matched": true,
+            "score": 36,
+            "start": 14,
+            "end": 16,
+            "positions": [
+              14,
+              15
+            ],
+            "utf8_positions": [
+              14,
+              15
+            ],
+            "utf16_positions": [
+              14,
+              15
+            ]
+          },
+          {
+            "index": 5,
+            "matched": true,
+            "score": 32,
+            "start": 0,
+            "end": 16,
+            "positions": [
+              0,
+              15
+            ],
+            "utf8_positions": [
+              0,
+              15
+            ],
+            "utf16_positions": [
+              0,
+              15
+            ]
+          }
+        ]
+      }
     },
     {
       "name": "default:acceptance:bj",
@@ -28264,6 +28684,25 @@
             ]
           },
           {
+            "index": 1087,
+            "matched": true,
+            "score": 58,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              7,
+              10
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
             "index": 23,
             "matched": true,
             "score": 58,
@@ -28394,6 +28833,25 @@
             "utf16_positions": [
               0,
               1
+            ]
+          },
+          {
+            "index": 945,
+            "matched": true,
+            "score": 58,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              7,
+              10
+            ],
+            "utf16_positions": [
+              3,
+              4
             ]
           },
           {
@@ -29252,25 +29710,6 @@
             ]
           },
           {
-            "index": 1087,
-            "matched": true,
-            "score": 58,
-            "start": 0,
-            "end": 2,
-            "positions": [
-              0,
-              1
-            ],
-            "utf8_positions": [
-              0,
-              3
-            ],
-            "utf16_positions": [
-              0,
-              1
-            ]
-          },
-          {
             "index": 298,
             "matched": true,
             "score": 58,
@@ -29329,25 +29768,6 @@
           },
           {
             "index": 944,
-            "matched": true,
-            "score": 58,
-            "start": 0,
-            "end": 2,
-            "positions": [
-              0,
-              1
-            ],
-            "utf8_positions": [
-              0,
-              3
-            ],
-            "utf16_positions": [
-              0,
-              1
-            ]
-          },
-          {
-            "index": 945,
             "matched": true,
             "score": 58,
             "start": 0,
@@ -30316,25 +30736,6 @@
             ]
           },
           {
-            "index": 622,
-            "matched": true,
-            "score": 55,
-            "start": 1,
-            "end": 3,
-            "positions": [
-              1,
-              2
-            ],
-            "utf8_positions": [
-              2,
-              5
-            ],
-            "utf16_positions": [
-              1,
-              2
-            ]
-          },
-          {
             "index": 1,
             "matched": true,
             "score": 55,
@@ -30620,25 +31021,6 @@
             ]
           },
           {
-            "index": 1066,
-            "matched": true,
-            "score": 55,
-            "start": 2,
-            "end": 4,
-            "positions": [
-              2,
-              3
-            ],
-            "utf8_positions": [
-              6,
-              9
-            ],
-            "utf16_positions": [
-              2,
-              3
-            ]
-          },
-          {
             "index": 352,
             "matched": true,
             "score": 55,
@@ -30678,25 +31060,6 @@
           },
           {
             "index": 325,
-            "matched": true,
-            "score": 55,
-            "start": 2,
-            "end": 4,
-            "positions": [
-              2,
-              3
-            ],
-            "utf8_positions": [
-              6,
-              9
-            ],
-            "utf16_positions": [
-              2,
-              3
-            ]
-          },
-          {
-            "index": 747,
             "matched": true,
             "score": 55,
             "start": 2,
@@ -30962,6 +31325,44 @@
             ]
           },
           {
+            "index": 292,
+            "matched": true,
+            "score": 55,
+            "start": 10,
+            "end": 12,
+            "positions": [
+              10,
+              11
+            ],
+            "utf8_positions": [
+              20,
+              23
+            ],
+            "utf16_positions": [
+              10,
+              11
+            ]
+          },
+          {
+            "index": 622,
+            "matched": true,
+            "score": 55,
+            "start": 3,
+            "end": 5,
+            "positions": [
+              3,
+              4
+            ],
+            "utf8_positions": [
+              8,
+              11
+            ],
+            "utf16_positions": [
+              3,
+              4
+            ]
+          },
+          {
             "index": 711,
             "matched": true,
             "score": 55,
@@ -31171,6 +31572,25 @@
             ]
           },
           {
+            "index": 1066,
+            "matched": true,
+            "score": 55,
+            "start": 4,
+            "end": 6,
+            "positions": [
+              4,
+              5
+            ],
+            "utf8_positions": [
+              12,
+              15
+            ],
+            "utf16_positions": [
+              4,
+              5
+            ]
+          },
+          {
             "index": 515,
             "matched": true,
             "score": 55,
@@ -31225,6 +31645,25 @@
             "utf16_positions": [
               5,
               6
+            ]
+          },
+          {
+            "index": 747,
+            "matched": true,
+            "score": 55,
+            "start": 4,
+            "end": 6,
+            "positions": [
+              4,
+              5
+            ],
+            "utf8_positions": [
+              12,
+              15
+            ],
+            "utf16_positions": [
+              4,
+              5
             ]
           },
           {
@@ -31339,25 +31778,6 @@
             "utf16_positions": [
               6,
               7
-            ]
-          },
-          {
-            "index": 396,
-            "matched": true,
-            "score": 55,
-            "start": 5,
-            "end": 7,
-            "positions": [
-              5,
-              6
-            ],
-            "utf8_positions": [
-              9,
-              12
-            ],
-            "utf16_positions": [
-              5,
-              6
             ]
           },
           {
@@ -31848,6 +32268,25 @@
             "utf8_positions": [
               19,
               22
+            ],
+            "utf16_positions": [
+              7,
+              8
+            ]
+          },
+          {
+            "index": 396,
+            "matched": true,
+            "score": 55,
+            "start": 7,
+            "end": 9,
+            "positions": [
+              7,
+              8
+            ],
+            "utf8_positions": [
+              15,
+              18
             ],
             "utf16_positions": [
               7,
@@ -32656,19 +33095,19 @@
             "index": 31,
             "matched": true,
             "score": 55,
-            "start": 2,
-            "end": 4,
+            "start": 4,
+            "end": 6,
             "positions": [
-              2,
-              3
+              4,
+              5
             ],
             "utf8_positions": [
-              3,
-              6
+              9,
+              12
             ],
             "utf16_positions": [
-              2,
-              3
+              4,
+              5
             ]
           },
           {
@@ -32802,25 +33241,6 @@
             "utf16_positions": [
               7,
               8
-            ]
-          },
-          {
-            "index": 292,
-            "matched": true,
-            "score": 55,
-            "start": 3,
-            "end": 5,
-            "positions": [
-              3,
-              4
-            ],
-            "utf8_positions": [
-              3,
-              6
-            ],
-            "utf16_positions": [
-              3,
-              4
             ]
           },
           {
@@ -37159,25 +37579,6 @@
             ]
           },
           {
-            "index": 787,
-            "matched": true,
-            "score": 53,
-            "start": 1,
-            "end": 4,
-            "positions": [
-              1,
-              3
-            ],
-            "utf8_positions": [
-              4,
-              6
-            ],
-            "utf16_positions": [
-              2,
-              4
-            ]
-          },
-          {
             "index": 1062,
             "matched": true,
             "score": 53,
@@ -37786,6 +38187,25 @@
             ]
           },
           {
+            "index": 356,
+            "matched": true,
+            "score": 53,
+            "start": 8,
+            "end": 11,
+            "positions": [
+              8,
+              10
+            ],
+            "utf8_positions": [
+              10,
+              12
+            ],
+            "utf16_positions": [
+              8,
+              10
+            ]
+          },
+          {
             "index": 860,
             "matched": true,
             "score": 53,
@@ -38277,6 +38697,25 @@
             "utf16_positions": [
               6,
               8
+            ]
+          },
+          {
+            "index": 787,
+            "matched": true,
+            "score": 53,
+            "start": 5,
+            "end": 8,
+            "positions": [
+              5,
+              7
+            ],
+            "utf8_positions": [
+              11,
+              13
+            ],
+            "utf16_positions": [
+              7,
+              9
             ]
           },
           {
@@ -39014,25 +39453,6 @@
             "utf8_positions": [
               6,
               8
-            ],
-            "utf16_positions": [
-              2,
-              4
-            ]
-          },
-          {
-            "index": 356,
-            "matched": true,
-            "score": 53,
-            "start": 2,
-            "end": 5,
-            "positions": [
-              2,
-              4
-            ],
-            "utf8_positions": [
-              3,
-              5
             ],
             "utf16_positions": [
               2,
@@ -40028,6 +40448,25 @@
             ]
           },
           {
+            "index": 578,
+            "matched": true,
+            "score": 47,
+            "start": 4,
+            "end": 7,
+            "positions": [
+              4,
+              6
+            ],
+            "utf8_positions": [
+              4,
+              6
+            ],
+            "utf16_positions": [
+              4,
+              6
+            ]
+          },
+          {
             "index": 395,
             "matched": true,
             "score": 47,
@@ -40199,25 +40638,6 @@
             ]
           },
           {
-            "index": 578,
-            "matched": true,
-            "score": 47,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
-            ]
-          },
-          {
             "index": 734,
             "matched": true,
             "score": 47,
@@ -40241,18 +40661,18 @@
             "matched": true,
             "score": 47,
             "start": 0,
-            "end": 3,
+            "end": 10,
             "positions": [
               0,
-              2
+              9
             ],
             "utf8_positions": [
               0,
-              2
+              16
             ],
             "utf16_positions": [
               0,
-              2
+              9
             ]
           },
           {
@@ -40298,18 +40718,18 @@
             "matched": true,
             "score": 47,
             "start": 0,
-            "end": 3,
+            "end": 10,
             "positions": [
               0,
-              2
+              9
             ],
             "utf8_positions": [
               0,
-              2
+              13
             ],
             "utf16_positions": [
               0,
-              2
+              9
             ]
           },
           {
@@ -40458,25 +40878,6 @@
             "utf8_positions": [
               2,
               4
-            ],
-            "utf16_positions": [
-              2,
-              4
-            ]
-          },
-          {
-            "index": 777,
-            "matched": true,
-            "score": 45,
-            "start": 1,
-            "end": 4,
-            "positions": [
-              1,
-              3
-            ],
-            "utf8_positions": [
-              4,
-              6
             ],
             "utf16_positions": [
               2,
@@ -41051,6 +41452,25 @@
             "utf16_positions": [
               6,
               8
+            ]
+          },
+          {
+            "index": 777,
+            "matched": true,
+            "score": 45,
+            "start": 6,
+            "end": 9,
+            "positions": [
+              6,
+              8
+            ],
+            "utf8_positions": [
+              13,
+              15
+            ],
+            "utf16_positions": [
+              7,
+              9
             ]
           },
           {
@@ -42688,63 +43108,6 @@
             ]
           },
           {
-            "index": 248,
-            "matched": true,
-            "score": 36,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
-            ]
-          },
-          {
-            "index": 680,
-            "matched": true,
-            "score": 36,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
-            ]
-          },
-          {
-            "index": 864,
-            "matched": true,
-            "score": 36,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
-            ]
-          },
-          {
             "index": 902,
             "matched": true,
             "score": 36,
@@ -42764,41 +43127,22 @@
             ]
           },
           {
-            "index": 1063,
+            "index": 156,
             "matched": true,
             "score": 36,
-            "start": 0,
-            "end": 3,
+            "start": 4,
+            "end": 7,
             "positions": [
-              0,
-              2
+              4,
+              6
             ],
             "utf8_positions": [
-              0,
-              2
+              4,
+              6
             ],
             "utf16_positions": [
-              0,
-              2
-            ]
-          },
-          {
-            "index": 127,
-            "matched": true,
-            "score": 36,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
+              4,
+              6
             ]
           },
           {
@@ -42837,25 +43181,6 @@
             "utf16_positions": [
               1,
               3
-            ]
-          },
-          {
-            "index": 761,
-            "matched": true,
-            "score": 36,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
             ]
           },
           {
@@ -42935,25 +43260,6 @@
             ]
           },
           {
-            "index": 628,
-            "matched": true,
-            "score": 36,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
-            ]
-          },
-          {
             "index": 577,
             "matched": true,
             "score": 36,
@@ -42993,25 +43299,6 @@
           },
           {
             "index": 794,
-            "matched": true,
-            "score": 36,
-            "start": 1,
-            "end": 4,
-            "positions": [
-              1,
-              3
-            ],
-            "utf8_positions": [
-              4,
-              6
-            ],
-            "utf16_positions": [
-              2,
-              4
-            ]
-          },
-          {
-            "index": 895,
             "matched": true,
             "score": 36,
             "start": 1,
@@ -43239,25 +43526,6 @@
             ]
           },
           {
-            "index": 311,
-            "matched": true,
-            "score": 36,
-            "start": 2,
-            "end": 5,
-            "positions": [
-              2,
-              4
-            ],
-            "utf8_positions": [
-              3,
-              5
-            ],
-            "utf16_positions": [
-              2,
-              4
-            ]
-          },
-          {
             "index": 327,
             "matched": true,
             "score": 36,
@@ -43372,6 +43640,25 @@
             ]
           },
           {
+            "index": 248,
+            "matched": true,
+            "score": 36,
+            "start": 4,
+            "end": 6,
+            "positions": [
+              4,
+              5
+            ],
+            "utf8_positions": [
+              4,
+              5
+            ],
+            "utf16_positions": [
+              4,
+              5
+            ]
+          },
+          {
             "index": 259,
             "matched": true,
             "score": 36,
@@ -43388,6 +43675,82 @@
             "utf16_positions": [
               4,
               5
+            ]
+          },
+          {
+            "index": 680,
+            "matched": true,
+            "score": 36,
+            "start": 4,
+            "end": 6,
+            "positions": [
+              4,
+              5
+            ],
+            "utf8_positions": [
+              4,
+              5
+            ],
+            "utf16_positions": [
+              4,
+              5
+            ]
+          },
+          {
+            "index": 864,
+            "matched": true,
+            "score": 36,
+            "start": 4,
+            "end": 6,
+            "positions": [
+              4,
+              5
+            ],
+            "utf8_positions": [
+              4,
+              5
+            ],
+            "utf16_positions": [
+              4,
+              5
+            ]
+          },
+          {
+            "index": 1063,
+            "matched": true,
+            "score": 36,
+            "start": 4,
+            "end": 6,
+            "positions": [
+              4,
+              5
+            ],
+            "utf8_positions": [
+              4,
+              5
+            ],
+            "utf16_positions": [
+              4,
+              5
+            ]
+          },
+          {
+            "index": 127,
+            "matched": true,
+            "score": 36,
+            "start": 4,
+            "end": 7,
+            "positions": [
+              4,
+              6
+            ],
+            "utf8_positions": [
+              4,
+              6
+            ],
+            "utf16_positions": [
+              4,
+              6
             ]
           },
           {
@@ -43543,6 +43906,25 @@
             ]
           },
           {
+            "index": 895,
+            "matched": true,
+            "score": 36,
+            "start": 6,
+            "end": 8,
+            "positions": [
+              6,
+              7
+            ],
+            "utf8_positions": [
+              10,
+              11
+            ],
+            "utf16_positions": [
+              7,
+              8
+            ]
+          },
+          {
             "index": 222,
             "matched": true,
             "score": 36,
@@ -43577,6 +43959,44 @@
             ],
             "utf16_positions": [
               6,
+              8
+            ]
+          },
+          {
+            "index": 311,
+            "matched": true,
+            "score": 36,
+            "start": 6,
+            "end": 8,
+            "positions": [
+              6,
+              7
+            ],
+            "utf8_positions": [
+              7,
+              8
+            ],
+            "utf16_positions": [
+              6,
+              7
+            ]
+          },
+          {
+            "index": 761,
+            "matched": true,
+            "score": 36,
+            "start": 7,
+            "end": 9,
+            "positions": [
+              7,
+              8
+            ],
+            "utf8_positions": [
+              7,
+              8
+            ],
+            "utf16_positions": [
+              7,
               8
             ]
           },
@@ -43787,6 +44207,25 @@
             "utf16_positions": [
               11,
               12
+            ]
+          },
+          {
+            "index": 628,
+            "matched": true,
+            "score": 36,
+            "start": 13,
+            "end": 15,
+            "positions": [
+              13,
+              14
+            ],
+            "utf8_positions": [
+              13,
+              14
+            ],
+            "utf16_positions": [
+              13,
+              14
             ]
           },
           {
@@ -44056,25 +44495,6 @@
             ]
           },
           {
-            "index": 156,
-            "matched": true,
-            "score": 36,
-            "start": 0,
-            "end": 3,
-            "positions": [
-              0,
-              2
-            ],
-            "utf8_positions": [
-              0,
-              2
-            ],
-            "utf16_positions": [
-              0,
-              2
-            ]
-          },
-          {
             "index": 265,
             "matched": true,
             "score": 36,
@@ -44192,19 +44612,19 @@
             "index": 75,
             "matched": true,
             "score": 36,
-            "start": 7,
-            "end": 9,
+            "start": 10,
+            "end": 12,
             "positions": [
-              7,
-              8
+              10,
+              11
             ],
             "utf8_positions": [
-              7,
-              8
+              10,
+              11
             ],
             "utf16_positions": [
-              7,
-              8
+              10,
+              11
             ]
           },
           {
@@ -46123,19 +46543,19 @@
             "utf16_positions": []
           },
           {
-            "index": 2,
+            "index": 3,
             "matched": true,
-            "score": 85009,
-            "start": 0,
-            "end": 3400,
+            "score": 81608,
+            "start": 1,
+            "end": 3401,
             "positions": [],
             "utf8_positions": [],
             "utf16_positions": []
           },
           {
-            "index": 3,
+            "index": 2,
             "matched": true,
-            "score": 81608,
+            "score": 67996,
             "start": 1,
             "end": 3401,
             "positions": [],

@@ -75,6 +75,7 @@ func Execute(req Request) (Response, error) {
 		query = strings.ToLower(query)
 	}
 	q := []rune(query)
+	forward, _ := schemeMatchingPolicy(req.Options.Scheme)
 	// Like fzf, accented query literals disable accent folding.
 	if norm {
 		for _, r := range q {
@@ -92,7 +93,7 @@ func Execute(req Request) (Response, error) {
 			// Upstream's no-position fast path may return an approximate start.
 			// The library promises exact, option-independent bounds (path sorting
 			// also depends on them), so always trace and only omit exported arrays.
-			r, pp := pinyin.FuzzyMatchV2(req.Options.CaseSensitive, norm, true, &chars, q, true, slab)
+			r, pp := pinyin.FuzzyMatchV2(req.Options.CaseSensitive, norm, forward, &chars, q, true, slab)
 			m := Match{Matched: r.Start >= 0, Score: r.Score, Start: r.Start, End: r.End, Positions: []int{}, UTF8Positions: []int{}, UTF16Positions: []int{}}
 			if !m.Matched {
 				m.Score = 0

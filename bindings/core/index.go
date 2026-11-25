@@ -98,6 +98,7 @@ func (x *Index) Find(query string, limit int, positions, exact bool) ([]RankHit,
 		query = strings.ToLower(query)
 	}
 	q := []rune(query)
+	forward, rankPositions := schemeMatchingPolicy(x.options.Scheme)
 	var required uint32
 	for _, r := range q {
 		if r >= 'A' && r <= 'Z' {
@@ -154,8 +155,8 @@ func (x *Index) Find(query string, limit int, positions, exact bool) ([]RankHit,
 				if item.letters&required != required {
 					continue
 				}
-				trace := x.options.Scheme == "path"
-				r, _ := pinyin.FuzzyMatchV2(x.options.CaseSensitive, norm, true, &item.chars, q, trace, worker.slab)
+				trace := rankPositions
+				r, _ := pinyin.FuzzyMatchV2(x.options.CaseSensitive, norm, forward, &item.chars, q, trace, worker.slab)
 				if r.Start < 0 {
 					continue
 				}
@@ -202,7 +203,7 @@ func (x *Index) Find(query string, limit int, positions, exact bool) ([]RankHit,
 				for j := len(result) * w / nw; j < len(result)*(w+1)/nw; j++ {
 					h := &result[j]
 					item := &x.items[h.Index]
-					r, pp := pinyin.FuzzyMatchV2(x.options.CaseSensitive, norm, true, &item.chars, q, true, x.workers[w].slab)
+					r, pp := pinyin.FuzzyMatchV2(x.options.CaseSensitive, norm, forward, &item.chars, q, true, x.workers[w].slab)
 					h.Start, h.End = r.Start, r.End
 					if positions && pp != nil {
 						h.Positions = slices.Clone(*pp)

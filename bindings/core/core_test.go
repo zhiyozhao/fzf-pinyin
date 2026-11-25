@@ -85,7 +85,7 @@ func TestPrimitiveOracle(t *testing.T) {
 			}
 		}
 		text := util.ToChars([]byte(r.Text))
-		raw, positions := pinyin.FuzzyMatchV2(r.Options.CaseSensitive, norm, true, &text, []rune(q), true, nil)
+		raw, positions := pinyin.FuzzyMatchV2(r.Options.CaseSensitive, norm, scheme != "path", &text, []rune(q), true, nil)
 		want := v.Expected.Match
 		if raw.Start != want.Start || raw.End != want.End || raw.Score != want.Score {
 			t.Fatalf("%s primitive=%+v facade=%+v", v.Name, raw, want)

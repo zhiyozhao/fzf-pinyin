@@ -67,6 +67,7 @@ func main() {
 		for _, query := range []string{"bj", "beijing", "", "nomatch!"} {
 			add(scheme+":filter:"+query, core.Request{Operation: "filter", Candidates: candidates, Query: query, Options: opts})
 		}
+		add(scheme+":tie-heavy-regression", core.Request{Operation: "filter", Candidates: []string{"case-test_qux", "test-cherry.index", "test_cherry-world", "test_finder-match", "grape-peach test", "score-lemon-filter"}, Query: "st", Options: opts})
 	}
 	// Shared acceptance cases include enough candidates to exercise batch
 	// parallelism, random tie keys, and upstream's fixed-slab V1 fallback.

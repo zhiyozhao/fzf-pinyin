@@ -27,6 +27,7 @@ jobs:
           node-version: '22'
       - run: bash scripts/build-bindings.sh all
       - run: bash scripts/test-bindings.sh
+      - run: npx --yes --package typescript@5.9.3 tsc --project bindings/javascript/tsconfig.json
       - run: |
           cp bindings/testdata/golden.json .cache/bindings/original-golden.json
           bash scripts/generate-bindings-golden.sh
@@ -71,12 +72,17 @@ jobs:
             python -m pip install --no-deps .cache/bindings/repaired/*.whl
             go test -race ./bindings/core ./capi ./src/algo
             go build -trimpath -buildvcs=false -o .cache/bindings/fzfp .
+            export FZFP_CLI_ORACLE_DIR="$PWD/.cache/bindings/cli-oracle"
+            FZFP_CLI="$PWD/.cache/bindings/fzfp" go test ./src -run "^TestBindingsCLIDifferential$" -count=1 -v
             FZFP_CLI="$PWD/.cache/bindings/fzfp" python -m unittest discover -s bindings/python/tests -v
             bash scripts/build-javascript.sh
             node --test bindings/javascript/test.js
             bash scripts/test-javascript-package.sh
             cc -I capi capi/examples/typed.c bindings/javascript/.cache/libfzfp.a -lpthread -ldl -lm -o .cache/bindings/c-typed
             .cache/bindings/c-typed
+            cc -fsanitize=address -g -I capi capi/examples/typed.c bindings/javascript/.cache/libfzfp.a -lpthread -ldl -lm -o .cache/bindings/c-typed-asan
+            ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 .cache/bindings/c-typed-asan
+            npx --yes --package typescript@5.9.3 tsc --project bindings/javascript/tsconfig.json
           '
       - uses: actions/upload-artifact@v4
         with:

@@ -1,0 +1,13 @@
+[
+  {"criteria":["score","length"],"tiebreak":"length","forward":true,"with_positions":false},
+  {"criteria":["score","end"],"tiebreak":"end","forward":false,"with_positions":false},
+  {"criteria":["score","begin"],"tiebreak":"begin","forward":true,"with_positions":false},
+  {"criteria":["score","pathname","length"],"tiebreak":"pathname,length","forward":false,"with_positions":true},
+  {"criteria":["score","begin","end"],"tiebreak":"begin,end","forward":true,"with_positions":false},
+  {"criteria":["score","end","begin"],"tiebreak":"end,begin","forward":false,"with_positions":false},
+  {"criteria":["score","begin","pathname"],"tiebreak":"begin,pathname","forward":true,"with_positions":true},
+  {"criteria":["score","pathname","begin"],"tiebreak":"pathname,begin","forward":false,"with_positions":true},
+  {"criteria":["score","chunk","end"],"tiebreak":"chunk,end","forward":false,"with_positions":true},
+  {"criteria":["score","chunk","length"],"tiebreak":"chunk,length","forward":true,"with_positions":true},
+  {"criteria":["score"],"tiebreak":"index","forward":true,"with_positions":false}
+]

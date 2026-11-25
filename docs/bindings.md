@@ -10,9 +10,24 @@ Measured batch results and reproduction commands: [performance](bindings-perform
 `match(text, query, options)` matches one **literal fuzzy term**, using pinyin
 FuzzyMatchV2. It does not parse fzf extended-query operators, whitespace-separated
 terms, fields, ANSI, smart case, or interactive CLI options. Default: case
-insensitive, accent normalization on, forward matching, positions on, default
+insensitive, accent normalization on, positions on, default
 scheme. An accented query disables accent folding, following fzf's term rules.
 Use `case_sensitive` explicitly; host locale and case folding are never used.
+Match direction follows the CLI's effective sort criteria: default/history
+are forward; path is backward. In `src/core.go`, criteria are traversed from
+last to first (excluding score): `end`/`pathname` select backward, `begin`
+selects forward, and `chunk` requires positions without changing direction.
+Thus the highest-priority direction criterion wins, including when a CLI
+`--tiebreak` overrides scheme defaults. Bindings currently expose only the
+scheme defaults, not custom tiebreak, tac, sort=false, fields or smart case;
+they do not inherit `FZF_DEFAULT_OPTS` or terminal/walker scheme auto-selection.
+The exported alignment positions remain sorted ascending even when the native
+backward traceback lists positions in reverse order.
+CLI `--scheme` and `--tiebreak` both replace effective criteria, so their last
+occurrence/order matters. `--tac` and `--no-sort` affect output order/streaming,
+not this direction decision; `--nth`/delimiter and fuzzy/exact select input or
+algorithm but do not override the criteria loop. Those CLI modes remain outside
+the binding contract. The regression suite probes these distinctions in Run.
 
 `filter(candidates, query, options)` matches and sorts a whole batch in Go,
 retaining duplicate entries and their zero-based input indexes. Rank follows

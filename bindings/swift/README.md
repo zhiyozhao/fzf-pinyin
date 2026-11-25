@@ -12,6 +12,8 @@ swift test
 Add `.package(path: "path/to/fzfp/bindings/swift")` and the `Fzfp` product to
 a consuming Swift package after building the XCFramework. Both macOS CPUs
 are included. The local binaryTarget is generated and ignored by Git.
+For this local path the package identity is `swift` (the directory name), so
+the consuming target uses `.product(name: "Fzfp", package: "swift")`.
 
 ```swift
 import Fzfp

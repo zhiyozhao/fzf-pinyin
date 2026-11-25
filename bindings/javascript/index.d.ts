@@ -18,3 +18,5 @@ export class Index {
 export function match(text: string, query: string, options?: Options): Match;
 export function filter(candidates: readonly string[], query: string, options?: Options): Result[];
 export function version(): { version: string; core_revision: string; abi_version: number; typed_abi_version: number; dictionary_version: string };
+/** @internal Legacy ABI benchmark/test hook. Not a supported application API. */
+export function _json(request: Record<string, unknown>): Record<string, unknown>;

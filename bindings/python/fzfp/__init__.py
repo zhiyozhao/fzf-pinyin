@@ -173,7 +173,7 @@ class Index:
         self._handle = ctypes.c_uint64()
         self._candidates = tuple(candidates)
         self.timings: dict[str, float] = {}
-        if options.scheme not in ("default", "path", "history") or not isinstance(workers, int) or not 0 <= workers <= 64:
+        if options.scheme not in ("default", "path", "history") or type(workers) is not int or not 0 <= workers <= 64:
             raise ValueError("invalid scheme or workers (expected 0..64)")
         chunks = [s.encode("utf-8") for s in self.candidates]
         offsets = [0]
@@ -186,7 +186,7 @@ class Index:
                                      len(chunks), ctypes.byref(native), ctypes.byref(self._handle)))
 
     def _find(self, query: str, limit: int | None, positions: bool, exact: bool = False) -> list[tuple]:
-        if limit is not None and (not isinstance(limit, int) or not 0 <= limit <= 2**63 - 1):
+        if limit is not None and (type(limit) is not int or not 0 <= limit <= 2**63 - 1):
             raise ValueError("limit must be None or a nonnegative int64")
         data = query.encode("utf-8")
         options = _FindOptions(2, ctypes.sizeof(_FindOptions), -1 if limit is None else limit, int(positions) | (2 if exact else 0), 0)

@@ -1,5 +1,10 @@
 # Prepared typed bindings: 100k-row benchmark
 
+Historical measurements of `662cfd7b`: its path alignment direction was later
+found incorrect on tie-heavy inputs. See [the correction and live regression](bindings-path-fix.md)
+and `bindings-benchmark-path-fix.json` for the corrected targeted rerun. The
+old corpus's CLI agreement did not establish correctness for all alignments.
+
 Measured 2026-11-25 on Apple M1 Pro arm64, Go 1.27.4, Swift 6.2.4 release, Python 3.12.16, Node 22.22.0.
 
 Same deterministic corpus as the original benchmark, plus low-selectivity `b`. All twelve cases validate full index/score order against legacy exact results, and text order against the CLI. Every top-K is checked against the full prefix. No incremental cache is used.

@@ -11,6 +11,34 @@ import fzfp
 
 
 class BindingTests(unittest.TestCase):
+    def test_cli_tie_heavy_oracle(self):
+        directory = os.environ.get("FZFP_CLI_ORACLE_DIR")
+        if not directory:
+            self.skipTest("scripts/test-bindings.sh generates the mandatory live CLI oracle")
+        count = 0
+        for path in sorted(Path(directory).glob("*.json")):
+            for v in json.loads(path.read_text())["vectors"]:
+                count += 1
+                r, expected = v["request"], v["expected"].get("results", [])
+                options = fzfp.Options(**r["options"])
+                def canonical(results):
+                    return [{k: value for k, value in asdict(h).items() if k != "text"} for h in results]
+                actual = fzfp.filter(r["candidates"], r["query"], options)
+                self.assertEqual(canonical(actual), expected, v["name"])
+                self.assertEqual(b"".join(h.text.encode()+b"\0" for h in actual),
+                                 b"".join(r["candidates"][h["index"]].encode()+b"\0" for h in expected), v["name"])
+                for workers in (1, 4):
+                    with fzfp.Index(r["candidates"], options, workers=workers) as index:
+                        for limit, positions in ((None, True), (50, True), (50, False)):
+                            hits = index.find(r["query"], limit, positions)
+                            want = expected if limit is None else expected[:limit]
+                            self.assertEqual([(h.index, h.score) for h in hits], [(h["index"], h["score"]) for h in want], v["name"])
+                            if positions:
+                                self.assertEqual([asdict(h.alignment) for h in hits],
+                                                 [{k: value for k, value in h.items() if k != "index"} for h in want], v["name"])
+        self.assertEqual(count, 1260)
+        print(f"Verified {count} live CLI tie-heavy datasets (Python)")
+
     def test_golden(self):
         path = Path(os.environ.get("FZFP_GOLDEN", Path(__file__).resolve().parents[2] / "testdata/golden.json"))
         fixture = json.loads(path.read_text())
@@ -71,6 +99,11 @@ class BindingTests(unittest.TestCase):
         index = fzfp.Index(["北京"])
         with self.assertRaises(ValueError):
             index.find("bj", -1)
+        for invalid in (True, False, 0.5):
+            with self.assertRaises(ValueError):
+                index.find("bj", invalid)
+        with self.assertRaises(ValueError):
+            fzfp.Index([], workers=True)
         handle = index._handle.value
         index.close()
         index.close()
