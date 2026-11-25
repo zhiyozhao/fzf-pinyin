@@ -4,7 +4,10 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"math/rand"
 	"os"
+	"strings"
 
 	"github.com/junegunn/fzf/bindings/core"
 )
@@ -35,6 +38,7 @@ func main() {
 		{"", ""}, {"中国", ""}, {"", "x"}, {"abc", "!a"},
 		{"/machao", "machao"}, {"/马超", "machao"}, {"-北京", "bj"},
 		{"中中国", "zg"}, {"hello hello", "hl"},
+		{strings.Repeat("中", 33000) + "国", "zg"},
 	}
 	add := func(name string, req core.Request) {
 		expected, err := core.Execute(req)
@@ -63,6 +67,25 @@ func main() {
 		for _, query := range []string{"bj", "beijing", "", "nomatch!"} {
 			add(scheme+":filter:"+query, core.Request{Operation: "filter", Candidates: candidates, Query: query, Options: opts})
 		}
+	}
+	// Shared acceptance cases include enough candidates to exercise batch
+	// parallelism, random tie keys, and upstream's fixed-slab V1 fallback.
+	rng := rand.New(rand.NewSource(20261125))
+	parts := []string{"北京", "中国", "绿茶", "fooBar", "a-b", "aab", "😀", "é", "e\u0301", "/", "\\", " ", "嗯略巨"}
+	candidates := []string{"", "a\x00北京\r\n", strings.Repeat("ab ", 2200) + "北京", strings.Repeat("a", 3400) + "b"}
+	for i := 0; i < 1100; i++ {
+		s := ""
+		for j := 0; j < 2+rng.Intn(5); j++ {
+			s += parts[rng.Intn(len(parts))]
+		}
+		candidates = append(candidates, s)
+	}
+	for _, scheme := range []string{"default", "path", "history"} {
+		for _, query := range []string{"bj", "ab", strings.Repeat("a", 40) + "b"} {
+			add(fmt.Sprintf("%s:acceptance:%s", scheme, query), core.Request{Operation: "filter", Candidates: candidates, Query: query, Options: core.Options{Scheme: scheme, Normalize: &yes, Positions: &yes}})
+		}
+		noPositions := core.Options{Scheme: scheme, Normalize: &yes, Positions: &no}
+		add(scheme+":saturated-rank", core.Request{Operation: "filter", Candidates: []string{strings.Repeat("a", 3400), "/" + strings.Repeat("a", 3400), strings.Repeat("a", 3401), " " + strings.Repeat("a", 3400) + " "}, Query: strings.Repeat("a", 3400), Options: noPositions})
 	}
 	e := json.NewEncoder(os.Stdout)
 	e.SetEscapeHTML(false)
