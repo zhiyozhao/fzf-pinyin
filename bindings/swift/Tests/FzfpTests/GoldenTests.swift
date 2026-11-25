@@ -89,6 +89,19 @@ final class GoldenTests: XCTestCase {
         XCTAssertEqual(failures, 0)
         try index.close(); try index.close()
         XCTAssertThrowsError(try index.find("bj"))
+        let raced = try Index(Array(repeating: "北京", count: 1100))
+        DispatchQueue.concurrentPerform(iterations: 21) { i in
+            do {
+                if i == 10 { try raced.close() }
+                else if try raced.find("bj", limit: 7).map(\.index) != Array(0..<7) {
+                    lock.lock(); failures += 1; lock.unlock()
+                }
+            } catch FzfpError.core(let status, _) where status == 3 {
+                // close acquired the wrapper lock before this query.
+            } catch { lock.lock(); failures += 1; lock.unlock() }
+        }
+        XCTAssertEqual(failures, 0)
+        try raced.close()
     }
     func testUnicodeRanges() throws {
         let m = try Fzfp.match("😀中国e\u{301}", query: "zg")

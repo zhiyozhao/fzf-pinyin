@@ -22,6 +22,13 @@ func LibraryLetterMask(chars *util.Chars) uint32 {
 	}
 	for i := 0; i < chars.Length(); i++ {
 		r := chars.Get(i)
+		if r < 128 {
+			if r >= 'A' && r <= 'Z' {
+				r += 'a' - 'A'
+			}
+			add(r)
+			continue
+		}
 		add(unicode.ToLower(r))
 		add(algo.FoldRune(unicode.ToLower(r)))
 		add(unicode.ToLower(algo.FoldRune(r)))
