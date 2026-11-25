@@ -1,0 +1,71 @@
+name: Bindings (build and test only)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', '.github/workflows/bindings.yml']
+  push:
+    branches: [devs/bindings]
+    paths: ['bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'scripts/*bindings*', '.github/workflows/bindings.yml']
+permissions:
+  contents: read
+jobs:
+  macos:
+    strategy:
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.4'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: bash scripts/build-bindings.sh all
+      - run: bash scripts/test-bindings.sh
+      - run: |
+          cp bindings/testdata/golden.json .cache/bindings/original-golden.json
+          bash scripts/generate-bindings-golden.sh
+          cmp bindings/testdata/golden.json .cache/bindings/original-golden.json
+      - run: |
+          cd bindings/swift/.cache
+          ditto -c -k --sequesterRsrc --keepParent CFzfp.xcframework CFzfp.xcframework.zip
+          swift package compute-checksum CFzfp.xcframework.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bindings-${{ matrix.runner }}
+          path: |
+            .cache/bindings/*.whl
+            bindings/swift/.cache/CFzfp.xcframework.zip
+  linux:
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            image: quay.io/pypa/manylinux_2_28_x86_64
+          - runner: ubuntu-24.04-arm
+            image: quay.io/pypa/manylinux_2_28_aarch64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      # Native-architecture manylinux containers supply GCC + auditwheel. Go
+      # is installed only inside the ephemeral container, never on the host.
+      - run: |
+          docker run --rm -v "$PWD:/work" -w /work '${{ matrix.image }}' bash -euc '
+            case "$(uname -m)" in x86_64) goarch=amd64 ;; aarch64) goarch=arm64 ;; esac
+            curl -fsSL "https://go.dev/dl/go1.27.4.linux-${goarch}.tar.gz" -o /tmp/go.tar.gz
+            tar -C /tmp -xzf /tmp/go.tar.gz
+            export PATH=/tmp/go/bin:/opt/python/cp312-cp312/bin:$PATH
+            mkdir -p .cache/bindings/raw .cache/bindings/repaired
+            python -m pip wheel --no-deps -w .cache/bindings/raw ./bindings/python
+            auditwheel repair .cache/bindings/raw/*.whl -w .cache/bindings/repaired
+            python -m pip install --no-deps .cache/bindings/repaired/*.whl
+            go test -race ./bindings/core ./capi ./src/algo
+            go build -trimpath -buildvcs=false -o .cache/bindings/fzfp .
+            FZFP_CLI="$PWD/.cache/bindings/fzfp" python -m unittest discover -s bindings/python/tests -v
+          '
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bindings-${{ matrix.runner }}
+          path: .cache/bindings/repaired/*.whl
