@@ -21,11 +21,12 @@ import fzfp
 parser = argparse.ArgumentParser()
 parser.add_argument("--repetitions", type=int, default=7)
 parser.add_argument("--top-repetitions", type=int, default=21)
-parser.add_argument("--output", type=Path, required=True)
+parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parents[1] / ".cache/bindings/benchmark-v2.json")
 parser.add_argument("--schemes", nargs="+", choices=("default", "path", "history"), default=["default", "path", "history"])
 parser.add_argument("--queries", nargs="+", default=["bj", "beijing", "fb", "b"])
 parser.add_argument("--top-only", action="store_true", help="measure only prepared top-50, 4 workers, highlights")
 args = parser.parse_args()
+args.output.parent.mkdir(parents=True, exist_ok=True)
 root = Path(__file__).resolve().parents[1]
 cli = root / ".cache/bindings/fzfp"
 swift = root / "bindings/swift/.build/release/fzfp-benchmark"

@@ -2,7 +2,7 @@
 
 Historical measurements of `662cfd7b`: its path alignment direction was later
 found incorrect on tie-heavy inputs. See [the correction and live regression](bindings-path-fix.md)
-and `bindings-benchmark-path-fix.json` for the corrected targeted rerun. The
+for the corrected targeted rerun's summary table. The
 old corpus's CLI agreement did not establish correctness for all alignments.
 
 Measured 2026-11-25 on Apple M1 Pro arm64, Go 1.27.4, Swift 6.2.4 release, Python 3.12.16, Node 22.22.0.
@@ -16,9 +16,15 @@ This was a shared desktop with ongoing browser/emulator activity; no user proces
 Reproduce after building all artifacts, installing the wheel into a venv, and building Swift release:
 
 ```sh
-python scripts/benchmark-bindings-v2.py --output docs/bindings-benchmark-v2.json
+python scripts/benchmark-bindings-v2.py --output .cache/bindings/benchmark-v2.json
 python scripts/summarize-bindings-v2.py
 ```
+
+Raw samples are deliberately untracked. The benchmark defaults to the ignored
+`.cache/bindings/benchmark-v2.json`; the summarizer reads that file and writes
+`.cache/bindings/performance-v2.md`. Committed tables below preserve the original
+measurement session. Regeneration measures the current code and environment;
+it does not reproduce historical timing samples byte-for-byte.
 
 ## Warm medians: complete matrix
 
@@ -211,4 +217,4 @@ Goals came from the approved API survey, section 6; unmet cases are reported, no
 
 The first nine scheme/query cases reproduce the original corpus queries; `b` is an extra initial-input case. All full-position paths and cold Index construction remain O(corpus/matches) work and must not be compared to rank-only/top-K as equivalent output. Retain an Index for interactive input. Prefix incremental work is deferred, so there is no incremental-vs-cold benchmark in this phase.
 
-The raw JSON preserves all samples, cold/create timings and per-call phase metrics. No isolated profile proves a single cause for every latency outlier; phase metrics identify native-vs-host costs, not system scheduler/thermal causality.
+Regenerated raw JSON in the ignored cache preserves all samples, cold/create timings and per-call phase metrics. No isolated profile proves a single cause for every latency outlier; phase metrics identify native-vs-host costs, not system scheduler/thermal causality.

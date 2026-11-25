@@ -99,7 +99,8 @@ generated from stale binding output is checked in as an independent oracle.
 ## Corrected performance
 
 Fresh measurements for default/bj and path/bj, top-50 with alignment and four
-workers, are recorded in `bindings-benchmark-path-fix.json` after all tests.
+workers, are summarized below. Raw samples are untracked; regenerate them into
+the ignored `.cache/bindings/benchmark-path-fix.json` with the command below.
 Corpus construction remains separate. One cold query precedes 21 warm samples.
 Every returned index/score is checked against full results validated by CLI
 text order. The raw results include native phase metrics and host overhead.
@@ -116,7 +117,7 @@ Reproduce with an installed rebuilt wheel and rebuilt Swift release/Node addon:
 
 ```sh
 python scripts/benchmark-bindings-v2.py --schemes default path --queries bj \
-  --top-only --top-repetitions 21 --output docs/bindings-benchmark-path-fix.json
+  --top-only --top-repetitions 21 --output .cache/bindings/benchmark-path-fix.json
 ```
 
 Local validation: `bash scripts/test-bindings.sh` passes (Python 7 tests, JS 4,

@@ -1,19 +1,24 @@
 """Render tables from measured samples; never substitutes targets for results."""
+import argparse
 import json
 from pathlib import Path
 import statistics
 
 root = Path(__file__).resolve().parents[1]
-data = json.loads((root / "docs/bindings-benchmark-v2.json").read_text())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--input", type=Path, default=root / ".cache/bindings/benchmark-v2.json")
+parser.add_argument("--output", type=Path, default=root / ".cache/bindings/performance-v2.md")
+args = parser.parse_args()
+data = json.loads(args.input.read_text())
 languages = ("swift", "python", "js")
 lines = ["# Prepared typed bindings: 100k-row benchmark", "",
-         "Historical measurements of `662cfd7b`: path alignment direction was later corrected. See [the fix and live regression](bindings-path-fix.md) and bindings-benchmark-path-fix.json. Agreement on this corpus did not establish all-input path correctness.", "",
+         "The committed performance summary preserves historical measurements of `662cfd7b`, whose path direction was later corrected. See docs/bindings-path-fix.md for corrected measurements and regression coverage. Raw samples and regenerated tables stay in ignored .cache/bindings.", "",
          "Measured 2026-11-25 on Apple M1 Pro arm64, Go 1.27.4, Swift 6.2.4 release, Python 3.12.16, Node 22.22.0.", "",
          "Same deterministic corpus as the original benchmark, plus low-selectivity `b`. All twelve cases validate full index/score order against legacy exact results, and text order against the CLI. Every top-K is checked against the full prefix. No incremental cache is used.", "",
          "Corpus file read/import/runtime startup are excluded. Prepared rows exclude corpus construction, measured separately. One cold query is recorded and excluded from warm statistics. Full/convenience/JSON use 7 warm samples; highlighted top-50/4 workers uses 21. CLI includes process startup, ingestion and stdin/stdout, returns text only. Legacy JSON/convenience always compute exact bounds even with positions off; new rank-only full results intentionally do less work, so the speed ratio is not a claim of equivalent exact-alignment work.", "",
          "This was a shared desktop with ongoing browser/emulator activity; no user processes were stopped. Cases/languages/configurations run sequentially, not interleaved, so differences between languages are not a controlled ranking of runtimes. No outliers are discarded; p95 is the nearest-rank sample percentile, not a production latency guarantee.", "",
          "Reproduce after building all artifacts, installing the wheel into a venv, and building Swift release:", "",
-         "```sh", "python scripts/benchmark-bindings-v2.py --output docs/bindings-benchmark-v2.json", "python scripts/summarize-bindings-v2.py", "```", "",
+         "```sh", "python scripts/benchmark-bindings-v2.py --output .cache/bindings/benchmark-v2.json", "python scripts/summarize-bindings-v2.py", "```", "",
          "## Warm medians: complete matrix", "",
          "Full results are unbounded; top50 returns at most 50. `positions=true` includes host UTF-8/UTF-16 conversion for returned hits. All times below are milliseconds.", "",
          "| Scheme/query | Mode | Workers | Positions | Swift | Python | JS | CLI |",
@@ -55,4 +60,5 @@ for lang in languages:
               f"- {lang}: max case-median top50 boundary + objects + C copy = {host:.3f}ms (goal <=5ms)."]
 lines += ["", "The first nine scheme/query cases reproduce the original corpus queries; `b` is an extra initial-input case. All full-position paths and cold Index construction remain O(corpus/matches) work and must not be compared to rank-only/top-K as equivalent output. Retain an Index for interactive input. Prefix incremental work is deferred, so there is no incremental-vs-cold benchmark in this phase.", "",
           "The raw JSON preserves all samples, cold/create timings and per-call phase metrics. No isolated profile proves a single cause for every latency outlier; phase metrics identify native-vs-host costs, not system scheduler/thermal causality.", ""]
-(root / "docs/bindings-performance-v2.md").write_text("\n".join(lines))
+args.output.parent.mkdir(parents=True, exist_ok=True)
+args.output.write_text("\n".join(lines))
