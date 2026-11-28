@@ -8,7 +8,7 @@ UPSTREAM := bf4869b7fa7748d973eeb414da4dde0d7fe4cd3c
 export FZFP_BIN := $(ROOT)/Artifacts/fzfp
 export FZF_REFERENCE_BIN := $(ROOT)/Artifacts/fzf-reference
 E2E_RUBY ?= ruby
-VERSION ?= 0.2.0
+VERSION ?= 0.2.1
 GORELEASER_VERSION := v2.20.0
 
 .PHONY: all build reference check test fmt run bench fuzz test-ui shots package e2e release-build

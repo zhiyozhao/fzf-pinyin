@@ -5,7 +5,7 @@ Build a native wheel from the complete checkout (Go and a C compiler required):
 
 ```sh
 python3 -m pip wheel --no-deps --wheel-dir .cache/bindings ./bindings/python
-python3 -m pip install .cache/bindings/fzfp-0.1.0-*.whl
+python3 -m pip install .cache/bindings/fzfp-0.2.1-*.whl
 ```
 
 Run installation in a virtual environment. Wheel consumers do not need Go.

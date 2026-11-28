@@ -1,4 +1,4 @@
-# Swift / Python / Node bindings (typed ABI 2 + JSON ABI 1, preview 0.1.0)
+# Swift / Python / Node bindings (0.2.1, typed ABI 2 + JSON ABI 1)
 
 One Go implementation serves the CLI, Swift, Python and Node. All binding files live
 in this repository so a scoring change and its shared test vectors can be
@@ -132,11 +132,19 @@ Input buffers are borrowed during the call, copied, never retained. No Go
 pointer crosses the boundary. Swift throws; Python raises ValueError for status
 1, RuntimeError for status 2, MemoryError for null.
 
-`version` returns binding/core contract version `0.1.0`, pinned core source
+`version` returns the unified CLI/binding version `0.2.1`, pinned core source
 revision, dictionary version, and independent integer ABI version `1`. The
 revision identifies the scoring baseline; binding commits are recorded by Git
 and release metadata. A scoring change requires new version metadata and golden
-vectors even if the C transport remains ABI compatible. Version 0.x is preview.
+vectors even if the C transport remains ABI compatible. In 0.2.1 the version
+is aligned across CLI, Swift, Python and Node, even though PyPI/npm publication
+is deferred. The 189 vectors retain their expected data; metadata is regenerated
+to identify the reviewed implementation commit. `core_revision` is this actual
+core source baseline, not a self-referential hash of the packaging commit.
+The asset provenance separately records its exact build source commit.
+ABI 2 adds find flag bit 2 (value 4) for contiguous matching; old calls retain
+their meaning, including bit 1 (value 2) for exact bounds. Older binaries reject
+the new flag, so use the wrapper and native asset from the same release.
 
 ## Threading and scheme
 

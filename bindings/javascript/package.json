@@ -1,6 +1,6 @@
 {
   "name": "fzfp",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Shared Go-core pinyin fuzzy matching for Node.js",
   "main": "index.js",
   "types": "index.d.ts",
@@ -9,9 +9,9 @@
   "files": ["index.js", "index.d.ts", "README.md", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"],
   "scripts": { "test": "node --test test.js" },
   "optionalDependencies": {
-    "@fzfp/native-darwin-arm64": "0.1.0",
-    "@fzfp/native-darwin-x64": "0.1.0",
-    "@fzfp/native-linux-arm64": "0.1.0",
-    "@fzfp/native-linux-x64": "0.1.0"
+    "@fzfp/native-darwin-arm64": "0.2.1",
+    "@fzfp/native-darwin-x64": "0.2.1",
+    "@fzfp/native-linux-arm64": "0.2.1",
+    "@fzfp/native-linux-x64": "0.2.1"
   }
 }

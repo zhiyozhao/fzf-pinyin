@@ -4,6 +4,22 @@
 
 这里只记录 fzfp 的发布变化。上游历史见 [fzf 变更记录](https://github.com/junegunn/fzf/blob/bf4869b7fa7748d973eeb414da4dde0d7fe4cd3c/CHANGELOG.md)。
 
+## 0.2.1
+
+### 中文
+
+- 长文本中的拼音搜索更快，减少无关文本区段的重复计算；匹配结果、排序和高亮保持不变。
+- Swift 包可通过 SwiftPM 的 `0.2.1` 版本直接引用，无需安装 Go；提供 macOS arm64/x86_64 XCFramework。
+- Swift `Index.find` 新增 `exact` 连续匹配选项；单条文本的高亮查询减少重复扫描，正确保留 emoji 等字符的 UTF-16 范围。
+- CLI 与绑定包版本统一为 0.2.1；Python/npm 包本轮不发布。
+
+### English
+
+- Speed up pinyin search in long text by skipping repeated work over unrelated regions, preserving matches, ranking, and highlights.
+- Reference the Swift package directly through SwiftPM version `0.2.1`, without installing Go. Ship a macOS arm64/x86_64 XCFramework.
+- Add contiguous matching with Swift `Index.find(exact:)`. Avoid a second scan for single-text highlights and preserve UTF-16 ranges for emoji and other supplementary characters.
+- Align the CLI and binding package versions at 0.2.1. Python and npm packages are not published in this release.
+
 ## 0.2.0
 
 ### 中文

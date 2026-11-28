@@ -31,6 +31,13 @@ int main(void) {
     assert(r->hits[0].start==0 && r->hits[0].end==2 && r->position_count==2);
     assert(r->positions[0]==0 && r->positions[1]==1);
     fzfp_results_free(r);
+    find.flags=5; /* positions plus contiguous matching (ABI 2 extension) */
+    assert(fzfp_index_find(h,"zhongguo",8,&find,&r)==0 && r->count==1);
+    assert(r->hits[0].start==0 && r->hits[0].end==2 && r->position_count==2);
+    fzfp_results_free(r);
+    find.flags=8;
+    assert(fzfp_index_find(h,"zg",2,&find,&r)==1 && r==NULL);
+    find.flags=1;
     find.limit=-2;
     assert(fzfp_index_find(h,"zg",2,&find,&r)==1 && r==NULL);
     find.limit=1; find.reserved=1;

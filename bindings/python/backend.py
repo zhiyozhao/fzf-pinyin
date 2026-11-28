@@ -18,7 +18,7 @@ import tempfile
 import zipfile
 
 HERE = Path(__file__).resolve().parent
-VERSION = "0.1.0"
+VERSION = "0.2.1"
 
 
 def _root():

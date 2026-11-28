@@ -7,8 +7,8 @@ trap 'rm -r "$task_dir"' EXIT
 # registry install: unpublished optional dependency names are intentionally
 # unresolved until release. The loader exercises the platform package path.
 mkdir -p "$task_dir/node_modules/fzfp" "$task_dir/node_modules/@fzfp/native-$(node -p 'process.platform+"-"+process.arch')"
-tar -xzf .cache/bindings/npm/fzfp-0.1.0.tgz -C "$task_dir/node_modules/fzfp" --strip-components=1
-tar -xzf ".cache/bindings/npm/fzfp-native-$(node -p 'process.platform+"-"+process.arch')-0.1.0.tgz" \
+tar -xzf .cache/bindings/npm/fzfp-0.2.1.tgz -C "$task_dir/node_modules/fzfp" --strip-components=1
+tar -xzf ".cache/bindings/npm/fzfp-native-$(node -p 'process.platform+"-"+process.arch')-0.2.1.tgz" \
   -C "$task_dir/node_modules/@fzfp/native-$(node -p 'process.platform+"-"+process.arch')" --strip-components=1
 FZFP_NPM_CONSUMER="$task_dir" node -e '
 const assert=require("node:assert/strict");

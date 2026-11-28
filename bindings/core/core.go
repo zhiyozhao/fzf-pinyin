@@ -13,7 +13,7 @@ import (
 	"github.com/junegunn/fzf/src/util"
 )
 
-const Version = "0.1.0"
+const Version = "0.2.1"
 const CoreRevision = "093ccbbdeae6e446e1e903d1ed80971d428e524b"
 const ABIVersion = 1
 

@@ -10,12 +10,12 @@
 
 ## 安装
 
-当前正式版为 **0.2.0**，包含下面的拼音输入、评分和性能改进。macOS / Linux 可用 Homebrew 安装，无需 Go：
+当前正式版为 **0.2.1**，包含下面的拼音输入、评分和性能改进。macOS / Linux 可用 Homebrew 安装，无需 Go：
 
 ```sh
 brew install zhiyozhao/tap/fzfp
 fzfp --version
-# fzfp 0.2.0 (based on fzf 0.75)
+# fzfp 0.2.1 (based on fzf 0.75)
 ```
 
 也可从源码构建，需要 [Go 1.23+](https://go.dev/doc/install)：

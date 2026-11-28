@@ -11,7 +11,7 @@ for (const kind of ['main', 'native']) {
   for (const name of ['LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md']) fs.copyFileSync(path.join(root, name), path.join(dir, name));
   if (kind === 'main') for (const name of ['package.json', 'index.js', 'index.d.ts', 'README.md']) fs.copyFileSync(path.join(binding, name), path.join(dir, name));
   else {
-    const manifest = { name: `@fzfp/native-${process.platform}-${process.arch}`, version: '0.1.0', main: 'fzfp.node',
+    const manifest = { name: `@fzfp/native-${process.platform}-${process.arch}`, version: require(path.join(binding, 'package.json')).version, main: 'fzfp.node',
       os: [process.platform], cpu: [process.arch], license: 'MIT', files: ['fzfp.node', '*LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md'] };
     if (process.platform === 'linux') manifest.libc = ['glibc'];
     fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(manifest, null, 2) + '\n');

@@ -10,12 +10,12 @@ Add pinyin search to [fzf](https://github.com/junegunn/fzf), with the `fzfp` com
 
 ## Install
 
-The current release is **0.2.0**, including the pinyin input, scoring, and performance improvements described below. Install with Homebrew on macOS or Linux, without Go:
+The current release is **0.2.1**, including the pinyin input, scoring, and performance improvements described below. Install with Homebrew on macOS or Linux, without Go:
 
 ```sh
 brew install zhiyozhao/tap/fzfp
 fzfp --version
-# fzfp 0.2.0 (based on fzf 0.75)
+# fzfp 0.2.1 (based on fzf 0.75)
 ```
 
 You can also build from source with [Go 1.23+](https://go.dev/doc/install):
