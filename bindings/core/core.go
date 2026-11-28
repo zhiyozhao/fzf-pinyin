@@ -17,7 +17,7 @@ const Version = "0.2.1"
 
 // Reviewed implementation baseline; packaging commits and asset provenance
 // identify later metadata-only changes without a circular commit hash.
-const CoreRevision = "4a6c6cac77351660ca4e3e675919beb91243ced6"
+const CoreRevision = "106433863575a60a4f035860b87d86cb0bf5cdd2"
 const ABIVersion = 1
 
 type Options struct {
