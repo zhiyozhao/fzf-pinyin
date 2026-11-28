@@ -1,8 +1,8 @@
 {
   "format_version": 1,
-  "core_revision": "093ccbbdeae6e446e1e903d1ed80971d428e524b",
+  "core_revision": "4a6c6cac77351660ca4e3e675919beb91243ced6",
   "abi_version": 1,
-  "core_version": "0.1.0",
+  "core_version": "0.2.1",
   "dictionary_version": "go-pinyin v0.21.0",
   "vectors": [
     {

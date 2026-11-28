@@ -14,7 +14,9 @@ import (
 )
 
 const Version = "0.2.1"
-const CoreRevision = "093ccbbdeae6e446e1e903d1ed80971d428e524b"
+// Reviewed implementation baseline; packaging commits and asset provenance
+// identify later metadata-only changes without a circular commit hash.
+const CoreRevision = "4a6c6cac77351660ca4e3e675919beb91243ced6"
 const ABIVersion = 1
 
 type Options struct {
