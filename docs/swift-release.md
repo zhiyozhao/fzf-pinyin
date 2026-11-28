@@ -49,7 +49,9 @@ archives for both tags have the same content; there is no second distribution re
    Create and push **both tags atomically** at that commit. Before publishing,
    the workflow requires both tags to resolve to HEAD. Do not push the SemVer tag
    early: consumers could resolve a manifest before its asset exists.
-5. CLI CI builds/checks/publishes its four archives. Its dependent `swift` job
+5. CLI CI explicitly sets `GORELEASER_CURRENT_TAG` to the triggering CLI tag,
+   so automatic tag selection cannot publish to the SemVer tag instead. It
+   builds/checks/publishes its four archives. Its dependent `swift` job
    downloads the pinned successful preparation run, verifies source/input/hash
    equality, and uploads those exact three reviewed files without overwriting
    existing assets. It does not rebuild a potentially different zip after tagging.

@@ -36,6 +36,8 @@ jobs:
       - name: Build, inspect and publish four archives
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # HEAD also has the SwiftPM SemVer tag; never auto-select that release.
+          GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
           GOMODCACHE: ${{ github.workspace }}/.cache/go-mod
           GOCACHE: ${{ github.workspace }}/.cache/go-build
           GOPATH: ${{ github.workspace }}/.cache/go
