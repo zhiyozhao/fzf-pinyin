@@ -5,25 +5,29 @@
 给 [fzf](https://github.com/junegunn/fzf) 加上拼音搜索，命令叫 `fzfp`。
 
 - 搜索汉字时支持全拼、首字母、声母，也能混用汉字和拼音。
-- 不含汉字的候选沿用 fzf 的匹配算法、评分和排序规则。
-- 拼音也支持模糊搜索：可以按顺序跳过原文中的字，保留原文输出和高亮。
+- 不含汉字的候选保留 fzf 的匹配和排序行为，见[验证与性能测量](docs/testing.md)。
+- 拼音也支持模糊搜索，可以按顺序跳字，输出和高亮仍是原文。
 
 ## 安装
 
-macOS / Linux 可用 Homebrew，无需 Go：
+下面的规则和语言绑定以 `main` 为准。Homebrew 和安装脚本目前提供的是 **0.1.0**，尚不包含新的输入法拼写、评分和性能改进，也没有语言绑定。
+
+要使用当前功能，请从源码构建，需要 [Go 1.23+](https://go.dev/doc/install)：
+
+```sh
+git clone https://github.com/zhiyozhao/fzf-pinyin.git
+cd fzf-pinyin
+go build -trimpath -o ./bin/fzfp .
+./bin/fzfp --version
+```
+
+把生成的 `bin/fzfp` 放到 PATH 中的目录即可使用。若只需已发布的 0.1.0，macOS / Linux 可用 Homebrew：
 
 ```sh
 brew install zhiyozhao/tap/fzfp
 ```
 
-Linux 也可用安装脚本，支持 x86_64 / arm64，校验 SHA256 后安装到 `~/.local/bin`：
-
-```sh
-curl -fL https://raw.githubusercontent.com/zhiyozhao/fzf-pinyin/fzfp-v0.1.0/install-fzfp -o install-fzfp
-sh install-fzfp --version 0.1.0
-```
-
-安装后确保目录在 PATH 中。`fzfp` 可与 `fzf` 并存；用法相同，把命令换成 `fzfp` 即可，已有 shell 快捷键不会自动切换。更多见[安装说明](docs/install.md)。
+用法和 fzf 相同，把命令换成 `fzfp` 即可；已有 shell 快捷键不会自动切换。安装脚本和其他方式见[安装说明](docs/install.md)。
 
 ## 拼音搜索规则
 
@@ -35,6 +39,11 @@ sh install-fzfp --version 0.1.0
 | `zhg`、`zguo` | **中国** | 声母，或缩写与全拼混用 |
 | `北jing`、`bei京` | **北京** | 汉字和拼音混用 |
 | `lvyou`、`lüyou` | **旅游** | ü 可以写成 v |
+| `nv`、`nü` | **女** | 不用 nu 代替 nü |
+| `lue`、`lve` | **略** | 同样接受 nue / nve 匹配“虐” |
+| `ju`、`jv` | **居** | j/q/x/y 后的 ü 可写成 u 或 v，如 yu / yv 匹配“鱼” |
+| `yinyue`、`yy` | **音乐** | 按正常 y/w 拼写，不用 in 代替 yin |
+| `en`、`ng` | **嗯** | 也可用首字母 e / n，不接受 eng |
 | `beiji` | **北京**市 | 最后匹配的字可没打完，不必是整行最后一字 |
 | `bj` | **北**小**京** | 默认允许按顺序跳字 |
 | `'bj` | **北京**市 | 前置单引号要求连续，不匹配“北小京” |
@@ -45,6 +54,36 @@ sh install-fzfp --version 0.1.0
 
 拼音不分大小写；实际英文字母仍遵守 fzf 的大小写设置。不支持声调、双拼和拼写纠错，多音字不按词组消歧。更多写法见[拼音指南](docs/pinyin.md)，排除、字段及多条件查询见[搜索语法](docs/syntax.md)。
 
-全拼、缩写和末字半截拼音均不按字扣分；整条匹配用了拼音只扣 1 分，让相同字母、边界和连续块下的原文字面命中排在前面。
+一行里只要用了拼音，总共扣 1 分，不随字数增加；其余评分条件相同时，直接匹配原文的结果排在前面。
+
+## 在其他语言里使用
+
+Swift、Python 和 JavaScript（Node.js）都能匹配拼音，并返回分数和原文中的匹配位置。支持单条匹配、列表筛选，以及重复搜索同一列表的 `Index`。查询是一个模糊搜索词，不解析 CLI 的引号、`^`、`$` 等语法。
+
+这些包尚未通过 SwiftPM release、PyPI 或 npm 发布，目前需要从完整仓库源码构建。环境要求和构建步骤见各语言说明，完整 API 见[绑定文档](docs/bindings.md)。
+
+[Swift](bindings/swift/README.md)：构建后在 Swift 项目中添加本地包依赖。
+
+```swift
+import Fzfp
+
+print(try Fzfp.match("中国", query: "zhongguo").positions) // [0, 1]
+```
+
+[Python](bindings/python/README.md)：从源码构建 wheel，并安装到虚拟环境。
+
+```python
+from fzfp import match
+
+print(match("中国", "zhongguo").positions)  # [0, 1]
+```
+
+[JavaScript](bindings/javascript/README.md)：构建后，在仓库根目录运行此例；需要 Node.js 22+，不支持浏览器。
+
+```js
+const { match } = require('./bindings/javascript');
+
+console.log(match('中国', 'zhongguo').positions); // [0, 1]
+```
 
 [开发指南](CONTRIBUTING.md) · [变更记录](CHANGELOG.fzfp.md) · [上游 fzf 文档](README.fzf.md) · [MIT](LICENSE) · [第三方许可](THIRD_PARTY_NOTICES.md)

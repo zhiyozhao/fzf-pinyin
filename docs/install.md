@@ -4,9 +4,31 @@
 
 ## 选择安装方式
 
+Homebrew 和安装脚本目前提供 **0.1.0**，落后于 `main`：不包含新的输入法拼写、整行只扣 1 分的评分规则、性能改进和语言绑定。首页及[拼音指南](pinyin.md)描述的是 `main`，要使用这些功能请从源码构建。
+
 Homebrew 支持 macOS 和 Linux，安装 `fzfp` 及其手册；独立安装脚本支持两种系统，但只安装可执行文件。两种方式都提供 x86_64（amd64）和 arm64（aarch64）版本，无需安装 Go。
 
 Linux 预编译包是静态程序，不依赖 glibc 或 musl。尚无 32 位 ARM 包。macOS 预编译包未做 Apple 公证。
+
+## 从源码安装当前版本
+
+需要 [Go 1.23+](https://go.dev/doc/install)：
+
+```sh
+git clone https://github.com/zhiyozhao/fzf-pinyin.git
+cd fzf-pinyin
+go build -trimpath -o ./bin/fzfp .
+./bin/fzfp --version
+```
+
+把 `bin/fzfp` 放到 PATH 中的目录。版本输出中的 `0.1.0` 尚未递增，请同时以源码提交号确认构建版本。后续更新可在没有本地修改的 checkout 中拉取 `main`，然后重新构建：
+
+```sh
+git pull --ff-only origin main
+go build -trimpath -o ./bin/fzfp .
+```
+
+这里只构建命令行程序；Swift / Python / JavaScript 的构建入口见[绑定文档](bindings.md)。
 
 ## Homebrew
 
@@ -64,4 +86,4 @@ sh install-fzfp --version latest --bin-dir ./bin
 
 先运行 `fzfp --version`，确认调用的是 `fzfp`。直接运行 `fzf` 或已有的 shell 快捷键，不会自动切换到这个程序。
 
-安装脚本默认目录必须在 PATH 中。构建源码的正确产物是 `Artifacts/fzfp`；仓库里的上游 `install` 脚本安装的是 `fzf`，请勿混用。源码构建见[开发指南](../CONTRIBUTING.md)。
+安装脚本默认目录必须在 PATH 中。上述源码构建生成的是 `bin/fzfp`；仓库里的上游 `install` 脚本安装的是 `fzf`，请勿混用。
