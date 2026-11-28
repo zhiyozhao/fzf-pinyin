@@ -75,7 +75,8 @@ swift package compute-checksum .cache/swift-release/CFzfp.xcframework.zip
 bash scripts/test-swift-consumer.sh local
 ```
 
-Builds use Go `-trimpath -buildvcs=false`; input ordering, ZIP timestamps and modes
+Builds use Go `-trimpath -buildvcs=false -ldflags=-buildid=` and `ZERO_AR_DATE=1`;
+input ordering, archive/ZIP timestamps and modes
 are normalized. The two complete CI builds verify reproducibility on the recorded
 runner. Different compiler/SDK/zlib versions may change native code or compressed
 bytes; this is why publication uses the reviewed artifact rather than assuming a

@@ -12,8 +12,8 @@ case "${1:-all}" in
     build_dir="$(mktemp -d /tmp/fzfp-swift.XXXXXX)"
     trap 'rm -r "$build_dir"' EXIT
     for arch in arm64 amd64; do
-      CGO_ENABLED=1 GOOS=darwin GOARCH="$arch" MACOSX_DEPLOYMENT_TARGET=13.0 \
-        go build -trimpath -buildvcs=false -buildmode=c-archive -o "$build_dir/$arch.a" ./capi
+      ZERO_AR_DATE=1 CGO_ENABLED=1 GOOS=darwin GOARCH="$arch" MACOSX_DEPLOYMENT_TARGET=13.0 \
+        go build -trimpath -buildvcs=false -ldflags=-buildid= -buildmode=c-archive -o "$build_dir/$arch.a" ./capi
     done
     lipo -create "$build_dir/arm64.a" "$build_dir/amd64.a" -output "$build_dir/libfzfp.a"
     mkdir -p "$build_dir/include" bindings/swift/.cache
