@@ -4,7 +4,7 @@
 
 ## 选择安装方式
 
-Homebrew 和安装脚本目前提供 **0.1.0**，落后于 `main`：不包含新的输入法拼写、整行只扣 1 分的评分规则、性能改进和语言绑定。首页及[拼音指南](pinyin.md)描述的是 `main`，要使用这些功能请从源码构建。
+当前 CLI 正式版为 **0.2.0**，包含新的输入法拼写、整行只扣 1 分的评分规则和性能改进。Swift / Python / JavaScript 绑定尚未发布，需要从源码构建，见[绑定文档](bindings.md)。
 
 Homebrew 支持 macOS 和 Linux，安装 `fzfp` 及其手册；独立安装脚本支持两种系统，但只安装可执行文件。两种方式都提供 x86_64（amd64）和 arm64（aarch64）版本，无需安装 Go。
 
@@ -21,7 +21,7 @@ go build -trimpath -o ./bin/fzfp .
 ./bin/fzfp --version
 ```
 
-把 `bin/fzfp` 放到 PATH 中的目录。版本输出中的 `0.1.0` 尚未递增，请同时以源码提交号确认构建版本。后续更新可在没有本地修改的 checkout 中拉取 `main`，然后重新构建：
+把 `bin/fzfp` 放到 PATH 中的目录。源码构建的版本输出带有 `devel` 标记，可同时以源码提交号确认构建版本。后续更新可在没有本地修改的 checkout 中拉取 `main`，然后重新构建：
 
 ```sh
 git pull --ff-only origin main
@@ -43,15 +43,15 @@ fzfp --version
 brew upgrade zhiyozhao/tap/fzfp
 ```
 
-版本输出会包含 `fzfp` 自身版本和所基于的 fzf 版本。当前正式版为 0.1.0，基于 fzf 0.75。
+版本输出会包含 `fzfp` 自身版本和所基于的 fzf 版本。当前正式版为 0.2.0，基于 fzf 0.75。
 
 ## 安装脚本
 
 在可写目录下载脚本，可以先查看内容再执行：
 
 ```sh
-curl -fL https://raw.githubusercontent.com/zhiyozhao/fzf-pinyin/fzfp-v0.1.0/install-fzfp -o install-fzfp
-sh install-fzfp --version 0.1.0
+curl -fL https://raw.githubusercontent.com/zhiyozhao/fzf-pinyin/fzfp-v0.2.0/install-fzfp -o install-fzfp
+sh install-fzfp --version 0.2.0
 ```
 
 默认目录是 `~/.local/bin`。在当前终端启用这个目录：
@@ -66,11 +66,11 @@ fzfp --version
 自选目录，例如当前目录下的 `bin`：
 
 ```sh
-sh install-fzfp --version 0.1.0 --bin-dir ./bin
+sh install-fzfp --version 0.2.0 --bin-dir ./bin
 ./bin/fzfp --version
 ```
 
-省略版本参数会安装 0.1.0；要安装最新正式版，请显式选择 `latest`，重复运行可更新已有程序：
+省略版本参数会安装 0.2.0；要安装最新正式版，请显式选择 `latest`，重复运行可更新已有程序：
 
 ```sh
 sh install-fzfp --version latest --bin-dir ./bin

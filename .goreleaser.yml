@@ -16,13 +16,33 @@ archives:
   - ids: [fzfp]
     formats: [tar.gz]
     name_template: 'fzfp-{{ .Env.FZFP_VERSION }}{{ if .IsSnapshot }}-snapshot{{ end }}-{{ .Os }}_{{ .Arch }}'
+    builds_info:
+      owner: root
+      group: root
+      mtime: '1970-01-01T00:00:00Z'
     files:
-      - LICENSE
-      - NOTICE
-      - THIRD_PARTY_NOTICES.md
+      - src: LICENSE
+        info:
+          owner: root
+          group: root
+          mtime: '1970-01-01T00:00:00Z'
+      - src: NOTICE
+        info:
+          owner: root
+          group: root
+          mtime: '1970-01-01T00:00:00Z'
+      - src: THIRD_PARTY_NOTICES.md
+        info:
+          owner: root
+          group: root
+          mtime: '1970-01-01T00:00:00Z'
       - src: man/man1/fzfp.1
         dst: .
         strip_parent: true
+        info:
+          owner: root
+          group: root
+          mtime: '1970-01-01T00:00:00Z'
 checksum:
   name_template: checksums.txt
 snapshot:

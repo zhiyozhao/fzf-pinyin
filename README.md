@@ -10,9 +10,15 @@
 
 ## 安装
 
-下面的规则和语言绑定以 `main` 为准。Homebrew 和安装脚本目前提供的是 **0.1.0**，尚不包含新的输入法拼写、评分和性能改进，也没有语言绑定。
+当前正式版为 **0.2.0**，包含下面的拼音输入、评分和性能改进。macOS / Linux 可用 Homebrew 安装，无需 Go：
 
-要使用当前功能，请从源码构建，需要 [Go 1.23+](https://go.dev/doc/install)：
+```sh
+brew install zhiyozhao/tap/fzfp
+fzfp --version
+# fzfp 0.2.0 (based on fzf 0.75)
+```
+
+也可从源码构建，需要 [Go 1.23+](https://go.dev/doc/install)：
 
 ```sh
 git clone https://github.com/zhiyozhao/fzf-pinyin.git
@@ -21,11 +27,7 @@ go build -trimpath -o ./bin/fzfp .
 ./bin/fzfp --version
 ```
 
-把生成的 `bin/fzfp` 放到 PATH 中的目录即可使用。若只需已发布的 0.1.0，macOS / Linux 可用 Homebrew：
-
-```sh
-brew install zhiyozhao/tap/fzfp
-```
+把生成的 `bin/fzfp` 放到 PATH 中的目录即可使用。语言绑定仍需要从源码构建，见下文。
 
 用法和 fzf 相同，把命令换成 `fzfp` 即可；已有 shell 快捷键不会自动切换。安装脚本和其他方式见[安装说明](docs/install.md)。
 

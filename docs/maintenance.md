@@ -36,6 +36,8 @@ CLI 标签使用 `fzfp-v<版本>`，不覆盖上游标签，也不移动已发�
 
 包涵盖 macOS / Linux × amd64 / arm64，名称为 `fzfp-<版本>-<系统>_<架构>.tar.gz`。每包包含程序、手册及完整许可文件。`checksums.txt` 包含四个 SHA256。快照版本带 `-snapshot`，不能将其哈希填入正式 formula。
 
+所有 tar 条目的 owner/group 固定为 `root/root`，UID/GID 为 0，mtime 固定为 `1970-01-01T00:00:00Z`，不记录构建机用户名或文件构建时间。二进制使用 `archives[].builds_info`，手册及每份许可使用各自的 `files[].info`，不能只设置其中一类。归档校验以 Go 标准库读取 header，核对全部五个普通文件、所有权与时间；可在 macOS 和 Linux 运行，不依赖两种 tar 的不同列表格式。用 `tar -tvzf <包>` 可人工复核。
+
 ## 发布顺序
 
 1. 更新版本、两份 README 和相关中文文档，运行检查、快照和压缩包核验。匹配或终端行为有变化时，还需完整终端测试。
@@ -54,7 +56,7 @@ Homebrew 打包代码以 [tap 仓库](https://github.com/zhiyozhao/homebrew-tap)
 
 `install-fzfp` 根据系统和架构选择资产、核对唯一 SHA256、在目标目录暂存后替换程序。失败不能破坏已有程序；不修改 shell 配置。下载校验依赖 GitHub HTTPS 提供的清单，并非独立签名认证。
 
-主仓库打包验证入口为 `scripts/verify-binary.sh`、`scripts/verify-archives.sh` 和 `scripts/test-install.sh`。每个二进制都进行 strings 检查；包内完整许可附录必须与源码一致，不能只检查文件名存在。普通检查包含安装器回归；生成器回归属于 tap 的同步工作流。
+主仓库打包验证入口为 `scripts/verify-binary.sh`、`scripts/verify-archives.sh` 和 `scripts/test-install.sh`。每个二进制都进行 strings 检查；包内完整许可附录必须与源码一致，不能只检查文件名存在。`verify-archives.sh` 调用 Go header 校验器，需要 Go，并拒绝构建机身份、变化的时间戳、额外条目和链接。普通检查包含安装器及归档 header 校验器回归；生成器回归属于 tap 的同步工作流。
 
 ## 上游差异清单
 
@@ -68,7 +70,7 @@ Homebrew 打包代码以 [tap 仓库](https://github.com/zhiyozhao/homebrew-tap)
 | `go.mod` | 修改 | 增加 go-pinyin 读音数据及终端测试所用 creack/pty；保留上游模块路径 |
 | `go.sum` | 修改 | 固定新增依赖校验和 |
 | `.gitignore` | 修改 | 忽略项目缓存、构建产物和本地配置 |
-| `.goreleaser.yml` | 修改 | 生成本项目四平台包，包含手册、完整许可和校验和 |
+| `.goreleaser.yml` | 修改 | 生成本项目四平台包，包含手册、完整许可和校验和；全部条目固定 root/root 与 epoch mtime，避免泄漏构建机身份和构建时间 |
 | `.github/CODEOWNERS` | 修改 | 本 fork 的代码审阅责任由维护者承担 |
 | `.github/workflows/release.yml` | 修改 | 仅处理 fzfp tag 和资产，不运行上游签名、MSI 或 winget 发布 |
 | `.github/workflows/linux.yml` | 删除 | 上游任务依赖其 lint/install 和 shell 集成流程；fork 使用独立检查及隔离对照 |

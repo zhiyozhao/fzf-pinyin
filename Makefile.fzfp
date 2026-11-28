@@ -8,7 +8,7 @@ UPSTREAM := bf4869b7fa7748d973eeb414da4dde0d7fe4cd3c
 export FZFP_BIN := $(ROOT)/Artifacts/fzfp
 export FZF_REFERENCE_BIN := $(ROOT)/Artifacts/fzf-reference
 E2E_RUBY ?= ruby
-VERSION ?= 0.1.0
+VERSION ?= 0.2.0
 GORELEASER_VERSION := v2.20.0
 
 .PHONY: all build reference check test fmt run bench fuzz test-ui shots package e2e release-build
@@ -28,7 +28,7 @@ fmt:
 	$(GO) fmt ./...
 
 check: build reference
-	@test -z "$$(gofmt -l main.go src integration internal cmd)"
+	@test -z "$$(gofmt -l main.go src integration internal cmd scripts)"
 	$(GO) vet ./...
 	$(GO) test ./...
 	$(GO) test -race ./src/pinyin ./integration

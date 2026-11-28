@@ -2,7 +2,7 @@
 # Download an official binary and verify its release checksum. No sudo needed.
 set -eu
 bin_dir=${HOME:?HOME is required}/.local/bin
-version=0.1.0
+version=0.2.0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --bin-dir|--version)

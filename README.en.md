@@ -10,9 +10,15 @@ Add pinyin search to [fzf](https://github.com/junegunn/fzf), with the `fzfp` com
 
 ## Install
 
-The rules and bindings below describe `main`. Homebrew and the installer currently provide **0.1.0**, which predates the new input spellings, scoring and performance improvements, and language bindings.
+The current release is **0.2.0**, including the pinyin input, scoring, and performance improvements described below. Install with Homebrew on macOS or Linux, without Go:
 
-Build from source for the current functionality. This requires [Go 1.23+](https://go.dev/doc/install):
+```sh
+brew install zhiyozhao/tap/fzfp
+fzfp --version
+# fzfp 0.2.0 (based on fzf 0.75)
+```
+
+You can also build from source with [Go 1.23+](https://go.dev/doc/install):
 
 ```sh
 git clone https://github.com/zhiyozhao/fzf-pinyin.git
@@ -21,11 +27,7 @@ go build -trimpath -o ./bin/fzfp .
 ./bin/fzfp --version
 ```
 
-Place the resulting `bin/fzfp` in a directory on PATH. If you prefer the published 0.1.0 release, Homebrew is available on macOS and Linux:
-
-```sh
-brew install zhiyozhao/tap/fzfp
-```
+Place the resulting `bin/fzfp` in a directory on PATH. Language bindings still require a source build; see below.
 
 Use `fzfp` as you would `fzf`; existing shell shortcuts do not switch automatically. See [installation](docs/install.md) for the installer and other options.
 

@@ -14,4 +14,5 @@ for platform in darwin_amd64 darwin_arm64 linux_amd64 linux_arm64; do
   # Compare the complete appendix, not merely the presence of its filename.
   tar -xOzf "$archive" THIRD_PARTY_NOTICES.md | cmp - "$root/THIRD_PARTY_NOTICES.md"
 done
-echo 'Four archives: checksums, root files and complete dependency licenses verified'
+go run "$root/scripts/verify-archive-metadata.go" "$directory"/fzfp-*.tar.gz
+echo 'Four archives: checksums, root files, private metadata and complete dependency licenses verified'

@@ -1,4 +1,4 @@
-.TH FZFP 1 "November 23, 2026" "fzfp 0.1.0" "User Commands"
+.TH FZFP 1 "November 28, 2026" "fzfp 0.2.0" "User Commands"
 .SH NAME
 fzfp \- fuzzy finder with Mandarin pinyin matching
 .SH SYNOPSIS
@@ -11,18 +11,24 @@ standard output.  Run fzfp interactively, or use --filter for non-interactive
 matching.  Enter selects an item; Escape or Ctrl-C exits.
 .SH PINYIN
 Each Han character accepts its full spelling, first letter, or consonant
-initial (including zh, ch and sh).  A syllable without a consonant initial
-also accepts its final.  These forms can be mixed per character.
+initial (including zh, ch and sh).  These forms can be mixed per character.
+Keep standard y/w spellings: yin or y finds 音, but in does not.
 The final matched syllable accepts any nonempty spelling prefix.
 Earlier syllables must use a complete supported form.
 .PP
 For example, zg, zhg, zhongguo and zhonggu match 中国;
 bj, beijing and beiji match 北京.
-Pinyin accepts v or ü and ignores case.
+Pinyin accepts v or ü and ignores case.  Both lue/lve find 略,
+ju/jv find 居, and yu/yv find 鱼.  Use lv/nv for lü/nü;
+lu/nu remain distinct.  Use en/ng (or initials e/n) for 嗯.
 Literal Latin text still follows the selected case mode.
 All dictionary readings of polyphonic characters are accepted, without
 phrase disambiguation.  Tones, dialect substitutions and typo correction
 are not supported.
+.PP
+A match using any pinyin loses one point in total, regardless of character
+count or spelling type.  Literal matches lead when other scoring factors
+are equal.
 .SH SEARCH SYNTAX
 .TP
 .B 'query
