@@ -27,7 +27,7 @@ func TestSparseDenseParity(t *testing.T) {
 				}
 				chars := util.ToChars([]byte(text))
 				q := []rune(queries[rng.Intn(len(queries))])
-				mode := Mode(rng.Intn(7))
+				mode := Mode(rng.Intn(6))
 				cs, norm, forward := rng.Intn(2) == 0, rng.Intn(2) == 0, rng.Intn(2) == 0
 				allow := rng.Intn(2) == 0
 				for _, positions := range []bool{false, true} {

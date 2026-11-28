@@ -62,9 +62,9 @@ A line matched using any pinyin loses one point in total, regardless of characte
 
 Swift, Python, and JavaScript (Node.js) can match pinyin and return scores and positions in the original text. Use `match` for one string, `filter` for a list, or `Index` to search the same list repeatedly. Queries are single fuzzy terms; CLI operators such as quotes, `^`, and `$` are not parsed.
 
-These packages have **not been published** as a SwiftPM release or to PyPI or npm. Build from a complete source checkout for now. Each language guide covers prerequisites and builds; see the [bindings documentation](docs/bindings.md) for the full API.
+Swift 0.2.1 supports a direct SwiftPM dependency without Go once its release assets and tag are available; the [release process](docs/swift-release.md) describes local validation before publication. Python and npm packages remain source builds and are not published in this release. See the [bindings documentation](docs/bindings.md) for the full API.
 
-[Swift](bindings/swift/README.md): build first, then add a local package dependency to your Swift project.
+[Swift](bindings/swift/README.md): `.package(url: "https://github.com/zhiyozhao/fzf-pinyin", exact: "0.2.1")`, product `Fzfp`. `Index.find(exact: true)` selects contiguous pinyin matching.
 
 ```swift
 import Fzfp

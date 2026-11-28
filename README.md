@@ -62,9 +62,9 @@ go build -trimpath -o ./bin/fzfp .
 
 Swift、Python 和 JavaScript（Node.js）都能匹配拼音，并返回分数和原文中的匹配位置。支持单条匹配、列表筛选，以及重复搜索同一列表的 `Index`。查询是一个模糊搜索词，不解析 CLI 的引号、`^`、`$` 等语法。
 
-这些包尚未通过 SwiftPM release、PyPI 或 npm 发布，目前需要从完整仓库源码构建。环境要求和构建步骤见各语言说明，完整 API 见[绑定文档](docs/bindings.md)。
+Swift 0.2.1 支持通过 SwiftPM 直接引用，发布资产和 tag 就绪后无需 Go；[发布流程](docs/swift-release.md)说明发布前的本地验证方式。Python 和 npm 包本轮不发布，仍从完整仓库源码构建。完整 API 见[绑定文档](docs/bindings.md)。
 
-[Swift](bindings/swift/README.md)：构建后在 Swift 项目中添加本地包依赖。
+[Swift](bindings/swift/README.md)：`.package(url: "https://github.com/zhiyozhao/fzf-pinyin", exact: "0.2.1")`，产品名为 `Fzfp`。`Index.find(exact: true)` 支持连续拼音匹配。
 
 ```swift
 import Fzfp

@@ -1,0 +1,67 @@
+name: Prepare Swift release (no publishing)
+on:
+  push:
+    branches: [devs/swift-0.2.1]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.4'
+      - name: Full legacy differential and sparse/dense parity
+        run: FZFP_FULL_DIFF=1 go test -timeout 20m -count=1 -v ./src/pinyin
+      - name: Compare published 0.2.0 CLI bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .cache/release-0.2.0 .cache/bindings
+          gh release download fzfp-v0.2.0 --dir .cache/release-0.2.0 --pattern checksums.txt --pattern fzfp-0.2.0-linux_amd64.tar.gz
+          cd .cache/release-0.2.0
+          grep ' fzfp-0.2.0-linux_amd64.tar.gz$' checksums.txt | sha256sum -c -
+          tar -xzf fzfp-0.2.0-linux_amd64.tar.gz fzfp
+          cd ../..
+          go build -trimpath -buildvcs=false -o .cache/bindings/fzfp .
+          python3 scripts/diff-release-0.2.0.py --old .cache/release-0.2.0/fzfp --new .cache/bindings/fzfp
+  asset:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.4'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build and prepare reviewed archive
+        run: |
+          bash scripts/build-bindings.sh swift
+          python3 scripts/swift-release.py prepare
+          cp .cache/swift-release/CFzfp.xcframework.zip .cache/swift-first.zip
+          bash scripts/build-bindings.sh swift
+          python3 scripts/swift-release.py prepare
+          cmp .cache/swift-first.zip .cache/swift-release/CFzfp.xcframework.zip
+          test "$(swift package compute-checksum .cache/swift-release/CFzfp.xcframework.zip)" = "$(cut -d ' ' -f 1 .cache/swift-release/CFzfp.xcframework.zip.sha256)"
+          bash scripts/test-swift-consumer.sh local
+      - name: Verify the pinned asset against the final manifest
+        if: ${{ hashFiles('.github/swift-release.json') != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run_id="$(python3 -c 'import json; print(json.load(open(".github/swift-release.json"))["run_id"])')"
+          test "$(gh run view "$run_id" --json conclusion --jq .conclusion)" = success
+          gh run download "$run_id" --name swift-0.2.1 --dir .cache/reviewed-swift
+          python3 scripts/swift-release.py verify --directory .cache/reviewed-swift
+      - uses: actions/upload-artifact@v4
+        with:
+          name: swift-0.2.1
+          retention-days: 90
+          path: .cache/swift-release/*

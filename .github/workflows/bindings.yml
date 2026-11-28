@@ -4,7 +4,7 @@ on:
   pull_request:
     paths: ['Package.swift', 'bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'src/bindings_oracle_test.go', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
   push:
-    branches: [main, devs/bindings]
+    branches: [main, devs/bindings, devs/swift-0.2.1]
     paths: ['Package.swift', 'bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'src/bindings_oracle_test.go', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
 permissions:
   contents: read
@@ -31,6 +31,7 @@ jobs:
       - name: Root SwiftPM build and tests
         env:
           FZFP_CLI_ORACLE_DIR: ${{ github.workspace }}/.cache/bindings/cli-oracle
+          FZFP_LOCAL_XCFRAMEWORK: '1'
         run: |
           swift build --scratch-path .cache/swift-root
           swift test --scratch-path .cache/swift-root

@@ -28,6 +28,8 @@ jobs:
           version="${tag#fzfp-v}"
           test "$(sed -n 's/^var version = "\(.*\)"/\1/p' main.go)" = "$version"
           test "$(git rev-parse "$tag^{commit}")" = "$(git rev-parse HEAD)"
+          # Push both tags atomically after the gate. SwiftPM needs SemVer.
+          test "$(git rev-parse "$version^{commit}")" = "$(git rev-parse HEAD)"
           test -z "$(git status --porcelain)"
           echo "FZFP_VERSION=$version" >> "$GITHUB_ENV"
       - run: make -f Makefile.fzfp check
@@ -64,3 +66,32 @@ jobs:
           test "$(printf '北京\n上海\n' | "$work/bin/fzfp" -f bj)" = 北京
           "$work/bin/fzfp" --version
           echo 'Standalone Linux installation and pinyin filter passed'
+  swift:
+    needs: release
+    runs-on: macos-15
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify and publish the reviewed Swift archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#fzfp-v}"
+          test "$version" = "$(python3 -c 'import json; print(json.load(open(".github/swift-release.json"))["version"])')"
+          test "$(git rev-parse "$version^{commit}")" = "$(git rev-parse HEAD)"
+          run_id="$(python3 -c 'import json; print(json.load(open(".github/swift-release.json"))["run_id"])')"
+          source_commit="$(python3 -c 'import json; print(json.load(open(".github/swift-release.json"))["source_commit"])')"
+          test "$(gh run view "$run_id" --json conclusion --jq .conclusion)" = success
+          test "$(gh run view "$run_id" --json headSha --jq .headSha)" = "$source_commit"
+          gh run download "$run_id" --name "swift-$version" --dir .cache/reviewed-swift
+          python3 scripts/swift-release.py verify --directory .cache/reviewed-swift
+          # No rebuild and no --clobber: publish precisely the bytes in Package.swift.
+          gh release upload "$GITHUB_REF_NAME" .cache/reviewed-swift/CFzfp.xcframework.zip \
+            .cache/reviewed-swift/CFzfp.xcframework.zip.sha256 .cache/reviewed-swift/CFzfp.provenance.json
+      - name: Resolve and test a clean remote SwiftPM consumer
+        run: bash scripts/test-swift-consumer.sh remote

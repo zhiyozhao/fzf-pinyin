@@ -185,19 +185,17 @@ Node blocks its event loop during find; Go workers do not make the host call
 asynchronous. Browser/WASM, native cancellation, prefix incremental caches,
 streaming injection and mutation are intentionally deferred in this phase.
 The repository-root `Package.swift` reuses the in-tree Swift sources and tests.
-SwiftPM uses the local binaryTarget after this explicit
-build; SwiftPM cannot by itself build the Go source. There is no build plugin
-that invokes installers or requests permissions. Swift distribution should use
-a tagged XCFramework zip and `swift package compute-checksum`, switching the
-root binaryTarget to the release URL only after review. Local path dependencies
-work after generating the ignored XCFramework; the nested manifest remains for
-existing local consumers. A remote URL dependency requires that release artifact
-and its checksum, so the current checkout alone is insufficient. No release is
-published and no URL or checksum is fabricated in this preview.
+It normally uses the 0.2.1 release XCFramework URL and its actual reviewed checksum.
+After release, `.package(url: "https://github.com/zhiyozhao/fzf-pinyin", exact: "0.2.1")`
+requires no Go installation. Source builds use `FZFP_LOCAL_XCFRAMEWORK=1` after
+generating the ignored local artifact; SwiftPM cannot itself compile Go. The
+nested manifest remains for existing local consumers. The URL becomes usable
+only after assets and both tags are published. See the [release process](swift-release.md)
+for source correspondence, checksum preparation and CI publication gates.
 
 Verify the root entrypoint from the repository root with
-`swift build --scratch-path .cache/swift-root` and
-`swift test --scratch-path .cache/swift-root`. Its explicit Swift target paths
+`FZFP_LOCAL_XCFRAMEWORK=1 swift build --scratch-path .cache/swift-root` and
+`FZFP_LOCAL_XCFRAMEWORK=1 swift test --scratch-path .cache/swift-root`. Its explicit Swift target paths
 do not change the Go build or any upstream source file.
 
 macOS 13+ arm64 and x86_64 are combined into one static universal XCFramework.
