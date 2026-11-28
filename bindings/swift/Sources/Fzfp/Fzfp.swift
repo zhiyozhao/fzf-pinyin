@@ -35,11 +35,17 @@ public struct Match: Codable, Equatable, Sendable {
     /// One range per matched Unicode scalar. Adjacent ranges are not merged.
     /// Combining marks are not expanded to grapheme clusters.
     public func utf16Ranges(in text: String) -> [NSRange] {
-        let scalars = Array(text.unicodeScalars)
-        return zip(positions, utf16Positions).compactMap { index, offset in
-            guard scalars.indices.contains(index) else { return nil }
-            return NSRange(location: offset, length: scalars[index].value > 0xffff ? 2 : 1)
+        guard !positions.isEmpty else { return [] }
+        var result: [NSRange] = [], p = 0
+        for (index, scalar) in text.unicodeScalars.enumerated() {
+            if index == positions[p] {
+                guard p < utf16Positions.count else { break }
+                result.append(NSRange(location: utf16Positions[p], length: scalar.value > 0xffff ? 2 : 1))
+                p += 1
+                if p == positions.count { break }
+            }
         }
+        return result
     }
 }
 
@@ -166,11 +172,11 @@ public final class Index {
     }
     deinit { if handle != 0 { _ = fzfp_index_destroy(handle) } }
 
-    private func rows(_ query: String, limit: Int?, positions: Bool, exact: Bool) throws -> [Hit] {
+    private func rows(_ query: String, limit: Int?, positions: Bool, exact: Bool, contiguous: Bool = false) throws -> [Hit] {
         if let limit, limit < 0 { throw FzfpError.core(status: 1, message: "limit must be nonnegative") }
         lock.lock(); defer { lock.unlock() }
         var native = fzfp_find_options(abi_version: 2, struct_size: UInt32(MemoryLayout<fzfp_find_options>.size),
-            limit: Int64(limit ?? -1), flags: (positions ? 1 : 0) | (exact ? 2 : 0), reserved: 0)
+            limit: Int64(limit ?? -1), flags: (positions ? 1 : 0) | (exact ? 2 : 0) | (contiguous ? 4 : 0), reserved: 0)
         var output: UnsafeMutablePointer<fzfp_results>?
         let status = Array(query.utf8).withUnsafeBytes { data in
             fzfp_index_find(handle, UnsafeMutablePointer(mutating: data.baseAddress?.assumingMemoryBound(to: CChar.self)),
@@ -189,7 +195,10 @@ public final class Index {
                 var u8: [Int] = [], u16: [Int] = [], b = 0, u = 0, p = 0
                 if !pp.isEmpty {
                     for (i, scalar) in candidates[idx].unicodeScalars.enumerated() {
-                        if p < pp.count && pp[p] == i { u8.append(b); u16.append(u); p += 1 }
+                        if pp[p] == i {
+                            u8.append(b); u16.append(u); p += 1
+                            if p == pp.count { break }
+                        }
                         b += scalar.utf8.count; u += scalar.value > 0xffff ? 2 : 1
                     }
                 }
@@ -199,8 +208,8 @@ public final class Index {
             return Hit(index: idx, score: Int(row.score), alignment: alignment)
         }
     }
-    public func find(_ query: String, limit: Int? = nil, positions: Bool = false) throws -> [Hit] {
-        try rows(query, limit: limit, positions: positions, exact: false)
+    public func find(_ query: String, limit: Int? = nil, positions: Bool = false, exact: Bool = false) throws -> [Hit] {
+        try rows(query, limit: limit, positions: positions, exact: false, contiguous: exact)
     }
     fileprivate func exactFind(_ query: String, positions: Bool) throws -> [Result] {
         try rows(query, limit: nil, positions: positions, exact: true).map {

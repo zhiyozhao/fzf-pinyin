@@ -51,6 +51,17 @@ func Wrap(fallback algo.Algo, mode Mode) algo.Algo {
 		if !phonetic {
 			return native, nativePos
 		}
+		// A literal match at the scheme's score ceiling cannot be beaten:
+		// every query rune contributes 16, the first bonus is doubled, all
+		// remaining bonuses are at most maxBonus, and gaps only subtract.
+		// Pinyin additionally loses one point. Avoid all DP passes in this
+		// common case (e.g. a word at a boundary in a very long document).
+		if native.Start >= 0 {
+			maxBonus := max(8, algo.BoundaryBonus(&scoreCeilingProbe, 1), algo.BoundaryBonus(&scoreCeilingProbe, 3))
+			if native.Score >= 16*len(query)+maxBonus*(len(query)+1) {
+				return native, nativePos
+			}
+		}
 		result, positions := match(cs, norm, forward, input, query, withPos, mode, true)
 		if result.Start >= 0 {
 			// max(all paths - 1, literal paths) charges exactly once for
@@ -74,6 +85,10 @@ func Wrap(fallback algo.Algo, mode Mode) algo.Algo {
 		return native, nativePos
 	}
 }
+
+// Observe the active scheme's whitespace and delimiter bonuses without
+// depending on or mutating upstream algo's private scheme state.
+var scoreCeilingProbe = util.ToChars([]byte(" a/a"))
 
 // These functions implement algo.Algo. V1 and V2 retain their distinct native
 // behavior; on Han input both use the same optimal phonetic dynamic program.

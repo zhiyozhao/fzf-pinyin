@@ -98,7 +98,7 @@ func fzfp_index_find(handle C.uint64_t, query *C.char, length C.uint64_t, option
 		return 1
 	}
 	o := *options
-	if o.abi_version != 2 || o.struct_size != C.sizeof_fzfp_find_options || o.limit < -1 || o.flags & ^C.uint32_t(3) != 0 || o.reserved != 0 {
+	if o.abi_version != 2 || o.struct_size != C.sizeof_fzfp_find_options || o.limit < -1 || o.flags & ^C.uint32_t(7) != 0 || o.reserved != 0 {
 		return 1
 	}
 	indexes.Lock()
@@ -108,7 +108,7 @@ func fzfp_index_find(handle C.uint64_t, query *C.char, length C.uint64_t, option
 		return 3
 	}
 	q := string(unsafe.Slice((*byte)(unsafe.Pointer(query)), int(length)))
-	hits, times, err := x.Find(q, int(o.limit), o.flags&1 != 0, o.flags&2 != 0)
+	hits, times, err := x.FindMode(q, int(o.limit), o.flags&1 != 0, o.flags&2 != 0, o.flags&4 != 0)
 	if err != nil {
 		return 1
 	}

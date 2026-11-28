@@ -35,7 +35,7 @@ typedef struct {
 typedef struct {
     uint32_t abi_version, struct_size;
     int64_t limit; /* -1 unlimited; 0 returns empty; less than -1 invalid */
-    uint32_t flags, reserved; /* bit 0 positions, bit 1 exact bounds */
+    uint32_t flags, reserved; /* bit 0 positions, bit 1 exact bounds, bit 2 contiguous matching */
 } fzfp_find_options;
 typedef struct {
     uint64_t index;

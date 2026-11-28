@@ -142,6 +142,37 @@ final class GoldenTests: XCTestCase {
         XCTAssertEqual(m.utf16Ranges(in: "😀中国e\u{301}"), [NSRange(location:2,length:1), NSRange(location:3,length:1)])
         XCTAssertEqual(try Fzfp.match("😀", query: "😀").utf16Ranges(in:"😀"), [NSRange(location:0,length:2)])
     }
+    func testSparseLongAlignmentAndLastScalarWidth() throws {
+        for (text, query, expected) in [
+            ("👋收货地址" + String(repeating: "synthetic line 你好 0123456789\n", count: 39_999), "👋shdz", [NSRange(location: 0, length: 2)] + (2..<6).map { NSRange(location: $0, length: 1) }),
+            (String(repeating: "0", count: 70_000) + "𰻝👋", "biang👋", [NSRange(location: 70_000, length: 2), NSRange(location: 70_002, length: 2)])
+        ] {
+            let index = try Index([text], options: Options(scheme: .history), workers: 1)
+            let hit = try XCTUnwrap(index.find(query, positions: true).first?.alignment)
+            XCTAssertEqual(hit.utf16Ranges(in: text), expected)
+            XCTAssertEqual(hit.score, try index.find(query).first?.score)
+        }
+        XCTAssertEqual(try Fzfp.match("tail", query: "absent").utf16Ranges(in: "tail"), [])
+    }
+    func testExactContiguousMatching() throws {
+        for scheme in [Scheme.default, .path, .history] {
+            for texts in [["👋abc"], ["👋abc", "👋a-b-c", "备忘录", "备 忘录"]] {
+                let index = try Index(texts, options: Options(scheme: scheme))
+                let exact = try index.find("abc", positions: true, exact: true)
+                XCTAssertEqual(exact.map(\.index), [0])
+                XCTAssertEqual(exact[0].alignment?.positions, [1, 2, 3])
+                XCTAssertEqual(exact[0].alignment?.utf16Ranges(in: texts[0]), (2..<5).map { NSRange(location: $0, length: 1) })
+                XCTAssertEqual(try index.find("abc", exact: true).map(\.score), exact.map(\.score))
+                XCTAssertEqual(try index.find("abc", limit: 0, exact: true), [])
+                if texts.count > 1 {
+                    XCTAssertEqual(try index.find("abc").count, 2)
+                    XCTAssertEqual(try index.find("bwl", exact: true).map(\.index), [2])
+                }
+                XCTAssertEqual(try index.find("absent", exact: true), [])
+                try index.close()
+            }
+        }
+    }
     func testConcurrentSchemes() throws {
         let group = DispatchGroup()
         let lock = NSLock()

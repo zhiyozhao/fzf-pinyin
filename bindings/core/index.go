@@ -84,6 +84,12 @@ func NewIndex(texts []string, options Options, workers int) (*Index, error) {
 // Find takes -1 for unlimited results. Exact requests bounds even without
 // positions, for the legacy convenience API. All positions are rune indexes.
 func (x *Index) Find(query string, limit int, positions, exact bool) ([]RankHit, Timings, error) {
+	return x.FindMode(query, limit, positions, exact, false)
+}
+
+// FindMode selects the native contiguous matcher without changing fuzzy scoring.
+// exactBounds is independent of matching mode (ABI 2's original flag bit 1).
+func (x *Index) FindMode(query string, limit int, positions, exactBounds, contiguous bool) ([]RankHit, Timings, error) {
 	x.mu.Lock()
 	defer x.mu.Unlock()
 	var times Timings
@@ -98,7 +104,28 @@ func (x *Index) Find(query string, limit int, positions, exact bool) ([]RankHit,
 		query = strings.ToLower(query)
 	}
 	q := []rune(query)
+	match := pinyin.FuzzyMatchV2
+	if contiguous {
+		match = pinyin.ExactMatchNaive
+	}
 	forward, rankPositions := schemeMatchingPolicy(x.options.Scheme)
+	// A one-candidate alignment request has nothing to select. Materialize it
+	// during the scan instead of rerunning the complete matcher for trace.
+	singleTrace := len(x.items) == 1 && (positions || exactBounds)
+	traceDuringScan := rankPositions || singleTrace
+	setPositions := func(h *RankHit, r algo.Result, pp *[]int) {
+		if !positions {
+			return
+		}
+		if pp != nil {
+			h.Positions = slices.Clone(*pp)
+			slices.Sort(h.Positions)
+		} else if contiguous {
+			for p := r.Start; p < r.End; p++ {
+				h.Positions = append(h.Positions, p)
+			}
+		}
+	}
 	var required uint32
 	for _, r := range q {
 		if r >= 'A' && r <= 'Z' {
@@ -155,14 +182,17 @@ func (x *Index) Find(query string, limit int, positions, exact bool) ([]RankHit,
 				if item.letters&required != required {
 					continue
 				}
-				trace := rankPositions
-				r, _ := pinyin.FuzzyMatchV2(x.options.CaseSensitive, norm, forward, &item.chars, q, trace, worker.slab)
+				trace := traceDuringScan
+				r, pp := match(x.options.CaseSensitive, norm, forward, &item.chars, q, trace, worker.slab)
 				if r.Start < 0 {
 					continue
 				}
 				h := RankHit{Index: i, Score: r.Score, Start: -1, End: -1, pathname: 65535, length: item.length}
 				if trace {
 					h.Start, h.End = r.Start, r.End
+					if singleTrace {
+						setPositions(&h, r, pp)
+					}
 				}
 				if r.End > r.Start && item.lastSlash <= r.Start {
 					h.pathname = min(65535, r.Start-item.lastSlash)
@@ -196,19 +226,16 @@ func (x *Index) Find(query string, limit int, positions, exact bool) ([]RankHit,
 			return 0
 		})
 		times.Select = elapsed(start)
-		if positions || exact {
+		if (positions || exactBounds) && !singleTrace {
 			start = time.Now()
 			// Returned hits are usually small. Parallelize full exact materialization.
 			align := func(w int) {
 				for j := len(result) * w / nw; j < len(result)*(w+1)/nw; j++ {
 					h := &result[j]
 					item := &x.items[h.Index]
-					r, pp := pinyin.FuzzyMatchV2(x.options.CaseSensitive, norm, forward, &item.chars, q, true, x.workers[w].slab)
+					r, pp := match(x.options.CaseSensitive, norm, forward, &item.chars, q, true, x.workers[w].slab)
 					h.Start, h.End = r.Start, r.End
-					if positions && pp != nil {
-						h.Positions = slices.Clone(*pp)
-						slices.Sort(h.Positions)
-					}
+					setPositions(h, r, pp)
 				}
 			}
 			parallel(nw, align)

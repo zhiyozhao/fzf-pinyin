@@ -95,9 +95,94 @@ func matchRange(cs, norm, forward bool, input *util.Chars, query []rune, withPos
 	// Reclaim dead paths in batches; this caps traceback space at O(c*m*m)
 	// even for winning intervals containing very long gaps.
 	traceLimit := max(65536, size*m*2)
+	// Long candidates commonly contain large regions with no possible query
+	// edge. Visit those runes cheaply, and advance gap penalties in one step.
+	// Short CLI lines keep the original recurrence without cache overhead.
+	sparse := stop-begin >= 4096
+	var ascii [128]bool
+	var possible map[rune]bool
+	if sparse {
+		possible = make(map[rune]bool)
+		for c := range ascii {
+			r := rune(c)
+			if !cs {
+				r = unicode.ToLower(r)
+			}
+			if norm {
+				r = algo.FoldRune(r)
+			}
+			ascii[c] = slices.Contains(query, r)
+		}
+	}
+	skipped := 0
 	for i := begin; i < stop; i++ {
-		clear(next)
 		r := input.Get(i)
+		if sparse {
+			eligible := false
+			if r < 128 {
+				eligible = ascii[r]
+			} else if cached, ok := possible[r]; ok {
+				eligible = cached
+			} else {
+				literal := r
+				if !cs {
+					literal = unicode.ToLower(literal)
+				}
+				if norm {
+					literal = algo.FoldRune(literal)
+				}
+				eligible = slices.Contains(query, literal)
+				if allowPinyin && !eligible {
+					for _, f := range spellings(r) {
+						for _, q := range query {
+							if q >= 'A' && q <= 'Z' {
+								q += 'a' - 'A'
+							}
+							if q == 'ü' || q == 'Ü' {
+								q = 'v'
+							}
+							if q == rune(f.text[0]) {
+								eligible = true
+								break
+							}
+						}
+						if eligible {
+							break
+						}
+					}
+				}
+				// Per-call scratch only; unusual corpora must not grow a map
+				// proportional to a document with many distinct codepoints.
+				if len(possible) < 4096 {
+					possible[r] = eligible
+				}
+			}
+			if !eligible {
+				skipped++
+				continue
+			}
+			if skipped > 0 {
+				if mode == Fuzzy {
+					for j := 1; j < min(m, limit+1); j++ {
+						old := gap[j]
+						old.score -= skipped
+						for _, from := range prev[j*blockBonuses : (j+1)*blockBonuses] {
+							if !from.valid {
+								continue
+							}
+							from.score -= 3 + skipped - 1
+							if better(from, old, forward) {
+								old = from
+							}
+						}
+						gap[j] = old
+					}
+				}
+				clear(prev)
+				skipped = 0
+			}
+		}
+		clear(next)
 		literal := r
 		if !cs {
 			literal = unicode.ToLower(literal)
