@@ -2,6 +2,57 @@ import XCTest
 @testable import Fzfp
 
 final class GoldenTests: XCTestCase {
+    func testExactCLIQuoteAndAscendingAlignment() throws {
+        guard let binary = ProcessInfo.processInfo.environment["FZFP_CLI"] else {
+            throw XCTSkip("set FZFP_CLI for exact CLI differential")
+        }
+        struct Cases: Decodable { let candidates: [String]; let queries: [String] }
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("testdata/exact.json")
+        let fixture = try JSONDecoder().decode(Cases.self, from: Data(contentsOf: url))
+        let texts = fixture.candidates
+        for scheme in [Scheme.default, .path, .history] {
+            let options = Options(scheme: scheme)
+            for query in fixture.queries {
+                let process = Process(), input = Pipe(), output = Pipe()
+                process.executableURL = URL(fileURLWithPath: binary)
+                process.arguments = ["-i", "--read0", "--print0", "--scheme=" + scheme.rawValue, "--filter='" + query]
+                var env = ProcessInfo.processInfo.environment
+                env["FZF_DEFAULT_OPTS"] = ""; env["FZF_DEFAULT_OPTS_FILE"] = "/dev/null"
+                process.environment = env
+                process.standardInput = input; process.standardOutput = output
+                try process.run()
+                input.fileHandleForWriting.write(Data((texts.joined(separator: "\0") + "\0").utf8))
+                try input.fileHandleForWriting.close()
+                let bytes = output.fileHandleForReading.readDataToEndOfFile()
+                process.waitUntilExit()
+                XCTAssertTrue([Int32(0), 1].contains(process.terminationStatus))
+                let expected = try Fzfp.filter(texts, query: query, options: options, exact: true)
+                XCTAssertEqual(Data(expected.flatMap { Array($0.text.utf8) + [UInt8(0)] }), bytes)
+                for workers in [1, 4] {
+                    let index = try Index(texts, options: options, workers: workers)
+                    for limit: Int? in [nil, 0, 1, 50] {
+                        let want = Array(expected.prefix(limit ?? expected.count))
+                        for positions in [false, true] {
+                            let hits = try index.find(query, limit: limit, positions: positions, exact: true)
+                            XCTAssertEqual(hits.map(\.index), want.map(\.index))
+                            XCTAssertEqual(hits.map(\.score), want.map { $0.match.score })
+                            if positions { XCTAssertEqual(hits.map { $0.alignment! }, want.map(\.match)) }
+                        }
+                    }
+                    try index.close()
+                }
+                for (i, text) in texts.enumerated() {
+                    let m = try Fzfp.match(text, query: query, options: options, exact: true)
+                    let want = expected.first { $0.index == i }
+                    XCTAssertEqual(m.matched, want != nil)
+                    if let want { XCTAssertEqual(m, want.match); XCTAssertEqual(m.positions, m.positions.sorted()) }
+                }
+            }
+        }
+        XCTAssertEqual(try Fzfp.match("😀ab", query: "ab").positions, [1, 2])
+        XCTAssertEqual(try Fzfp.match("😀ab", query: "ab").utf16Positions, [2, 3])
+    }
     func testCLITieHeavyOracle() throws {
         guard let directory = ProcessInfo.processInfo.environment["FZFP_CLI_ORACLE_DIR"] else {
             throw XCTSkip("scripts/test-bindings.sh generates the mandatory live CLI oracle")

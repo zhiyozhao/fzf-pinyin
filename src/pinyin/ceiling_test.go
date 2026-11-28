@@ -9,6 +9,49 @@ import (
 	"github.com/junegunn/fzf/src/util"
 )
 
+// Assert the production bound itself, not just observable matches: a one-point
+// underestimate may fall between reachable native scores and evade black-box tests.
+func TestScoreCeilingFormula(t *testing.T) {
+	for _, tc := range []struct {
+		scheme string
+		want   [5]int // query lengths 0, 1, 2, 3, 100
+	}{
+		{"default", [5]int{10, 36, 62, 88, 2610}},
+		{"path", [5]int{9, 34, 59, 84, 2509}},
+		{"history", [5]int{8, 32, 56, 80, 2408}},
+	} {
+		algo.WithLibraryScheme(tc.scheme, func() {
+			for i, n := range []int{0, 1, 2, 3, 100} {
+				if got := scoreCeiling(n); got != tc.want[i] {
+					t.Errorf("%s/%d: ceiling=%d want %d", tc.scheme, n, got, tc.want[i])
+				}
+			}
+		})
+	}
+}
+
+func TestScoreCeilingNearLimitCompetition(t *testing.T) {
+	for _, tc := range []struct {
+		scheme string
+		score  int
+	}{
+		{"default", 61}, {"path", 59}, {"history", 56},
+	} {
+		algo.WithLibraryScheme(tc.scheme, func() {
+			chars := util.ToChars([]byte("安/an"))
+			for _, forward := range []bool{false, true} {
+				for _, positions := range []bool{false, true} {
+					got, gp := FuzzyMatchV2(false, true, forward, &chars, []rune("an"), positions, nil)
+					want, wp := legacyWrap(algo.FuzzyMatchV2, Fuzzy)(false, true, forward, &chars, []rune("an"), positions, nil)
+					if got.Score != tc.score || got != want || !reflect.DeepEqual(gp, wp) {
+						t.Fatalf("%s forward=%t positions=%t: got %v/%v want %v/%v score=%d", tc.scheme, forward, positions, got, gp, want, wp, tc.score)
+					}
+				}
+			}
+		})
+	}
+}
+
 func TestScoreCeilingPreservesNativeAlignment(t *testing.T) {
 	for _, scheme := range []string{"default", "path", "history"} {
 		algo.WithLibraryScheme(scheme, func() {

@@ -4,8 +4,47 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { Worker } = require('node:worker_threads');
+const { spawnSync } = require('node:child_process');
 const { Index, match, filter, version, _json } = require('./');
 const fixture = JSON.parse(fs.readFileSync(process.env.FZFP_GOLDEN || path.join(__dirname, '../testdata/golden.json')));
+test('exact matches CLI quote syntax and preserves ascending Unicode alignment', {
+  skip: !process.env.FZFP_CLI && 'set FZFP_CLI for exact CLI differential'
+}, () => {
+  const { candidates: texts, queries } = JSON.parse(fs.readFileSync(path.join(__dirname, '../testdata/exact.json')));
+  for (const scheme of ['default', 'path', 'history']) for (const query of queries) {
+    const cli = spawnSync(process.env.FZFP_CLI, ['-i', '--read0', '--print0', '--scheme='+scheme, "--filter='"+query], {
+      input: Buffer.from(texts.join('\0')+'\0'), env: {...process.env, FZF_DEFAULT_OPTS: '', FZF_DEFAULT_OPTS_FILE: '/dev/null'}
+    });
+    assert.ok(cli.status === 0 || cli.status === 1, String(cli.stderr));
+    const expected = filter(texts, query, { scheme, exact: true });
+    assert.deepEqual(Buffer.from(expected.map(h => h.text+'\0').join('')), cli.stdout);
+    for (const workers of [1, 4]) {
+      const index = new Index(texts, { scheme, workers });
+      try {
+        for (const limit of [null, 0, 1, 50]) for (const positions of [false, true]) {
+          const hits = index.find(query, { limit, positions, exact: true });
+          const want = limit === null ? expected : expected.slice(0, limit);
+          assert.deepEqual(hits.map(h => [h.index,h.score]), want.map(h => [h.index,h.score]));
+          if (positions) assert.deepEqual(hits.map(h => h.alignment), want.map(({index,text,...m}) => m));
+        }
+      } finally { index.close(); }
+    }
+    texts.forEach((text, i) => {
+      const m = match(text, query, { scheme, exact: true });
+      const hit = expected.find(h => h.index === i);
+      assert.equal(m.matched, !!hit);
+      if (hit) {
+        const { index, text: _, ...want } = hit;
+        assert.deepEqual(m, want);
+        assert.deepEqual(m.positions, [...m.positions].sort((a,b)=>a-b));
+      }
+    });
+  }
+  assert.deepEqual(match('😀ab', 'ab').positions, [1,2]);
+  assert.deepEqual(match('😀ab', 'ab').utf16Positions, [2,3]);
+  const x = new Index(['ab']);
+  try { assert.throws(() => x.find('ab', { exact: 1 })); } finally { x.close(); }
+});
 test('live CLI tie-heavy oracle: byte order, scores, exact alignment, workers and top-K', {
   skip: !process.env.FZFP_CLI_ORACLE_DIR && 'scripts/test-bindings.sh generates the mandatory live CLI oracle'
 }, () => {

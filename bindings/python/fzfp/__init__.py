@@ -76,18 +76,18 @@ def version() -> Version:
     return dict(_call({"operation": "version"}), typed_abi_version=2)
 
 
-def match(text: str, query: str, options: Options = Options()) -> Match:
+def match(text: str, query: str, options: Options = Options(), *, exact: bool = False) -> Match:
     """Match one literal fuzzy term (no extended-query operators or smart case)."""
     with Index([text], options) as index:
-        hits = index._find(query, None, options.positions, True)
+        hits = index._find(query, None, options.positions, True, exact)
         return _alignment(text, hits[0]) if hits else Match(False, 0, -1, -1, [], [], [])
 
 
-def filter(candidates: Sequence[str], query: str, options: Options = Options()) -> list[Result]:
+def filter(candidates: Sequence[str], query: str, options: Options = Options(), *, exact: bool = False) -> list[Result]:
     """Batch match and sort in Go, retaining original indexes and duplicates."""
     with Index(candidates, options) as index:
         return [Result(**vars(_alignment(index.candidates[h[0]], h)), index=h[0], text=index.candidates[h[0]])
-                for h in index._find(query, None, options.positions, True)]
+                for h in index._find(query, None, options.positions, True, exact)]
 
 
 class _Options(ctypes.Structure):
@@ -185,11 +185,14 @@ class Index:
         _check(_lib.fzfp_index_create(data, len(data), (ctypes.c_uint64 * len(offsets))(*offsets),
                                      len(chunks), ctypes.byref(native), ctypes.byref(self._handle)))
 
-    def _find(self, query: str, limit: int | None, positions: bool, exact: bool = False) -> list[tuple]:
+    def _find(self, query: str, limit: int | None, positions: bool, exact_bounds: bool = False, exact: bool = False) -> list[tuple]:
         if limit is not None and (type(limit) is not int or not 0 <= limit <= 2**63 - 1):
             raise ValueError("limit must be None or a nonnegative int64")
+        if type(positions) is not bool or type(exact) is not bool:
+            raise ValueError("positions and exact must be bool")
         data = query.encode("utf-8")
-        options = _FindOptions(2, ctypes.sizeof(_FindOptions), -1 if limit is None else limit, int(positions) | (2 if exact else 0), 0)
+        options = _FindOptions(2, ctypes.sizeof(_FindOptions), -1 if limit is None else limit,
+                               int(positions) | (2 if exact_bounds else 0) | (4 if exact else 0), 0)
         with self._lock:
             output = ctypes.POINTER(_Results)()
             _check(_lib.fzfp_index_find(self._handle, data, len(data), ctypes.byref(options), ctypes.byref(output)))
@@ -201,9 +204,9 @@ class Index:
             finally:
                 _lib.fzfp_results_free(output)
 
-    def find(self, query: str, limit: int | None = None, positions: bool = False) -> list[Hit]:
+    def find(self, query: str, limit: int | None = None, positions: bool = False, exact: bool = False) -> list[Hit]:
         return [Hit(h[0], h[1], _alignment(self.candidates[h[0]], h) if positions else None)
-                for h in self._find(query, limit, positions)]
+                for h in self._find(query, limit, positions, exact=exact)]
 
     def close(self) -> None:
         with self._lock:

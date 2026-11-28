@@ -53,7 +53,7 @@ static napi_value find(napi_env env,napi_callback_info info) {
     NAPI(napi_get_cb_info(env,info,&n,a,NULL,NULL));
     if(n!=4 || !get_handle(env,a[0],&h)) return NULL;
     NAPI(napi_get_buffer_info(env,a[1],&q,&ql));
-    if(!integer(env,a[2],-1,9007199254740991.0,&limit)||!integer(env,a[3],0,3,&flags)) return NULL;
+    if(!integer(env,a[2],-1,9007199254740991.0,&limit)||!integer(env,a[3],0,7,&flags)) return NULL;
     fzfp_find_options opts={2,sizeof(opts),(int64_t)limit,(uint32_t)flags,0}; fzfp_results *r=NULL;
     if(!check(env,fzfp_index_find(h,q,ql,&opts,&r))) return NULL;
     OUT(napi_create_object(env,&result)); OUT(napi_create_array_with_length(env,r->count,&rows));

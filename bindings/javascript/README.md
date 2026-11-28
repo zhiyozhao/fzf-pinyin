@@ -8,12 +8,15 @@ runtime when a matching platform binary is installed.
 const { match, filter, Index } = require('fzfp');
 console.log(match('中国', 'zhongguo').positions); // [0, 1]
 console.log(filter(['北京', 'fooBar'], 'bj'));
+console.log(match('备忘录', 'bwl', { exact: true }));
+console.log(filter(['备忘录', '备 忘录'], 'bwl', { exact: true })); // first only
 const titles = ['北京', '中国', 'fooBar'];
 const index = new Index(titles, { scheme: 'path', workers: 4 });
 try {
   for (const hit of index.find('bj', { limit: 50, positions: true })) {
     console.log(titles[hit.index], hit.score, hit.alignment.utf16Positions);
   }
+  console.log(index.find('bj', { positions: true, exact: true }));
 } finally { index.close(); }
 ```
 
@@ -26,6 +29,9 @@ rejected. `match`/`filter` retain exact bounds and default to positions enabled.
 
 Queries are literal fuzzy terms, with the same case, normalization and three
 scheme tie rules as Swift/Python; extended fzf operators are not parsed.
+`match`, `filter`, and `Index.find` accept `exact: true` for a contiguous term,
+equivalent to CLI `--filter="'query"`; all default to fuzzy matching.
+This option is independent of whether output bounds/positions are requested.
 Calls are synchronous and block the Node event loop while Go batch workers
 run. Put the Index in a `worker_threads` worker for UI/server responsiveness.
 There is no implicit native cancellation, async callback or streaming injector.

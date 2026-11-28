@@ -37,16 +37,16 @@ class Index {
   }
   get candidates() { return this.#candidates; }
   get timings() { return { ...this.#timings }; }
-  _find(query, limit, positions, exact = false) {
+  _find(query, limit, positions, exactBounds = false, exact = false) {
     validString(query);
     if (limit != null && (!Number.isSafeInteger(limit) || limit < 0)) throw new RangeError('limit must be null or a nonnegative safe integer');
-    if (typeof positions !== 'boolean') throw new TypeError('positions must be boolean');
-    const output = native.find(this.#handle, Buffer.from(query), limit ?? -1, +positions | (exact ? 2 : 0));
+    if (typeof positions !== 'boolean' || typeof exact !== 'boolean') throw new TypeError('positions and exact must be boolean');
+    const output = native.find(this.#handle, Buffer.from(query), limit ?? -1, +positions | (exactBounds ? 2 : 0) | (exact ? 4 : 0));
     this.#timings = output.timings;
     return output.rows;
   }
-  find(query, { limit = null, positions = false } = {}) {
-    return this._find(query, limit, positions).map(row => ({
+  find(query, { limit = null, positions = false, exact = false } = {}) {
+    return this._find(query, limit, positions, false, exact).map(row => ({
       index: row[0], score: row[1], alignment: positions ? alignment(this.#candidates[row[0]], row) : null,
       positions: positions ? row[4] : []
     }));
@@ -57,7 +57,7 @@ class Index {
 }
 function filter(candidates, query, options = {}) {
   const index = new Index(candidates, options);
-  try { return index._find(query, null, options.positions ?? true, true).map(row => ({
+  try { return index._find(query, null, options.positions ?? true, true, options.exact ?? false).map(row => ({
     index: row[0], text: index.candidates[row[0]], ...alignment(index.candidates[row[0]], row)
   })); } finally { index.close(); }
 }

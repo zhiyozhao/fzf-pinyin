@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # These complete subtrees deliberately include tests: a release may change the
 # root manifest or release pin, but not silently replace the reviewed core,
 # wrapper, public headers, dependencies, licenses, or asset-building scripts.
-INPUTS = ["src", "bindings/core", "bindings/swift/Sources", "bindings/swift/Tests", "bindings/swift/Consumer", "capi",
+INPUTS = ["src", "bindings/core", "bindings/testdata", "bindings/swift/Sources", "bindings/swift/Tests", "bindings/swift/Consumer", "capi",
           "go.mod", "go.sum", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md",
           "scripts/build-bindings.sh", "scripts/swift-release.py", "scripts/test-swift-consumer.sh"]
 

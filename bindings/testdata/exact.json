@@ -1,0 +1,4 @@
+{
+  "candidates": ["😀ab", "a-b", "abc", "a/b/c", "备忘录", "备 忘录", "中国", "中 国", "安", "重庆", "绿", "𰻝", "👋abc/abc", "ab", "ab"],
+  "queries": ["ab", "abc", "bwl", "zhongguo", "zg", "an", "chongqing", "lv", "biang", "zzzz"]
+}

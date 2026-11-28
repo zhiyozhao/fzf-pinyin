@@ -5,6 +5,7 @@ root="$PWD"
 go test -race ./bindings/core ./capi ./src/algo
 go build -trimpath -buildvcs=false -o .cache/bindings/fzfp .
 export FZFP_CLI_ORACLE_DIR="$root/.cache/bindings/cli-oracle"
+export FZFP_CLI="$root/.cache/bindings/fzfp"
 FZFP_CLI="$root/.cache/bindings/fzfp" go test ./src -run '^TestBindingsCLIDifferential$' -count=1 -v
 test_dir="$(mktemp -d /tmp/fzfp-bindings-test.XXXXXX)"
 trap 'rm -r "$test_dir"' EXIT

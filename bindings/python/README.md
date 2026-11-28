@@ -24,11 +24,19 @@ titles = ["北京", "中国", "fooBar"]
 with Index(titles, Options(scheme="path"), workers=4) as index:
     for hit in index.find("bj", limit=50, positions=True):
         print(titles[hit.index], hit.score, hit.positions)
+
+with Index(["备忘录", "备 忘录"]) as index:
+    assert [h.index for h in index.find("bwl", positions=True, exact=True)] == [0]
+assert match("备忘录", "bwl", exact=True).matched
+assert len(filter(["备忘录", "备 忘录"], "bwl", exact=True)) == 1
 ```
 
 Positions are ordinary Python string indexes, not UTF-8 byte indexes.
 `utf8_positions` and `utf16_positions` are also available. One literal fuzzy
-term is accepted; CLI extended syntax is not parsed. Mixed-scheme calls are
+term is accepted; CLI extended syntax is not parsed. `match`, `filter`, and
+`Index.find` accept `exact=True` for a contiguous term (CLI `--filter="'query"`);
+all default to fuzzy matching. Exact matching and exact output bounds are
+independent. Mixed-scheme calls are
 thread safe and serialized in Go. Exceptions own no native memory.
 Each batch uses up to four native workers by default; ctypes releases the GIL
 while Go runs. Index copies the corpus once and reuses query scratch. It has

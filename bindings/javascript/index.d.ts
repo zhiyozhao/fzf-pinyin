@@ -1,5 +1,5 @@
 export type Scheme = 'default' | 'path' | 'history';
-export interface Options { scheme?: Scheme; caseSensitive?: boolean; normalize?: boolean; positions?: boolean; workers?: number }
+export interface Options { scheme?: Scheme; caseSensitive?: boolean; normalize?: boolean; positions?: boolean; workers?: number; exact?: boolean }
 export interface Match {
   matched: boolean; score: number;
   /** Unicode scalar indexes, end exclusive; -1 for no match. */
@@ -12,7 +12,7 @@ export class Index {
   readonly candidates: readonly string[];
   /** Native phase wall times in milliseconds; scan includes worker-local top-K. */
   readonly timings: Readonly<Record<string, number>>;
-  find(query: string, options?: { limit?: number | null; positions?: boolean }): Hit[];
+  find(query: string, options?: { limit?: number | null; positions?: boolean; exact?: boolean }): Hit[];
   close(): void;
 }
 export function match(text: string, query: string, options?: Options): Match;

@@ -33,6 +33,10 @@ archives for both tags have the same content; there is no second distribution re
    and modes, and requires the two archives to be byte-identical. It also checks
    SwiftPM's checksum and a clean external consumer. It uploads a private review
    artifact named `swift-0.2.1`; it never publishes a release.
+   For changed native inputs, dispatch it on the preparation branch with
+   `verify_pinned=false`; the old pin cannot describe the new build. After
+   updating the pin, dispatch again with the default `verify_pinned=true`.
+   Push triggers target main only; preparation branches use workflow_dispatch.
 2. Download that successful run's artifact. Record its actual run ID, source
    commit and SHA256 in `.github/swift-release.json`. Set the root binaryTarget
    URL to the future `fzfp-v0.2.1` release and its checksum to the actual zip hash.
@@ -80,7 +84,9 @@ bash scripts/test-swift-consumer.sh local
 Builds use Go `-trimpath -buildvcs=false -ldflags=-buildid=` and `ZERO_AR_DATE=1`;
 input ordering, archive/ZIP timestamps and modes
 are normalized. The two complete CI builds verify reproducibility on the recorded
-runner. Different compiler/SDK/zlib versions may change native code or compressed
+runner. Byte-for-byte reproducibility is guaranteed only within the same CI
+environment, not across CI runner image or toolchain/SDK changes.
+Different compiler/SDK/zlib versions may change native code or compressed
 bytes; this is why publication uses the reviewed artifact rather than assuming a
 different machine can recreate its checksum. Its source correspondence is checked
 independently of byte reproduction. The asset has no tag commit hash embedded in

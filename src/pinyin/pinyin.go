@@ -57,8 +57,7 @@ func Wrap(fallback algo.Algo, mode Mode) algo.Algo {
 		// Pinyin additionally loses one point. Avoid all DP passes in this
 		// common case (e.g. a word at a boundary in a very long document).
 		if native.Start >= 0 {
-			maxBonus := max(8, algo.BoundaryBonus(&scoreCeilingProbe, 1), algo.BoundaryBonus(&scoreCeilingProbe, 3))
-			if native.Score >= 16*len(query)+maxBonus*(len(query)+1) {
+			if native.Score >= scoreCeiling(len(query)) {
 				return native, nativePos
 			}
 		}
@@ -89,6 +88,11 @@ func Wrap(fallback algo.Algo, mode Mode) algo.Algo {
 // Observe the active scheme's whitespace and delimiter bonuses without
 // depending on or mutating upstream algo's private scheme state.
 var scoreCeilingProbe = util.ToChars([]byte(" a/a"))
+
+func scoreCeiling(queryRunes int) int {
+	maxBonus := max(8, algo.BoundaryBonus(&scoreCeilingProbe, 1), algo.BoundaryBonus(&scoreCeilingProbe, 3))
+	return 16*queryRunes + maxBonus*(queryRunes+1)
+}
 
 // These functions implement algo.Algo. V1 and V2 retain their distinct native
 // behavior; on Han input both use the same optimal phonetic dynamic program.

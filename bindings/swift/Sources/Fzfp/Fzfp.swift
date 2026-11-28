@@ -113,13 +113,13 @@ public enum Fzfp {
         return try JSONDecoder().decode(type, from: output)
     }
     public static func version() throws -> Version { try call(Request(operation: "version"), as: Version.self) }
-    public static func match(_ text: String, query: String, options: Options = Options()) throws -> Match {
+    public static func match(_ text: String, query: String, options: Options = Options(), exact: Bool = false) throws -> Match {
         let index = try Index([text], options: options)
-        return try index.exactFind(query, positions: options.positions).first?.match ?? Match(
+        return try index.exactFind(query, positions: options.positions, contiguous: exact).first?.match ?? Match(
             matched: false, score: 0, start: -1, end: -1, positions: [], utf8Positions: [], utf16Positions: [])
     }
-    public static func filter(_ candidates: [String], query: String, options: Options = Options()) throws -> [Result] {
-        try Index(candidates, options: options).exactFind(query, positions: options.positions)
+    public static func filter(_ candidates: [String], query: String, options: Options = Options(), exact: Bool = false) throws -> [Result] {
+        try Index(candidates, options: options).exactFind(query, positions: options.positions, contiguous: exact)
     }
     /// Original ABI 1 compatibility path, also used as a benchmark baseline.
     public static func filterJSON(_ candidates: [String], query: String, options: Options = Options()) throws -> [Result] {
@@ -211,8 +211,8 @@ public final class Index {
     public func find(_ query: String, limit: Int? = nil, positions: Bool = false, exact: Bool = false) throws -> [Hit] {
         try rows(query, limit: limit, positions: positions, exact: false, contiguous: exact)
     }
-    fileprivate func exactFind(_ query: String, positions: Bool) throws -> [Result] {
-        try rows(query, limit: nil, positions: positions, exact: true).map {
+    fileprivate func exactFind(_ query: String, positions: Bool, contiguous: Bool = false) throws -> [Result] {
+        try rows(query, limit: nil, positions: positions, exact: true, contiguous: contiguous).map {
             Result(index: $0.index, text: candidates[$0.index], match: $0.alignment!)
         }
     }

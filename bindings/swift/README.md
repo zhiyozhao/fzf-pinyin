@@ -68,5 +68,7 @@ await does not stop a native query. Rank-only `find` returns no alignment by
 default; positions opt in. `limit: nil` returns all, zero none, negative throws.
 Corpus construction is a one-time cost; do not rebuild an Index per keystroke.
 `exact` defaults to false; it selects the core contiguous matcher, independent
-of whether positions are requested. `match` and `filter` retain fuzzy behavior.
+of whether positions are requested. `Fzfp.match` and `Fzfp.filter` also accept
+`exact: true`; all three APIs default to fuzzy matching. Exact is one contiguous
+literal term, equivalent to CLI `--filter="'query"`, not an extended query parser.
 Full contract and release URL/checksum plan: [bindings documentation](../../docs/bindings.md).

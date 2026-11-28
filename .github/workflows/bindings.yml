@@ -4,7 +4,7 @@ on:
   pull_request:
     paths: ['Package.swift', 'bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'src/bindings_oracle_test.go', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
   push:
-    branches: [main, devs/bindings, devs/swift-0.2.1]
+    branches: [main]
     paths: ['Package.swift', 'bindings/**', 'capi/**', 'src/algo/**', 'src/pinyin/**', 'src/bindings_oracle_test.go', 'scripts/*bindings*', 'scripts/*javascript*', '.github/workflows/bindings.yml']
 permissions:
   contents: read
@@ -31,6 +31,7 @@ jobs:
       - name: Root SwiftPM build and tests
         env:
           FZFP_CLI_ORACLE_DIR: ${{ github.workspace }}/.cache/bindings/cli-oracle
+          FZFP_CLI: ${{ github.workspace }}/.cache/bindings/fzfp
           FZFP_LOCAL_XCFRAMEWORK: '1'
         run: |
           swift build --scratch-path .cache/swift-root
@@ -85,6 +86,7 @@ jobs:
             go test -race ./bindings/core ./capi ./src/algo
             go build -trimpath -buildvcs=false -o .cache/bindings/fzfp .
             export FZFP_CLI_ORACLE_DIR="$PWD/.cache/bindings/cli-oracle"
+            export FZFP_CLI="$PWD/.cache/bindings/fzfp"
             FZFP_CLI="$PWD/.cache/bindings/fzfp" go test ./src -run "^TestBindingsCLIDifferential$" -count=1 -v
             FZFP_CLI="$PWD/.cache/bindings/fzfp" python -m unittest discover -s bindings/python/tests -v
             bash scripts/build-javascript.sh

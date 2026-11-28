@@ -145,6 +145,12 @@ The asset provenance separately records its exact build source commit.
 ABI 2 adds find flag bit 2 (value 4) for contiguous matching; old calls retain
 their meaning, including bit 1 (value 2) for exact bounds. Older binaries reject
 the new flag, so use the wrapper and native asset from the same release.
+All three languages expose contiguous matching as `exact` (default false) on
+`match`, `filter`, and `Index.find`: Swift `exact: true`, Python `exact=True`,
+Node `{ exact: true }`. This matches a literal term as CLI `--filter="'query"`
+would; the binding does not parse extended-query operators. It is separate
+from requesting precise output bounds. Shared `testdata/exact.json` is checked
+against the live CLI quote syntax in each language, including Unicode alignment.
 
 ## Threading and scheme
 

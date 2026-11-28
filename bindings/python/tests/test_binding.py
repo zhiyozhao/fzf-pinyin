@@ -11,6 +11,44 @@ import fzfp
 
 
 class BindingTests(unittest.TestCase):
+    def test_exact_cli_quote_and_alignment(self):
+        binary = os.environ.get("FZFP_CLI")
+        if not binary:
+            self.skipTest("set FZFP_CLI for exact CLI differential")
+        fixture = json.loads((Path(__file__).resolve().parents[2] / "testdata/exact.json").read_text())
+        texts = fixture["candidates"]
+        for scheme in ("default", "path", "history"):
+            opts = fzfp.Options(scheme=scheme)
+            for query in fixture["queries"]:
+                cli = subprocess.run([binary, "-i", "--read0", "--print0", "--scheme="+scheme, "--filter='"+query],
+                    input=b"".join(s.encode()+b"\0" for s in texts), capture_output=True,
+                    env=dict(os.environ, FZF_DEFAULT_OPTS="", FZF_DEFAULT_OPTS_FILE="/dev/null"))
+                self.assertIn(cli.returncode, (0, 1))
+                expected = fzfp.filter(texts, query, opts, exact=True)
+                self.assertEqual(b"".join(h.text.encode()+b"\0" for h in expected), cli.stdout)
+                for workers in (1, 4):
+                    with fzfp.Index(texts, opts, workers=workers) as index:
+                        for limit in (None, 0, 1, 50):
+                            want = expected if limit is None else expected[:limit]
+                            for positions in (False, True):
+                                hits = index.find(query, limit, positions, exact=True)
+                                self.assertEqual([(h.index, h.score) for h in hits], [(h.index, h.score) for h in want])
+                                if positions:
+                                    self.assertEqual([asdict(h.alignment) for h in hits],
+                                        [{k:v for k,v in asdict(h).items() if k not in ("index", "text")} for h in want])
+                for i, text in enumerate(texts):
+                    match = fzfp.match(text, query, opts, exact=True)
+                    want = next((h for h in expected if h.index == i), None)
+                    self.assertEqual(match.matched, want is not None)
+                    if want:
+                        self.assertEqual(asdict(match), {k:v for k,v in asdict(want).items() if k not in ("index", "text")})
+                        self.assertEqual(match.positions, sorted(match.positions))
+        self.assertEqual(fzfp.match("😀ab", "ab").positions, [1, 2])
+        self.assertEqual(fzfp.match("😀ab", "ab").utf16_positions, [2, 3])
+        with fzfp.Index(["ab"]) as index:
+            with self.assertRaises(ValueError):
+                index.find("ab", exact=1)
+
     def test_cli_tie_heavy_oracle(self):
         directory = os.environ.get("FZFP_CLI_ORACLE_DIR")
         if not directory:

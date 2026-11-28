@@ -1,15 +1,20 @@
 name: Prepare Swift release (no publishing)
 on:
   push:
-    branches: [devs/swift-0.2.1]
+    branches: [main]
   workflow_dispatch:
+    inputs:
+      verify_pinned:
+        description: Verify the existing release pin (disable when preparing changed native inputs)
+        type: boolean
+        default: true
 permissions:
   contents: read
 jobs:
   parity:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
       - uses: actions/setup-go@v5
@@ -32,7 +37,7 @@ jobs:
   asset:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
       - uses: actions/setup-go@v5
@@ -52,7 +57,7 @@ jobs:
           test "$(swift package compute-checksum .cache/swift-release/CFzfp.xcframework.zip)" = "$(cut -d ' ' -f 1 .cache/swift-release/CFzfp.xcframework.zip.sha256)"
           bash scripts/test-swift-consumer.sh local
       - name: Verify the pinned asset against the final manifest
-        if: ${{ hashFiles('.github/swift-release.json') != '' }}
+        if: ${{ hashFiles('.github/swift-release.json') != '' && (github.event_name != 'workflow_dispatch' || inputs.verify_pinned) }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
